@@ -1,4 +1,4 @@
-package user.servlet;
+package servlet.user;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class UserLogoutServlet
+ * Servlet implementation class UserModifyServlet
  */
-@WebServlet("/UserLogoutServlet")
-public class UserLogoutServlet extends HttpServlet {
+@WebServlet("/User/user_modify.do")
+public class UserModifyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserLogoutServlet() {
+    public UserModifyServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

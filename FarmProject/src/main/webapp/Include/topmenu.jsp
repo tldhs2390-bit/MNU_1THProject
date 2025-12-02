@@ -76,7 +76,7 @@
         <!-- 메뉴들 -->
         <td><a href="/User/user_login.jsp">로그인</a></td>
         <td><a href="">로그아웃</a></td>
-        <td><a href="/User/user_join.jsp">회원가입</a></td>
+        <td><a href="/User/user_join.do">회원가입</a></td>
         <td><a href="">정보수정</a></td>
 
         <td><a href="/Guide/guide_list.jsp">초심자가이드</a></td>
