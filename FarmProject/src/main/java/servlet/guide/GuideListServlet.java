@@ -40,6 +40,7 @@ public class GuideListServlet extends HttpServlet {
 		request.setAttribute("guideList", guideList);
 		RequestDispatcher rd = request.getRequestDispatcher("/Guide/guide_list.jsp");
 		rd.forward(request, response);
+		
 	}
 
 	/**
