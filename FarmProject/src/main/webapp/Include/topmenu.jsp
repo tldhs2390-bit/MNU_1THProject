@@ -69,7 +69,7 @@
 
         <!-- 연녹색 로고 / 로그인 블록 -->
         <td class="logo-area" style="width:20%;">
-            <a href="/" style="font-size:14pt; font-weight:bold; color:#1B5E20;">🌿 FarmProject</a>
+            <a href="/index.do" style="font-size:14pt; font-weight:bold; color:#1B5E20;">🌿 FarmProject</a>
             <small>Total 136,489 | Now 178</small>
         </td>
 
@@ -79,7 +79,7 @@
         <td><a href="/User/user_join.jsp">회원가입</a></td>
         <td><a href="">정보수정</a></td>
 
-        <td><a href="/Guide/guide_list.jsp">초심자가이드</a></td>
+        <td><a href="/guide_list.do">초심자가이드</a></td>
         <td><a href="/Success/success_list.jsp">쑥쑥 성장이야기</a></td>
         <td><a href="/Fail/fail_list.jsp">아쉬운 성장이야기</a></td>
         <td><a href="/Board/board_list.jsp">자유게시판</a></td> 
