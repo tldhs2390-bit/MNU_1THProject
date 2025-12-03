@@ -50,7 +50,7 @@ public class UserLoginServlet extends HttpServlet {
 		int row = dao.userLogin(user_id,user_pass);
 		
 		if(row==1) {
-			//로그인 성공(세션에 저장할 정보 검색);(name, id, tel)
+			//로그인 성공(세션에 저장할 정보 검색)
 			UserDTO dto = dao.userSelect(user_id);
 			//세션 형성
 			HttpSession session = request.getSession();

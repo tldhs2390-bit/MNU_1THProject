@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
  <head><title>Web Programming Test</title>
@@ -74,10 +75,18 @@
         </td>
 
         <!-- 메뉴들 -->
-        <td><a href="/User/user_login.jsp">로그인</a></td>
-        <td><a href="">로그아웃</a></td>
+        <c:if test="${empty user }">
+        <td><a href="/User/user_login.do">로그인</a></td>
+        </c:if>
+        <c:if test="${!empty user }">
+        <td><a href="/User/user_logout.do">로그아웃</a></td>
+        </c:if>
+        <c:if test="${empty user }">
         <td><a href="/User/user_join.do">회원가입</a></td>
-        <td><a href="">정보수정</a></td>
+        </c:if>
+        <c:if test="${!empty user }">
+        <td><a href="/User/user_modify.do">정보수정</a></td>
+        </c:if>
 
         <td><a href="/Guide/guide_list.jsp">초심자가이드</a></td>
         <td><a href="/Success/success_list.jsp">쑥쑥 성장이야기</a></td>

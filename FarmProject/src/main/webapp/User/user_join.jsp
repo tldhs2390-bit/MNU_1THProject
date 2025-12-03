@@ -1,18 +1,108 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!-- 탑 메뉴 영역 등 include 파일 경로 확인 필요 -->
 <%@ include file="/Include/topmenu.jsp" %>
 <html>
 <head>
 <title>회원등록</title>
-<style type="text/css">
-/* CSS 주석 수정 및 스타일 정리 */
-body { font-family: 돋움, Verdana; font-size: 9pt}
-td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; color: #000000; background-position: left top; background-repeat: no-repeat;}
-.formbox {
-	background-color: #F0F0F0; font-family: "Verdana", "Arial", "Helvetica", "돋움"; font-size:9pt
-} 
-</style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+/* 전체 배경을 아이디 찾기처럼 */
+body { 
+    font-family: 'Noto Sans KR', 돋움, Verdana, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:0;
+}
+
+/* 회원가입 전체 박스를 감싸는 부분 */
+.join-container {
+    width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+}
+
+/* 아이디 찾기와 같은 카드형 박스 */
+.join-box {
+    background:white;
+    width:100%;
+    border-radius: 12px;
+    padding: 30px 35px 40px 35px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 제목 바 */
+.join-title {
+    background:#7AAAD5;
+    color:white;
+    text-align:center;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* 테이블 스타일은 크게 건드리지 않고 색만 조금 개선 */
+td.form-label {
+    background:#f3f7fb;
+    font-weight:bold;
+    padding-left:18px;
+    height:40px;
+}
+
+td.form-input {
+    background:white;
+    padding:10px 18px;
+}
+
+/* input 전체 공통 */
+.join-box input[type="text"],
+.join-box input[type="password"],
+.join-box select {
+    width:280px;
+    height:32px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    padding-left:8px;
+    font-size:12px;
+    box-sizing:border-box;
+}
+
+/* 이메일 인증 버튼 */
+#emailSendBtn,
+#emailVerifyBtn {
+    background:#7AAAD5;
+    border:none;
+    color:white;
+    padding:5px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+/* 회원가입 / 취소 버튼 */
+.btn-submit {
+    background:#4CAF50 !important;
+    color:white !important;
+    border:none;
+    border-radius:6px;
+    width:120px;
+    height:40px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.btn-submit:hover { background:#43A047 !important; }
+
+.btn-cancel {
+    background:#ccc !important;
+    color:black !important;
+    border:none;
+    border-radius:6px;
+    width:120px;
+    height:40px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.btn-cancel:hover { background:#b5b5b5 !important; }
+
+</style><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
 	$(function(){
@@ -62,6 +152,7 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 			}
 			
 			// 전송
+			alert("회원가입 성공!");
 			$("#user").submit();		
 		});
 
@@ -97,7 +188,7 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 			});
 		});
 		
-		// 비밀번호 일치 확인 (실시간)
+		// 비밀번호 일치
 		$("#user_repass").keyup(function(){
 			var pass = $("#user_pass").val();
 			var repass = $(this).val();
@@ -108,56 +199,110 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 				$("#repasswd_c").text("비밀번호가 일치하지 않습니다.").css("color", "red");
 			}
 		});
+		
+		// 이메일 인증코드 전송
+		$("#emailSendBtn").click(function(){
+		    let email = $("#email").val();
+
+		    if(email.trim() == ""){
+		        alert("이메일을 입력하세요");
+		        return;
+		    }
+
+		    $.ajax({
+		        url: "/User/emailSend.do",   // ★ 서블릿 호출
+		        type: "get",
+		        data: { email: email },
+		        success: function(result){
+		            if(result.trim() == "OK"){
+		                alert("인증코드가 발송되었습니다.");
+		            } else {
+		                alert("메일 발송 실패! 서버 콘솔을 확인하세요.");
+		            }
+		        },
+		        error: function(){
+		            alert("서버 통신 오류");
+		        }
+		    });
+		});
+		
+		// 인증코드 확인
+		$("#emailVerifyBtn").click(function(){
+		    let code = $("#emailCode").val();
+
+		    $.ajax({
+		        url: "/User/emailVerify.do",
+		        type: "get",
+		        data: { code: code },
+		        success: function(result){
+		            if(result.trim() == "OK"){
+		                $("#emailMsg").text("이메일 인증 완료").css("color","blue");
+		                $("#emailVerified").val("1"); // 필요하면 hidden값으로 사용
+		            } else {
+		                $("#emailMsg").text("인증코드가 틀립니다.").css("color","red");
+		            }
+		        }
+		    });
+		});
 	});
+	
+	
+	
 </script>
 </head>
 
 <body bgcolor="#FFFFFF" leftmargin=0 topmargin=0 >
  
-<table border="0" width="800">
-<tr>
-  <td width="20%"  bgcolor="#ecf1ef" valign="top" style="padding-left:0;">
+<!-- 왼쪽 로그인 배너 -->
+<table border="0" width="100%">
+	<tr>
+  	<td width="20%" bgcolor="#ecf1ef" valign="top" style="padding:0; margin:0; height:auto;">
 
 	<%@ include file="/Include/login_form.jsp" %>
   </td>
-  <td width="80%" valign="top">&nbsp;<br>    
-
+  <td valign="top" style="background:#f5f5f5; padding:0; width:80%;">
+    
+    <!-- join-box를 가운데로 정렬하고 높이를 제한하는 wrapper -->
+   <div style="width:94%; margin:0;">
+	<div class="join-box">
 	<form name="user" id="user" method="post" action="user_join.do">
-	<table border=0 cellpadding=0 cellspacing=0 width=730 valign=top>
-		<tr><td align=center><br>                            
-			<table cellpadding=0 cellspacing=0 border=0 width=650 align=center>       
+	<table border=0 cellpadding=0 cellspacing=0 width=800 valign=top>
+		<tr><td align=center>                      
+			<table cellpadding=0 cellspacing=0 border=0 width=100% align="center">       
 				<tr>
 					<td bgcolor="#7AAAD5">            
 						<table cellpadding=0 cellspacing=0 border=0 width=100%>
-							<tr bgcolor=#7AAAD5>
+							<tr bgcolor=#7AAAD5> 
 								<td align=left border="0" hspace="0" vspace="0"></td>
-								<td align=center bgcolor="#7AAAD5"><font color="#FFFFFF"><b>사용자등록&nbsp;</b><font color=black>(</font><font color=red>&nbsp;*&nbsp;</font><font color=black>표시항목은 반드시 입력하십시요.)</font></font></td>
+								<td align=center bgcolor="#7AAAD5" style="padding: 8px 0;">
+									<font color="#FFFFFF"><b>사용자등록&nbsp;</b><font color=black>(</font><font color=red>&nbsp;*&nbsp;</font><font color=black>표시항목은 반드시 입력하십시요.)</font></font>
+								</td>
 								<td align=right border="0" hspace="0" vspace="0"></td>
 							</tr>
 						</table>
-						<table cellpadding=3 cellspacing=1 border=0 width=100%>
+						<table cellpadding=5 cellspacing=1 border=0 width=100%>
 							<tr>
-								<td width=110 bgcolor=#EFF4F8>&nbsp;회원 성명<font color=red>&nbsp;*</font></td>
+								<td width=200 bgcolor=#EFF4F8>&nbsp;회원 성명<font color=red>&nbsp;*</font></td>
 								<td bgcolor=WHITE>
-									<input type=text id=user_name name=user_name size=16 maxlength=20 value="">&nbsp;성명은 빈칸없이 입력하세요.
+									<input type=text id=user_name name=user_name maxlength=20 value="" style="width:250px; height:30px; font-size:11px;">&nbsp;성명은 빈칸없이 입력하세요.
 								</td>
 							</tr>
 							<tr>
-								<td width=110 bgcolor=#EFF4F8>&nbsp;닉네임<font color=red>&nbsp;*</font></td>
+								<td bgcolor=#EFF4F8>&nbsp;닉네임<font color=red>&nbsp;*</font></td>
 								<td bgcolor=WHITE>
-									<input type=text id=n_name name=n_name size=16 maxlength=20 value="">
+									<input type=text id=n_name name=n_name maxlength=20 value="" style="width:250px; height:30px; font-size:11px;">
 								</td>
 							</tr>
 							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;회원 ID<font color=red>&nbsp;*</font></td>
+								<td bgcolor="#EFF4F8">&nbsp;아이디<font color=red>&nbsp;*</font></td>
 								<td bgcolor=WHITE>
 									<table cellspacing=0 cellpadding=0>
 										<tr>
 											<td align=absmiddle>
-												<input type=text id=user_id name=user_id size=12 maxlength=16 style="width:120px">
+												<input type=text id=user_id name=user_id maxlength=16 style="width:250px; height:30px; font-size:13px;">
 											</td>
 											<td id="userID_c" style="padding-left: 10px; font-size: 11px; color: gray;">
-                   									&nbsp; 5~16자 이내의 영문이나 숫자만 가능합니다.
+                   									&nbsp;5~16자 이내의 영문이나 숫자만 가능합니다.
                   							</td>
 										</tr>
 									</table>
@@ -166,60 +311,67 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 							<tr>
 								<td bgcolor="#EFF4F8">&nbsp;비밀번호<font color=red>&nbsp;*</font></td>
 								<td bgcolor=WHITE>
-								    <input type=password id=user_pass name=user_pass size=8 maxlength=12 style="width:120px">
+								    <input type=password id=user_pass name=user_pass maxlength=12 style="width:250px; height:30px; font-size:10px;">
 									 &nbsp; 6~12자 이내의 영문이나 숫자만 가능합니다.
 								</td>
 							</tr>
 							<tr>
 								<td bgcolor="#EFF4F8">&nbsp;비밀번호확인<font color=red>&nbsp;*</font></td>
-								<td bgcolor=WHITE><input type=password id=user_repass name=user_repass size=8 maxlength=12 value="" style="width:120px">
-								 <font id="repasswd_c" color="red" style="font-size: 11px;">&nbsp; 비밀번호 확인을 위해서 비밀번호를 한번 더 입력해주세요.</font> 
+								<td bgcolor=WHITE>
+									<input type=password id=user_repass name=user_repass maxlength=12 value="" style="width:250px; height:30px; font-size:11px;">
+									
+                                    
+									<font id="repasswd_c" color="red" style="font-size: 10px; margin-top: 5px; display: inline-block;">&nbsp; 비밀번호 확인을 위해서 비밀번호를 한번 더 입력해주세요.</font> 
 								</td>
 							</tr>
 							<tr>
 								<td bgcolor="#EFF4F8">&nbsp;전화번호<font color=red>&nbsp;*</font></td>
 								<td bgcolor=WHITE>
-									<input type=text id=tel name=tel size=13 maxlength=13 value="">&nbsp; "-" 포함
+									<input type=text id=tel name=tel maxlength=13 value="" style="width:250px; height:30px; font-size:11px;">&nbsp; "-" 포함
 								</td>
 							</tr>
 							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;E-mail</td>
-								<td bgcolor=WHITE valign=middle>
-									<input type="text" id=email name="email" maxlength="50">
-									<input type="button" value="인증하기">
-								</td>
+							    <td bgcolor="#EFF4F8">&nbsp;E-mail</td>
+							    <td bgcolor=WHITE valign=middle>
+							        <input type="text" id="email" name="email" maxlength="50" 
+							               style="width:250px; height:30px; font-size:11px;">
+							        <input type="button" value="인증하기" id="emailSendBtn" 
+							               style="height:30px; cursor:pointer;">
+							        <br>
+							        <input type="text" id="emailCode" placeholder="인증코드 입력" 
+							               style="width:150px; height:30px; font-size:11px; margin-top:5px;">
+							        <input type="button" value="확인" id="emailVerifyBtn" 
+							               style="height:30px; cursor:pointer;">
+							        <span id="emailMsg" style="margin-left:10px; font-size:11px;"></span>
+							    </td>
 							</tr>
 
 							<tr>
 								<td bgcolor="#EFF4F8">&nbsp;거주지</td>
-								<td bgcolor=WHITE valign=middle>
-								<input type="radio" name="address" value="아파트" checked>아파트
-								<input type="radio" name="address" value="주택">주택
+								<td bgcolor=WHITE valign=middle style="height:40px;">
+									<input type="radio" name="address" value="아파트" checked>아파트
+									&nbsp;&nbsp;&nbsp;
+									<input type="radio" name="address" value="주택">주택
 								</td>
 							</tr>
 							
 							<tr>
 								<td bgcolor="#EFF4F8">&nbsp;등급</td>
 								<td bgcolor=WHITE valign=middle>
-								<select name="user_rank">
-									<option>등급을 선택하세요</option>
-									<option value="고수">고수</option>
-									<option value="초심자">초심자</option>
-									</select></td>
+									<select name="user_rank" style="width:150px; height:30px;">
+										<option>등급을 선택하세요</option>
+										<option value="고수">고수</option>
+										<option value="초심자">초심자</option>
+									</select>
+								</td>
 							</tr>
-	<!-- 					
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;포인트</td>
-								<td bgcolor=WHITE valign=middle>
-								<input type="text" id=point name="point" maxlength="50"></td>
-							</tr>
- 	-->						
 						</table>
 						<table cellpadding="0" cellspacing="0" border="0" width="100%">
 							<tr bgcolor="#ffffff">
-                                <td colspan="2" style="text-align: center; padding: 20px 0;">
-									<input type="button" value="회원가입" id="btn1" class="btn-style btn-submit">
-                                    &nbsp;&nbsp; <input type="button" value="가입취소" id="btn2" class="btn-style btn-cancel">
+                                <td colspan="2" style="text-align: center; padding: 30px 0;">
+									<input type="button" value="회원가입" id="btn1" class="btn-style btn-submit" style="width:120px; height:40px; font-weight:bold; cursor:pointer; background:#4CAF50; color:white; border:none;">
+                                    &nbsp;&nbsp; 
+									<input type="button" value="가입취소" id="btn2" class="btn-style btn-cancel" style="width:120px; height:40px; font-weight:bold; cursor:pointer; background:#ccc; color:black; border:none;">
 								</td>
 							</tr>
 						</table>
@@ -229,6 +381,8 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 		</td></tr>
 	</table>
 	</form>
+	</div>
+	</div>
   </td>
 </tr>
 </table>

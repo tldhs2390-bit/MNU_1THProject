@@ -40,8 +40,8 @@ public class UserDAO {
 	//회원가입
 	public int userWrite(UserDTO dto) {
 		int row=0;
-		String sql="insert into tbl_user(user_name,n_name,tel,email,address,user_rank,user_id,user_pass) "
-				+ " values(?,?,?,?,?,?,?,?)";
+		String sql="insert into tbl_user(user_name,n_name,tel,email,address,user_rank,user_id,user_pass,point) "
+				+ " values(?,?,?,?,?,?,?,?,?)";
 		try {
 			conn = DBManager.getConn();
 			pstmt = conn.prepareStatement(sql);
@@ -53,6 +53,7 @@ public class UserDAO {
 			pstmt.setString(6, dto.getUser_rank());
 			pstmt.setString(7,dto.getUser_id());
 			pstmt.setString(8, dto.getUser_pass());
+			pstmt.setInt(9, 1000); //회원가입 포인트
 			
 			row = pstmt.executeUpdate();
 			
@@ -125,8 +126,14 @@ public class UserDAO {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				dto.setUser_name(rs.getString("user_name"));
-				dto.setUser_id(rs.getString("user_id"));
-				dto.setTel(rs.getString("tel"));
+	            dto.setUser_id(rs.getString("user_id"));
+	            dto.setN_name(rs.getString("n_name"));
+	            dto.setTel(rs.getString("tel"));
+	            dto.setEmail(rs.getString("email"));
+	            dto.setAddress(rs.getString("address"));
+	            dto.setUser_rank(rs.getString("user_rank"));
+	            dto.setUser_pass(rs.getString("user_pass"));
+	            dto.setPoint(rs.getInt("point"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -136,4 +143,90 @@ public class UserDAO {
 		return dto;
 		
 	}
+	//modify
+		public int userModify(UserDTO dto) {
+			int row = 0;
+			String sql="update tbl_user set user_name=?,n_name=?,user_pass=?,tel=?,email=?,address=?,user_rank=? where user_id=?";
+			
+			try {
+				conn=DBManager.getConn();
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getUser_name());
+				pstmt.setString(2, dto.getN_name());
+				pstmt.setString(3, dto.getUser_pass());
+				pstmt.setString(4, dto.getTel());
+				pstmt.setString(5, dto.getEmail());
+				pstmt.setString(6, dto.getAddress());
+				pstmt.setString(7, dto.getUser_rank());
+				pstmt.setString(8, dto.getUser_id());
+
+				row = pstmt.executeUpdate();
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt);
+			}
+			return row;
+		}
+		
+		//Point Add			****boardDAO에 addPoint 호출하기
+		public void addPoint(String user_id,int point) {
+			String sql="update tbl_user set point = point + ? where user_id=?";
+			try {
+				conn=DBManager.getConn();
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, point);
+				pstmt.setString(2, user_id);
+				pstmt.executeUpdate();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt);
+			}
+		}
+		
+		//User Find id
+		public String findUserId(String email) {
+			String sql="select user_id from tbl_user where email=?";
+			String userId = null;
+			
+			try {
+				conn = DBManager.getConn();
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, email);
+				rs=pstmt.executeQuery();
+				
+				if(rs.next()) {
+					userId=rs.getString("user_id");
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt, rs);
+			}
+			return userId;
+		}
+		
+		//User Find Pass
+		public String findUserPass(String user_id,String email) {
+			String sql="select user_pass from tbl_user where user_id=? and email=?";
+			String pass=null;
+			try {
+				conn = DBManager.getConn();
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, user_id);
+				pstmt.setString(2, email);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					pass=rs.getString("user_pass");
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt, rs);
+			}
+			return pass;
+		}
 }

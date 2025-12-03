@@ -15,12 +15,12 @@
 <tr>
 
     <!-- 왼쪽 로그인 -->
-    <td class="left-menu">
+    <td class="left-menu" width="20%" valign="top">
         <%@ include file="/Include/login_form.jsp" %>
     </td>
 
     <!-- 오른쪽 본문 -->
-    <td class="content">
+    <td class="content" width="80%" valign="top">
 
         <h1 class="main-title">🌿 FarmProject</h1>
         <p class="main-sub">가장 쉬운 초심자 텃밭 가이드와 성장일기 공유 커뮤니티</p>

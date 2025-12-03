@@ -7,19 +7,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import user.model.MailSender;
 
 /**
- * Servlet implementation class UserLogoutServlet
+ * Servlet implementation class UserEmailServlet
  */
-@WebServlet("/User/user_logout.do")
-public class UserLogoutServlet extends HttpServlet {
+@WebServlet("/User/emailSend.do")
+public class UserEmailSendServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserLogoutServlet() {
+    public UserEmailSendServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,11 +29,22 @@ public class UserLogoutServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//세션확인
-		HttpSession session = request.getSession();
-		session.invalidate();//세션해제
-		//로그아웃
-		response.sendRedirect("/index.do");
+		request.setCharacterEncoding("utf-8");
+        String email = request.getParameter("email");
+
+        // 랜덤 인증코드 생성 (6자리)
+        int code = (int)(Math.random() * 900000) + 100000;
+
+        // 세션에 저장
+        request.getSession().setAttribute("emailCode", code);
+
+        boolean result = MailSender.sendMail(email, "회원가입 인증코드","인증코드 : " + code);
+
+        if(result){
+            response.getWriter().print("OK");
+        } else {
+            response.getWriter().print("FAIL");
+        }
 	}
 
 	/**

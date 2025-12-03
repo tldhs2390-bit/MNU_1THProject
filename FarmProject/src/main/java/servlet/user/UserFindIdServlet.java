@@ -2,24 +2,26 @@ package servlet.user;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import user.model.UserDAO;
 
 /**
- * Servlet implementation class UserLogoutServlet
+ * Servlet implementation class UserFindIdServlet
  */
-@WebServlet("/User/user_logout.do")
-public class UserLogoutServlet extends HttpServlet {
+@WebServlet("/User/user_find_id.do")
+public class UserFindIdServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserLogoutServlet() {
+    public UserFindIdServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,19 +30,24 @@ public class UserLogoutServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//세션확인
-		HttpSession session = request.getSession();
-		session.invalidate();//세션해제
-		//로그아웃
-		response.sendRedirect("/index.do");
+		RequestDispatcher rd = request.getRequestDispatcher("/User/user_find_id.jsp");
+	    rd.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("utf-8");
+        String email = request.getParameter("email");
+
+        UserDAO dao = UserDAO.getInstance();
+        String userId = dao.findUserId(email);
+
+        request.setAttribute("userId", userId);
+
+        RequestDispatcher rd = request.getRequestDispatcher("/User/user_find_id_ok.jsp");
+        rd.forward(request, response);
 	}
 
 }

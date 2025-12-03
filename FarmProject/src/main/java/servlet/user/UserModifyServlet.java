@@ -1,11 +1,17 @@
 package servlet.user;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import user.model.UserDAO;
+import user.model.UserDTO;
 
 /**
  * Servlet implementation class UserModifyServlet
@@ -26,16 +32,41 @@ public class UserModifyServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession();
+	    UserDTO dto = (UserDTO)session.getAttribute("user");
+		
+		request.setAttribute("dto", dto);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("user_modify.jsp");
+		rd.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("utf-8");
+		UserDTO dto = new UserDTO();
+
+		
+		dto.setUser_name(request.getParameter("user_name"));
+		dto.setN_name(request.getParameter("n_name"));
+		dto.setTel(request.getParameter("tel"));
+		dto.setEmail(request.getParameter("email"));
+		dto.setAddress(request.getParameter("address"));
+		dto.setUser_rank(request.getParameter("user_rank"));
+		dto.setUser_id(request.getParameter("user_id"));
+		dto.setUser_pass(request.getParameter("user_pass"));		
+		
+		UserDAO dao = UserDAO.getInstance();
+		
+		int row = dao.userModify(dto);
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("user", dto);
+		session.setMaxInactiveInterval(1800);
+		
+		response.sendRedirect("/index.do");
 	}
 
 }
