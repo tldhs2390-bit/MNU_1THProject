@@ -30,27 +30,27 @@
 
             <div class="guide-card">
                 <h3>🥬 채소 가이드</h3>
-                <p>아파트에서도 쉽게 키우는 15종 채소</p>
-                <a class="guide-btn" href="/guide/guide_list.do?cate=veg">바로가기</a>
+                <p>실내,실외에서도 <br> 쉽게 키울 수 있는 12종 채소</p>
+                <a class="guide-btn" href="guide_veg_list.do">바로가기</a>
             </div>
 
             <div class="guide-card">
                 <h3>🌿 허브 가이드</h3>
-                <p>향기 좋은 초보자 허브 5종</p>
-                <a class="guide-btn" href="/guide/guide_list.do?cate=herb">바로가기</a>
+                <p>아파트에서도 쉽게 키울 수 있는 <br> 향기 좋은 초보자 허브 5종</p>
+                <a class="guide-btn" href="/guide_herb_list.do">바로가기</a>
             </div>
 
             <div class="guide-card">
                 <h3>🍓 과일 가이드</h3>
-                <p>집에서 키우는 10종 과일</p>
-                <a class="guide-btn" href="/guide/guide_list.do?cate=fruit">바로가기</a>
+                <p>텃밭과 실내에서   <br> 직접 키워보는 13종 과일</p>
+                <a class="guide-btn" href="/guide_fruit_list.do">바로가기</a>
             </div>
 
         </div>
 
         <!-- 성공 최신 글 -->
         <div class="latest-box">
-            <h3>🌱 최근 성공 이야기</h3>
+            <h3>🌱 쑥쑥 성장 이야기</h3>
             <table class="latest-mini">
                 <c:forEach var="s" items="${successList}">
                     <tr>
@@ -63,7 +63,7 @@
 
         <!-- 실패 최신 글 -->
         <div class="latest-box">
-            <h3>💧 최근 실패 노트</h3>
+            <h3>💧 아쉬운 성장 노트</h3>
             <table class="latest-mini">
                 <c:forEach var="f" items="${failList}">
                     <tr>

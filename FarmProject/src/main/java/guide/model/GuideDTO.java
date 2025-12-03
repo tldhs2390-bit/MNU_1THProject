@@ -11,10 +11,17 @@ public class GuideDTO {
 	private String last_date;
 	private String link;
 	private String image_filename;
+	private String place;
 	
 	
 	
 	
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place = place;
+	}
 	public String getImage_filename() {
 		return image_filename;
 	}
