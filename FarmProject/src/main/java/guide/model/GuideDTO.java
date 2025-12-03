@@ -9,6 +9,24 @@ public class GuideDTO {
 	private String water;
 	private String medicine;
 	private String last_date;
+	private String link;
+	private String image_filename;
+	
+	
+	
+	
+	public String getImage_filename() {
+		return image_filename;
+	}
+	public void setImage_filename(String image_filename) {
+		this.image_filename = image_filename;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
 	public String getName() {
 		return name;
 	}

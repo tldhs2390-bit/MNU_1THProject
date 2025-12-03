@@ -34,6 +34,8 @@ public class GuideDAO {
 					dto.setWater(rs.getString("water"));
 					dto.setMedicine(rs.getString("medicine"));
 					dto.setLast_date(rs.getString("last_date"));
+					dto.setLink(rs.getString("link"));
+					dto.setImage_filename(rs.getString("image_filename").trim());
 					
 
 					guideList.add(dto);
