@@ -1,26 +1,26 @@
-package servlet.admin;
+package servlet.user;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import model.user.MailSender;
 
 /**
- * Servlet implementation class AdminIndexServlet
+ * Servlet implementation class UserEmailServlet
  */
-@WebServlet("/admin_index.do")
-public class AdminIndexServlet extends HttpServlet {
+@WebServlet("/User/emailSend.do")
+public class UserEmailSendServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminIndexServlet() {
+    public UserEmailSendServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,14 +29,22 @@ public class AdminIndexServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//관리자가 로그인 하지 않은 경우 관리자 로그인 페이지로 이동 
-		HttpSession session = request.getSession();
-		if(session.getAttribute("admin") == null) {
-			response.sendRedirect("admin_login.do");
-			return;
-		}
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_index.jsp");
-		rd.forward(request, response);
+		request.setCharacterEncoding("utf-8");
+        String email = request.getParameter("email");
+
+        // 랜덤 인증코드 생성 (6자리)
+        int code = (int)(Math.random() * 900000) + 100000;
+
+        // 세션에 저장
+        request.getSession().setAttribute("emailCode", code);
+
+        boolean result = MailSender.sendMail(email, "회원가입 인증코드","인증코드 : " + code);
+
+        if(result){
+            response.getWriter().print("OK");
+        } else {
+            response.getWriter().print("FAIL");
+        }
 	}
 
 	/**

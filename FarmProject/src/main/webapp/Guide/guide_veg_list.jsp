@@ -57,9 +57,9 @@
 <div class="page-wrapper">
 
     <!-- 왼쪽 로그인 -->
-    <div class="left-menu">
+    <td class="left-menu" width="20%" valign="top">
         <%@ include file="/Include/login_form.jsp" %>
-    </div>
+    </td>
 
     <!-- 오른쪽 -->
     <div class="content">

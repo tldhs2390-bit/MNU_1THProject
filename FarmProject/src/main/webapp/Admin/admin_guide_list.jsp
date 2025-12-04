@@ -64,6 +64,12 @@
     <!-- 오른쪽 -->
     <div class="content">
     <h1 class="main-title">🌿 초심자 가이드(관리자용)</h1>
+    	<div style="margin-top: 30px; text-align: left;">
+		    <a href="admin_guide_write.do" 
+		       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
+		        카드 등록
+		    </a>
+		</div>
 
     	<table class="guide-table">
     		<tr>
@@ -108,12 +114,7 @@
 
    					 </tr>
 			</table>
-			<div style="margin-top: 30px; text-align: center;">
-			    <a href="admin_guide_write.do" 
-			       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
-			        등록
-			    </a>
-			</div>
+			
 
     				</div>
 					</div>

@@ -15,7 +15,7 @@
 <tr>
 
     <!-- 왼쪽 로그인 -->
-    <td class="left-menu">
+    <td class="left-menu" width="20%" valign="top">
         <%@ include file="/Include/login_form.jsp" %>
     </td>
 

@@ -1,4 +1,4 @@
-package servlet.admin;
+package servlet.admin.user;
 
 import java.io.IOException;
 
@@ -10,17 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.user.UserDAO;
+import model.user.UserDTO;
+
 /**
- * Servlet implementation class AdminIndexServlet
+ * Servlet implementation class AdminUserModifyServlet
  */
-@WebServlet("/admin_index.do")
-public class AdminIndexServlet extends HttpServlet {
+@WebServlet("/admin_user_modify.do")
+public class AdminUserModifyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminIndexServlet() {
+    public AdminUserModifyServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,8 +38,15 @@ public class AdminIndexServlet extends HttpServlet {
 			response.sendRedirect("admin_login.do");
 			return;
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_index.jsp");
-		rd.forward(request, response);
+		String user_id = request.getParameter("user_id");
+
+        UserDAO dao = UserDAO.getInstance();
+        UserDTO dto = dao.userSelect(user_id);
+
+        request.setAttribute("dto", dto);
+
+        RequestDispatcher rd = request.getRequestDispatcher("/Admin/user_modify.jsp");
+        rd.forward(request, response);
 	}
 
 	/**

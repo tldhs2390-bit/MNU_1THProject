@@ -1,4 +1,4 @@
-package servlet.admin;
+package servlet.admin.user;
 
 import java.io.IOException;
 
@@ -8,19 +8,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import model.user.UserDAO;
 
 /**
- * Servlet implementation class AdminIndexServlet
+ * Servlet implementation class AdminUserDeleteServlet
  */
-@WebServlet("/admin_index.do")
-public class AdminIndexServlet extends HttpServlet {
+@WebServlet("/admin_user_delete.do")
+public class AdminUserDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminIndexServlet() {
+    public AdminUserDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,22 +30,24 @@ public class AdminIndexServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//관리자가 로그인 하지 않은 경우 관리자 로그인 페이지로 이동 
-		HttpSession session = request.getSession();
-		if(session.getAttribute("admin") == null) {
-			response.sendRedirect("admin_login.do");
-			return;
-		}
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_index.jsp");
-		rd.forward(request, response);
-	}
+		int idx = Integer.parseInt(request.getParameter("idx"));
+
+        UserDAO dao = UserDAO.getInstance();
+        int row = dao.userDelete(idx);
+
+        if(row > 0) {
+            response.sendRedirect("/admin_user_list.do");
+        } else {
+            response.setContentType("text/html; charset=UTF-8");
+            response.getWriter().println("<script>alert('삭제 실패'); history.back();</script>");
+        }
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.sendRedirect("/Admin/user_list.do");
 	}
 
 }

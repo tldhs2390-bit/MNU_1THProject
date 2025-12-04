@@ -106,7 +106,7 @@
     		return;
     	}
     	if(!guide_modify.water.value){
-    		alert("금수량을 입력해주세요.");
+    		alert("급수량을 입력해주세요.");
     		guide_modify.water.focus();
     		return;
     	}

@@ -97,7 +97,7 @@
     		return;
     	}
     	if(!guide_write.water.value){
-    		alert("금수량을 입력해주세요.");
+    		alert("급수량을 입력해주세요.");
     		guide_write.water.focus();
     		return;
     	}

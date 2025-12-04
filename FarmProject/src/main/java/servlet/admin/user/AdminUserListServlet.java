@@ -1,6 +1,7 @@
-package servlet.admin;
+package servlet.admin.user;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,17 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.user.UserDAO;
+import model.user.UserDTO;
+
 /**
- * Servlet implementation class AdminIndexServlet
+ * Servlet implementation class AdminUserListServlet
  */
-@WebServlet("/admin_index.do")
-public class AdminIndexServlet extends HttpServlet {
+@WebServlet("/admin_user_list.do")
+public class AdminUserListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminIndexServlet() {
+    public AdminUserListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,7 +39,15 @@ public class AdminIndexServlet extends HttpServlet {
 			response.sendRedirect("admin_login.do");
 			return;
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_index.jsp");
+		UserDAO dao = UserDAO.getInstance();
+		
+		int totcount = dao.userCount();
+		List<UserDTO> uList = dao.userList();
+		
+		request.setAttribute("totcount", totcount);
+		request.setAttribute("uList", uList);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/Admin/user_list.jsp");
 		rd.forward(request, response);
 	}
 
