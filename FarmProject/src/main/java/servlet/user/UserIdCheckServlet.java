@@ -30,13 +30,11 @@ public class UserIdCheckServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user_id = request.getParameter("user_id");
-		
-		System.out.println("user_id :" + user_id);
-		//DB 연결
+
 		UserDAO dao = UserDAO.getInstance();
 		
 		int row = dao.userIdCheck(user_id);
-		System.out.println("row:" + row);
+
 		
 		response.getWriter().append(String.valueOf(row));
 		
