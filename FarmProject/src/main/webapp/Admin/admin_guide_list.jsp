@@ -86,6 +86,17 @@
                    			<a href="${g.link}" target="_blank" class="detail-btn">
                         	🔍 자세히 보기
                    			</a>
+                   			<!-- 수정 / 삭제 버튼 추가 -->
+							<div style="margin-top:10px;">
+							    <a href="admin_guide_modify.do?id=${g.id}"
+							       style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">
+							        수정
+							    </a>
+							    <a href="/Admin/Guide?cmd=guide_delete&id=${g.id}"
+							       style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;">
+							        삭제
+							    </a>
+							</div>
                     </div>
                 
             	</td>
@@ -101,16 +112,6 @@
 			    <a href="admin_guide_write.do" 
 			       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
 			        등록
-			    </a>
-			
-			    <a href="admin_guide_modify.do" 
-			       style="padding:10px 20px; background:#FFC107; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
-			        수정
-			    </a>
-			
-			    <a href="/Admin/Guide?cmd=guide_delete" 
-			       style="padding:10px 20px; background:#F44336; color:white; border-radius:8px;">
-			        삭제
 			    </a>
 			</div>
 

@@ -1,7 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/Admin/Include/admin_topmenu.jsp" %>
-
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+ 
 <html>
 <head>
     <title>초심자 가이드 수정(관리자)</title>
@@ -141,97 +142,78 @@
             <h2>🌿 초심자 가이드 등록(관리자용)</h2>
 			<span style="color:#D32F2F; font-size:10pt;">*등록 시 전부 기입해주세요.</span>
             <form action="admin_guide_modify.do" method="post" name="guide_modify" enctype="multipart/form-data">
-
+			<input type="hidden" name="id" value="${dto.id}">
+			
                 <div class="form-row">
-                    <label>식물 이름</label>
-                    <input type="text" name="name" value="name" required>
-                </div>
-
-                <div class="form-row">
-                    <label>카테고리</label>
-                    <select name="category">
-                    	<option>카테고리를 선택해주세요</option>
-                        <option value="채소">채소</option>
-                        <option value="과일">과일</option>
-                        <option value="허브">허브</option>
-                        <option value="기타">기타</option>
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label>이미지 파일</label>
-                    <input type="file" name="image_filename" value="image_filename" accept="image/*" required>
-                </div>
-
-                <div class="form-row">
-                    <label>파종 시기</label>
-                    <input type="text" name="best_date" value="best_date" placeholder="예: 3~4월" required>
-                </div>
-
-                <div class="form-row">
-				    <label>난이도</label>
-				    <select name="level" required>
-				     	<option>난이도를 선택해주세요</option>
-				        <option value="★☆☆☆☆">★☆☆☆☆ (1)</option>
-				        <option value="★★☆☆☆">★★☆☆☆ (2)</option>
-				        <option value="★★★☆☆">★★★☆☆ (3)</option>
-				        <option value="★★★★☆">★★★★☆ (4)</option>
-				        <option value="★★★★★">★★★★★ (5)</option>
-				    </select>
-				</div>
-
-                <div class="form-row">
-                    <label>급수량</label>
-                    <input type="text" name="water" value="water" placeholder="예: 주 700ml" required>
-                </div>
-
-                <div class="form-row">
-                    <label>비료 정보</label>
-                    <input type="text" name="medicine" value="medicine" placeholder="예: NPK균형비료" required>
-                </div>
-
-                <div class="form-row">
-                    <label>수확 기간</label>
-                    <input type="text" name="last_date" value="last_date" placeholder="예: 2~3개월" required>
-                </div>
-
-                <div class="form-row">
-
-				    <!-- 1줄: 라벨만 -->
-				    <label style="display:block; margin-bottom:8px; white-space:nowrap;">
-				        재배 장소 
-				    </label>
-				
-				    <!-- 2줄: 체크박스 + 텍스트 가로 정렬 -->
-				    <div style="display:flex; align-items:center; gap:25px;">
-				        
-				        <label style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
-				            <input type="checkbox" name="place" value="실내">
-				            실내
-				        </label>
-				
-				        <label style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
-				            <input type="checkbox" name="place" value="실외">
-				            실외
-				        </label>
-				
-				    </div>
-				</div>
-				
-	                <div class="form-row">
-	                    <label>자세히 보기 링크(URL)</label>
-	                    <input type="text" name="link" value="link" placeholder="예: https://example.com/guide" required>
-	                </div>
-	
-	                <div class="btn-wrap">
-	                    <button type="button" class="btn btn-submit" onclick="write_send()">수정</button>
-	                    <a href="admin_guide_list.do" class="btn btn-cancel">취소</a>
-	                </div>
-	
-	            </form>
-	        		</div>
-				
-				    </div>
-</div>
-</body>
-</html>
+			        <label>식물 이름</label>
+			        <input type="text" name="name" value="${dto.name}" required>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>카테고리</label>
+			        <select name="category">
+			            <option value="채소" ${dto.category=="채소"?"selected":""}>채소</option>
+			            <option value="과일" ${dto.category=="과일"?"selected":""}>과일</option>
+			            <option value="허브" ${dto.category=="허브"?"selected":""}>허브</option>
+			            <option value="기타" ${dto.category=="기타"?"selected":""}>기타</option>
+			        </select>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>이미지 파일</label>
+			        <input type="file" name="image_filename" accept="image/*">
+			        <div>현재 파일: ${dto.image_filename}</div>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>파종 시기</label>
+			        <input type="text" name="best_date" value="${dto.best_date}">
+			    </div>
+			
+			    <div class="form-row">
+			        <label>난이도</label>
+			        <select name="level">
+			            <option value="★☆☆☆☆" ${dto.level=="★☆☆☆☆"?"selected":""}>★☆☆☆☆</option>
+			            <option value="★★☆☆☆" ${dto.level=="★★☆☆☆"?"selected":""}>★★☆☆☆</option>
+			            <option value="★★★☆☆" ${dto.level=="★★★☆☆"?"selected":""}>★★★☆☆</option>
+			            <option value="★★★★☆" ${dto.level=="★★★★☆"?"selected":""}>★★★★☆</option>
+			            <option value="★★★★★" ${dto.level=="★★★★★"?"selected":""}>★★★★★</option>
+			        </select>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>급수량</label>
+			        <input type="text" name="water" value="${dto.water}">
+			    </div>
+			
+			    <div class="form-row">
+			        <label>비료 정보</label>
+			        <input type="text" name="medicine" value="${dto.medicine}">
+			    </div>
+			
+			    <div class="form-row">
+			        <label>수확 기간</label>
+			        <input type="text" name="last_date" value="${dto.last_date}">
+			    </div>
+			
+			    <div class="form-row">
+			        <label>재배 장소</label>
+			
+			        <c:set var="places" value="${fn:split(dto.place, ',')}" />
+			
+			        <label><input type="checkbox" name="place" value="실내"
+			            <c:if test="${fn:contains(dto.place, '실내')}">checked</c:if>> 실내</label>
+			
+			        <label><input type="checkbox" name="place" value="실외"
+			            <c:if test="${fn:contains(dto.place, '실외')}">checked</c:if>> 실외</label>
+			    </div>
+			
+			    <div class="form-row">
+			        <label>자세히 보기 링크</label>
+			        <input type="text" name="link" value="${dto.link}">
+			    </div>
+			
+			    <button type="submit">수정 완료</button>
+			</form>
+			</body>
+			</html>
