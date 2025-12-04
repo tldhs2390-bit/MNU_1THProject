@@ -41,7 +41,7 @@ public class AdminUserModifyProServlet extends HttpServlet {
 
 	        UserDTO dto = new UserDTO();
 	        dto.setUser_id(request.getParameter("user_id"));
-	        dto.setN_name(request.getParameter("n_name"));
+
 	        dto.setUser_rank(request.getParameter("user_rank"));
 	        dto.setPoint(Integer.parseInt(request.getParameter("point")));
 
