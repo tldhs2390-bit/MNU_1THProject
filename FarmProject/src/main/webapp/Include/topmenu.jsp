@@ -1,14 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<html>
- <head><title>Web Programming Test</title>
- <link rel="stylesheet" type="text/css" href="/css/main.css">
+<!-- 메인 CSS -->
+<link rel="stylesheet" type="text/css"
+      href="${pageContext.request.contextPath}/css/main.css">
 
 <style>
 /* 전체 탑 메뉴 영역 */
 .top-wrapper {
     width: 100%;
-    background: #4CAF50; /* 상단 메뉴 메인 녹색 */
+    background: #4CAF50;
     color: white;
     margin: 0;
     padding: 0;
@@ -23,14 +23,14 @@
 
 .top-table td {
     text-align: center;
-    padding: 10px 0;
-    font-size: 11pt;
+    padding: 15px 0;
+    font-size: 12pt;
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
 }
 
-/* 상단 메뉴 셀 */
+/* 상단 메뉴 셀 색상 */
 .top-table td {
     background: #4CAF50;
 }
@@ -47,44 +47,49 @@
     display: block;
 }
 
-/* 로그인 영역(왼쪽) → 연한 녹색 */
+/* 로고 영역 */
 .logo-area {
-    background: #A5D6A7 !important; /* 연녹색 */
+    background: #A5D6A7 !important;
     color: #1B5E20;
     padding: 15px 0;
 }
 
-/* 방문자 수 표시 */
+/* 방문자 수 글씨 */
 .logo-area small {
     display: block;
-    font-size: 9pt;
+    font-size: 10pt;
     color: #2E7D32;
 }
 </style>
 
+
+<!-- 메뉴 실제 출력 부분 -->
 <div class="top-wrapper">
 
 <table class="top-table">
     <tr>
-
-        <!-- 연녹색 로고 / 로그인 블록 -->
-        <td class="logo-area" style="width:20%;">
-            <a href="/" style="font-size:14pt; font-weight:bold; color:#1B5E20;">🌿 FarmProject</a>
+        <!-- 로고 영역 -->
+        <td class="logo-area" style="width:22%;">
+            <a href="${pageContext.request.contextPath}/"
+               style="font-size:15pt; font-weight:bold; color:#1B5E20;">
+               🌿 FarmProject
+            </a>
             <small>Total 136,489 | Now 178</small>
         </td>
 
-        <!-- 메뉴들 -->
-        <td><a href="/User/user_login.jsp">로그인</a></td>
+        <!-- 메뉴 -->
+        <td><a href="${pageContext.request.contextPath}/User/user_login.jsp">로그인</a></td>
         <td><a href="">로그아웃</a></td>
-        <td><a href="/User/user_join.jsp">회원가입</a></td>
+        <td><a href="${pageContext.request.contextPath}/User/user_join.jsp">회원가입</a></td>
         <td><a href="">정보수정</a></td>
 
-        <td><a href="/Guide/guide_list.jsp">초심자가이드</a></td>
-        <td><a href="/Success/success_list.jsp">쑥쑥 성장이야기</a></td>
-        <td><a href="/Fail/fail_list.jsp">아쉬운 성장이야기</a></td>
-        <td><a href="/Board/board_list.jsp">자유게시판</a></td> 
-        <td><a href="">관리자</a></td>
+        <td><a href="${pageContext.request.contextPath}/Guide/guide_list.jsp">초심자가이드</a></td>
 
+        <td><a href="${pageContext.request.contextPath}/Success/list.do">쑥쑥 성장이야기</a></td>
+
+        <td><a href="${pageContext.request.contextPath}/Fail/fail_list.jsp">아쉬운 성장이야기</a></td>
+        <td><a href="${pageContext.request.contextPath}/Board/board_list.jsp">자유게시판</a></td>
+        <td><a href="">관리자</a></td>
     </tr>
 </table>
 
