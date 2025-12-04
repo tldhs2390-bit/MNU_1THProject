@@ -3,6 +3,8 @@ package user.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import util.DBManager;
 
@@ -134,6 +136,7 @@ public class UserDAO {
 	            dto.setUser_rank(rs.getString("user_rank"));
 	            dto.setUser_pass(rs.getString("user_pass"));
 	            dto.setPoint(rs.getInt("point"));
+	            dto.setIdx(rs.getInt("idx"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -228,5 +231,96 @@ public class UserDAO {
 				DBManager.close(conn, pstmt, rs);
 			}
 			return pass;
+		}
+		
+		//User List (admin)
+		public List<UserDTO> userList(){
+			List<UserDTO> list = new ArrayList();
+			String sql = "select * from tbl_user order by point desc";
+			
+			try {
+				conn = DBManager.getConn();
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					UserDTO dto = new UserDTO();
+					dto.setUser_name(rs.getString("user_name"));
+		            dto.setUser_id(rs.getString("user_id"));
+		            dto.setN_name(rs.getString("n_name"));
+		            dto.setTel(rs.getString("tel"));
+		            dto.setEmail(rs.getString("email"));
+		            dto.setAddress(rs.getString("address"));
+		            dto.setUser_rank(rs.getString("user_rank"));
+		            dto.setUser_pass(rs.getString("user_pass"));
+		            dto.setPoint(rs.getInt("point"));
+		            dto.setIdx(rs.getInt("idx"));
+		            list.add(dto);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt, rs);
+			}
+			return list;
+		}
+		
+		//User Count (admin)
+		public int userCount() {
+			int row=0;
+			String sql = "select count(*) from tbl_user";
+			
+			try {
+				conn = DBManager.getConn();
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					row=rs.getInt(1);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally {
+				DBManager.close(conn, pstmt, rs);
+			}
+			return row;
+		}
+		
+		//User Delete
+		public int userDelete(int idx) {
+		    int row = 0;
+		    String sql = "delete from tbl_user where idx=?";
+		    try {
+		        conn = DBManager.getConn();
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setInt(1, idx);
+		        row = pstmt.executeUpdate();
+		    } catch(Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        DBManager.close(conn, pstmt);
+		    }
+		    return row;
+		}
+		
+		//User Modify (admin)
+		public int adminUserUpdate(UserDTO dto) {
+		    int row = 0;
+		    String sql = "update tbl_user set n_name=?, user_rank=?, point=? where user_id=?";
+
+		    try {
+		        conn = DBManager.getConn();
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, dto.getN_name());
+		        pstmt.setString(2, dto.getUser_rank());
+		        pstmt.setInt(3, dto.getPoint());
+		        pstmt.setString(4, dto.getUser_id());
+
+		        row = pstmt.executeUpdate();
+		    } catch(Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        DBManager.close(conn, pstmt);
+		    }
+
+		    return row;
 		}
 }

@@ -6,7 +6,14 @@ public class UserDTO {
 	private String tel;
 	private String email;
 	private String address;
+	private int idx;
 	
+	public int getIdx() {
+		return idx;
+	}
+	public void setIdx(int idx) {
+		this.idx = idx;
+	}
 	public String getUser_rank() {
 		return user_rank;
 	}
