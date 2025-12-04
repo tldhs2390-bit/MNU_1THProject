@@ -156,7 +156,40 @@ public class GuideDAO {
 			}
 			return fruitList;
 		}
-		
+		//4.초심자 가이드 등록
+		public int guideWrite(GuideDTO dto) {
+	        int row = 0;
+
+	        String sql = "INSERT INTO tbl_guide "
+	                + "(name, category, best_date, level, water, medicine, last_date, link, image_filename,  place) "
+	                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+	        try {
+	            Connection conn = DBManager.getConn();
+	            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+	            pstmt.setString(1, dto.getName());
+	            pstmt.setString(2, dto.getCategory());
+	            pstmt.setString(3, dto.getBest_date());
+	            pstmt.setString(4, dto.getLevel());
+	            pstmt.setString(5, dto.getWater());
+	            pstmt.setString(6, dto.getMedicine());
+	            pstmt.setString(7, dto.getLast_date());
+	            pstmt.setString(8, dto.getLink());
+	            pstmt.setString(9, dto.getImage_filename());
+	            pstmt.setString(10, dto.getPlace());
+
+	            row = pstmt.executeUpdate();
+
+	            pstmt.close();
+	            conn.close();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return row;
+	    }
 		
 		
 }

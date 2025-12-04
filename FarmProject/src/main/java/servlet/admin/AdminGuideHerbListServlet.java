@@ -15,16 +15,16 @@ import guide.model.GuideDAO;
 import guide.model.GuideDTO;
 
 /**
- * Servlet implementation class AdminGuideListServlet
+ * Servlet implementation class AdminGuideHerbListServlet
  */
-@WebServlet("/admin_guide_list.do")
-public class AdminGuideListServlet extends HttpServlet {
+@WebServlet("/admin_guide_herb_list.do")
+public class AdminGuideHerbListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminGuideListServlet() {
+    public AdminGuideHerbListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,14 +43,13 @@ public class AdminGuideListServlet extends HttpServlet {
 		//DB 연결
 		GuideDAO dao = new GuideDAO();
 		//메소드 호출
-		List<GuideDTO> guideList = dao.GuideList();
+		List<GuideDTO> herbList = dao.herbList();
 		//값을 넘기기
-		request.setAttribute("guideList", guideList);
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_list.jsp");
+		request.setAttribute("herbList", herbList);
+		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_herb_list.jsp");
 		rd.forward(request, response);
 		
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

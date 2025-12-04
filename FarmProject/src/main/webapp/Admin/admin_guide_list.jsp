@@ -73,7 +73,7 @@
            		<td>
                 <a href="${g.link}" target="_blank">
                     <div class="guide-card">
-                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(g.image_filename)}.jpeg" alt="${g.name}"></a>
+                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(g.image_filename)}" alt="${g.name}"></a>
                         <h3>${g.name}</h3>
                         <p>카테고리: ${g.category}</p>
                         <p>파종 시기: ${g.best_date}</p>
@@ -97,6 +97,22 @@
 
    					 </tr>
 			</table>
+			<div style="margin-top: 30px; text-align: center;">
+			    <a href="admin_guide_write.do" 
+			       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
+			        등록
+			    </a>
+			
+			    <a href="/Admin/Guide?cmd=guide_modify" 
+			       style="padding:10px 20px; background:#FFC107; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
+			        수정
+			    </a>
+			
+			    <a href="/Admin/Guide?cmd=guide_delete" 
+			       style="padding:10px 20px; background:#F44336; color:white; border-radius:8px;">
+			        삭제
+			    </a>
+			</div>
 
     				</div>
 					</div>

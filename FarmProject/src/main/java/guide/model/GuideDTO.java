@@ -12,10 +12,16 @@ public class GuideDTO {
 	private String link;
 	private String image_filename;
 	private String place;
+	private String image;
 	
 	
 	
-	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public String getPlace() {
 		return place;
 	}

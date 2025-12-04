@@ -31,19 +31,19 @@
             <div class="guide-card">
                 <h3>🥬 채소 가이드</h3>
                 <p>실내,실외에서도 <br> 쉽게 키울 수 있는 12종 채소</p>
-                <a class="guide-btn" href="guide_veg_list.do">바로가기</a>
+                <a class="guide-btn" href="admin_guide_veg_list.do">바로가기</a>
             </div>
 
             <div class="guide-card">
                 <h3>🌿 허브 가이드</h3>
                 <p>아파트에서도 쉽게 키울 수 있는 <br> 향기 좋은 초보자 허브 5종</p>
-                <a class="guide-btn" href="/guide_herb_list.do">바로가기</a>
+                <a class="guide-btn" href="admin_guide_herb_list.do">바로가기</a>
             </div>
 
             <div class="guide-card">
                 <h3>🍓 과일 가이드</h3>
                 <p>텃밭과 실내에서   <br> 직접 키워보는 13종 과일</p>
-                <a class="guide-btn" href="/guide_fruit_list.do">바로가기</a>
+                <a class="guide-btn" href="admin_guide_fruit_list.do">바로가기</a>
             </div>
 
         </div>

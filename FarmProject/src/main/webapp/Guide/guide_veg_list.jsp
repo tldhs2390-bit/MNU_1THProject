@@ -76,7 +76,7 @@
                 	<td>
                    	<a href="${veg.link}" target="_blank">
                     <div class="guide-card">
-                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}.jpeg" alt="${veg.name}"></a>
+                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}" alt="${veg.name}"></a>
                         <h3>${veg.name}</h3>
                         <p>카테고리: ${veg.category}</p>
                         <p>파종 시기: ${veg.best_date}</p>

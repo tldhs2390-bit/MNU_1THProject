@@ -76,7 +76,7 @@
                 	<td>
                    	<a href="${herb.link}" target="_blank">
                     <div class="guide-card">
-                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}.jpeg" alt="${herb.name}"></a>
+                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}" alt="${herb.name}"></a>
                         <h3>${herb.name}</h3>
                         <p>카테고리: ${herb.category}</p>
                         <p>파종 시기: ${herb.best_date}</p>
