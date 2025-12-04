@@ -1,43 +1,97 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<html>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
-</head>
+<style>
+    /* modify.jsp 왼쪽 20% 영역에 정확히 맞는 크기 */
+    .side-login-box {
+        width: 100%;               /* td(20%) 안에서 꽉 차도록 */
+        padding: 15px;
+        background: #ffffff;
+        border: 1px solid #cfcfcf;
+        border-radius: 8px;
+        font-family: 돋움, Verdana;
+        font-size: 11pt;
+        box-sizing: border-box;    /* padding·border 포함해서 100% 유지 */
+    }
 
-<body>
+    .side-login-title {
+        font-weight: bold;
+        color: #4CAF50;
+        font-size: 13pt;
+        margin-bottom: 15px;
+        text-align: center;
+    }
 
-<!--  로그인 상단 배너 이미지 -->
-<!--  <div class="login-banner">
-    <img src="/img/garden_banner.png">
-</div> -->
+    .side-login-box input[type=text],
+    .side-login-box input[type=password] {
+        width: 100%;
+        height: 28px;
+        margin-bottom: 8px;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        padding-left: 5px;
+        box-sizing: border-box;
+        font-size: 10pt;
+    }
 
-    
+    .side-login-btn {
+        width: 100%;
+        height: 32px;
+        background: #4CAF50;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 5px;
+    }
 
-<div class="login-box">
+    .side-login-btn:hover {
+        background: #43A047;
+    }
 
-    <h3 class="login-title">Member Login</h3>
+    .side-login-box a {
+        color: #4CAF50;
+        font-size: 11pt;
+        text-decoration: none;
+    }
 
-    <form action="/User?cmd=user_login" method="post">
+    .side-login-box p {
+        margin: 11px 0;
+        text-align: center;
+    }
+</style>
 
-        <!-- 아이디 -->
-        <div class="input-wrap">
-            <img src="/img/leaf_icon.png" class="icon">
-            <input type="text" name="userid" placeholder="아이디">
-        </div>
+<!-- 로그인 안 된 상태 -->
+<c:if test="${empty user}">
+    <div class="side-login-box">
+        <h3 class="side-login-title">Member Login</h3>
 
-        <!-- 비밀번호 -->
-        <div class="input-wrap">
-            <img src="/img/leaf_icon.png" class="icon">
-            <input type="password" name="passwd" placeholder="비밀번호">
-        </div>
+        <form method="post" action="/User/user_login.do">
 
-        <input type="image" src="/img/login_btn.png" class="login-btn">
+            <input type="text" name="user_id" placeholder="아이디">
 
-    </form>
+            <input type="password" name="user_pass" placeholder="비밀번호">
 
-</div>
+            <input type="submit" value="로그인" class="side-login-btn">
+        </form>
 
-</body>
-</html>
+        <p><a href="/User/user_join.do">회원가입</a></p>
+    </div>
+</c:if>
+
+<!-- 로그인 된 상태 -->
+<c:if test="${!empty user}">
+    <div class="side-login-box">
+        <h4 class="side-login-title">이용자 정보</h4>
+
+        <p><b>${user.user_name}</b> 님</p>
+        <p>닉네임 : ${user.n_name}</p>
+        <p>등급 : ${user.user_rank}</p>
+        <p>포인트 : ${user.point }</p>
+        
+
+        <p><a href="/User/user_modify.do">회원정보수정</a></p>
+        <p><a href="/User/user_logout.do">로그아웃</a></p>
+    </div>
+</c:if>

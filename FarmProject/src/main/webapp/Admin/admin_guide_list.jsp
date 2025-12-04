@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="/Include/topmenu.jsp" %>
+<%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 
 <html>
 <head>
-    <title>초심자 가이드 목록</title>
+    <title>초심자 가이드 목록(관리자 용)</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <style>
@@ -57,13 +57,19 @@
 <div class="page-wrapper">
 
     <!-- 왼쪽 로그인 -->
-    <td class="left-menu" width="20%" valign="top">
+    <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
-    </td>
+    </div>
 
     <!-- 오른쪽 -->
     <div class="content">
-    <h1 class="main-title">🌿 초심자 가이드</h1>
+    <h1 class="main-title">🌿 초심자 가이드(관리자용)</h1>
+    	<div style="margin-top: 30px; text-align: left;">
+		    <a href="admin_guide_write.do" 
+		       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
+		        카드 등록
+		    </a>
+		</div>
 
     	<table class="guide-table">
     		<tr>
@@ -86,6 +92,17 @@
                    			<a href="${g.link}" target="_blank" class="detail-btn">
                         	🔍 자세히 보기
                    			</a>
+                   			<!-- 수정 / 삭제 버튼 추가 -->
+							<div style="margin-top:10px;">
+							    <a href="admin_guide_modify.do?id=${g.id}"
+							       style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">
+							        수정
+							    </a>
+							    <a href="/Admin/Guide?cmd=guide_delete&id=${g.id}"
+							       style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;">
+							        삭제
+							    </a>
+							</div>
                     </div>
                 
             	</td>
@@ -97,6 +114,7 @@
 
    					 </tr>
 			</table>
+			
 
     				</div>
 					</div>

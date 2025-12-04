@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="/Include/topmenu.jsp" %>
+<%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 
 <html>
 <head>
-    <title>초심자 가이드 목록</title>
+    <title>채소 가이드 목록(관리자용)</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <style>
@@ -57,46 +57,49 @@
 <div class="page-wrapper">
 
     <!-- 왼쪽 로그인 -->
-    <td class="left-menu" width="20%" valign="top">
+    <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
-    </td>
+    </div>
 
     <!-- 오른쪽 -->
     <div class="content">
-    <h1 class="main-title">🌿 초심자 가이드</h1>
+        <h1 class="main-title">🥬 채소 가이드(관리자용)</h1>
+		<p>아파트에서도 쉽게 키우는 12종 채소</p>
+        	<table class="guide-table">
+    			<tr>
+        		<c:set var="count" value="0"/>
+        		<c:forEach var="veg" items="${vegList}">
+           	  	<!-- name이 '채소'인 것만 출력 -->
+            	<c:if test="${veg.category eq '채소'}">
+				<c:set var="count" value="${count + 1}" />
 
-    	<table class="guide-table">
-    		<tr>
-        	<c:set var="count" value="0"/>
-        	<c:forEach var="g" items="${guideList}">
-            <c:set var="count" value="${count + 1}" />
-           		<td>
-                <a href="${g.link}" target="_blank">
+                	<td>
+                   	<a href="${veg.link}" target="_blank">
                     <div class="guide-card">
-                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(g.image_filename)}" alt="${g.name}"></a>
-                        <h3>${g.name}</h3>
-                        <p>카테고리: ${g.category}</p>
-                        <p>파종 시기: ${g.best_date}</p>
-                        <p>난이도: ${g.level}</p>
-                        <p>급수: ${g.water}</p>
-                        <p>비료: ${g.medicine}</p>
-                        <p>수확 기간: ${g.last_date}</p>
-                   	  	<p>재배 장소 : ${g.place}</p>
-                        <!-- 자세히 보기 버튼 -->
-                   			<a href="${g.link}" target="_blank" class="detail-btn">
+                        <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}" alt="${veg.name}"></a>
+                        <h3>${veg.name}</h3>
+                        <p>카테고리: ${veg.category}</p>
+                        <p>파종 시기: ${veg.best_date}</p>
+                        <p>난이도: ${veg.level}</p>
+                        <p>급수: ${veg.water}</p>
+                        <p>비료: ${veg.medicine}</p>
+                        <p>수확 기간: ${veg.last_date}</p>
+                        <p>재배 장소: ${veg.place}</p>
+							<!-- 자세히 보기 버튼 -->
+                   			<a href="${veg.link}" target="_blank" class="detail-btn">
                         	🔍 자세히 보기
-                   			</a>
+                        	</a>
                     </div>
-                
-            	</td>
+                	</td>
 
-            	<c:if test="${count % 5 == 0}">
-                	</tr><tr>
-            	</c:if>
-       			</c:forEach>
+                	<c:if test="${count % 5 == 0}">
+                    	</tr><tr>
+                	</c:if>
 
-   					 </tr>
-			</table>
+            		</c:if>
+       				</c:forEach>
+    					</tr>
+				</table>
 
     				</div>
 					</div>
