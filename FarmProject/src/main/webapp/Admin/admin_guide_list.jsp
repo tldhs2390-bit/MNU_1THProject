@@ -103,7 +103,7 @@
 			        등록
 			    </a>
 			
-			    <a href="/Admin/Guide?cmd=guide_modify" 
+			    <a href="admin_guide_modify.do" 
 			       style="padding:10px 20px; background:#FFC107; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
 			        수정
 			    </a>

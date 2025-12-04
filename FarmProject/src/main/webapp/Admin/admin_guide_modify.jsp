@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>초심자 가이드 등록(관리자)</title>
+    <title>초심자 가이드 수정(관리자)</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <style>
@@ -71,57 +71,57 @@
     </style>
 <script>
     function write_send(){
-    	if(!guide_write.name.value){
+    	if(!guide_modify.name.value){
     		alert("식물 이름을 입력해주세요.");
-    		guide_write.name.focus();
+    		guide_modify.name.focus();
     		return;
     	}
-    	if(guide_write.category.selectedIndex==0){
+    	if(guide_modify.category.selectedIndex==0){
     		alert("카데고리를 선택해주세요.");
-    		guide_write.category.focus();
+    		guide_modify.category.focus();
     		return;
     	}
-    	if (!guide_write.image_filename.value) {
+    	if (!guide_modify.image_filename.value) {
     	    alert("파일을 선택해주세요.");
-    	    guide_write.image_filename.focus();
+    	    guide_modify.image_filename.focus();
     	    return;
     	}
-    	if(!guide_write.best_date.value){
+    	if(!guide_modify.best_date.value){
     		alert("파종 시기를 입력해주세요.");
-    		guide_write.best_date.focus();
+    		guide_modify.best_date.focus();
     		return;
     	}
-    	if(guide_write.level.selectedIndex==0){
+    	if(guide_modify.level.selectedIndex==0){
     		alert("난이도를 선택해주세요.");
-    		guide_write.level.focus();
+    		guide_modify.level.focus();
     		return;
     	}
-    	if(!guide_write.water.value){
+    	if(!guide_modify.water.value){
     		alert("금수량을 입력해주세요.");
-    		guide_write.water.focus();
+    		guide_modify.water.focus();
     		return;
     	}
-    	if(!guide_write.medicine.value){
+    	if(!guide_modify.medicine.value){
     		alert("비료 정보를 입력해주세요.");
-    		guide_write.medicine.focus();
+    		guide_modify.medicine.focus();
     		return;
     	}
-    	if(!guide_write.last_date.value){
+    	if(!guide_modify.last_date.value){
     		alert("수확 기간을 입력해주세요.");
-    		guide_write.last_date.focus();
+    		guide_modify.last_date.focus();
     		return;
     	}
-    	if(!guide_write.place[0].checked && !guide_write.place[1].checked){
+    	if(!guide_modify.place[0].checked && !guide_modify.place[1].checked){
     		alert("재배 장소를 입력해주세요.");
-    		guide_write.place.focus();
+    		guide_modify.place.focus();
     		return;
     	}
-    	if(!guide_write.link.value){
+    	if(!guide_modify.link.value){
     		alert("링크를 첨부해주세요.");
-    		guide_write.link.focus();
+    		guide_modify.link.focus();
     		return;
     	}
-    	guide_write.submit();
+    	guide_modify.submit();
     }
 </script>
 </head>
@@ -140,11 +140,11 @@
         <div class="form-box">
             <h2>🌿 초심자 가이드 등록(관리자용)</h2>
 			<span style="color:#D32F2F; font-size:10pt;">*등록 시 전부 기입해주세요.</span>
-            <form action="admin_guide_write.do" method="post" name="guide_write" enctype="multipart/form-data">
+            <form action="admin_guide_modify.do" method="post" name="guide_modify" enctype="multipart/form-data">
 
                 <div class="form-row">
                     <label>식물 이름</label>
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" value="name" required>
                 </div>
 
                 <div class="form-row">
@@ -160,12 +160,12 @@
 
                 <div class="form-row">
                     <label>이미지 파일</label>
-                    <input type="file" name="image_filename" accept="image/*" required>
+                    <input type="file" name="image_filename" value="image_filename" accept="image/*" required>
                 </div>
 
                 <div class="form-row">
                     <label>파종 시기</label>
-                    <input type="text" name="best_date" placeholder="예: 3~4월" required>
+                    <input type="text" name="best_date" value="best_date" placeholder="예: 3~4월" required>
                 </div>
 
                 <div class="form-row">
@@ -182,17 +182,17 @@
 
                 <div class="form-row">
                     <label>급수량</label>
-                    <input type="text" name="water" placeholder="예: 주 700ml" required>
+                    <input type="text" name="water" value="water" placeholder="예: 주 700ml" required>
                 </div>
 
                 <div class="form-row">
                     <label>비료 정보</label>
-                    <input type="text" name="medicine" placeholder="예: NPK균형비료" required>
+                    <input type="text" name="medicine" value="medicine" placeholder="예: NPK균형비료" required>
                 </div>
 
                 <div class="form-row">
                     <label>수확 기간</label>
-                    <input type="text" name="last_date" placeholder="예: 2~3개월" required>
+                    <input type="text" name="last_date" value="last_date" placeholder="예: 2~3개월" required>
                 </div>
 
                 <div class="form-row">
@@ -220,11 +220,11 @@
 				
 	                <div class="form-row">
 	                    <label>자세히 보기 링크(URL)</label>
-	                    <input type="text" name="link" placeholder="예: https://example.com/guide" required>
+	                    <input type="text" name="link" value="link" placeholder="예: https://example.com/guide" required>
 	                </div>
 	
 	                <div class="btn-wrap">
-	                    <button type="button" class="btn btn-submit" onclick="write_send()">등록</button>
+	                    <button type="button" class="btn btn-submit" onclick="write_send()">수정</button>
 	                    <a href="admin_guide_list.do" class="btn btn-cancel">취소</a>
 	                </div>
 	
