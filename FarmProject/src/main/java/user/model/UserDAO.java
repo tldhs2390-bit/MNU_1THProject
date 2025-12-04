@@ -82,21 +82,12 @@ public class UserDAO {
 
 				if(rs.next()) {
 					String dbPass = rs.getString("user_pass");
-
-					System.out.println("== 로그인 디버깅 ==");
-					System.out.println("입력한 아이디: " + user_id);
-					System.out.println("입력한  비번: [" + user_pass + "]");
-					System.out.println("DB 저장 비번: [" + dbPass + "]");
-
-					if(dbPass != null && user_pass.equals(dbPass.trim())) {
-						
+					if(dbPass != null && user_pass.equals(dbPass.trim())) {			
 						row = 1;
-
 						try {
 
 							if(rs != null) rs.close();
 							if(pstmt != null) pstmt.close();
-							
 							sql = "update tbl_user set last_time = now() where user_id=?";
 							pstmt = conn.prepareStatement(sql);
 							pstmt.setString(1, user_id);
@@ -284,7 +275,7 @@ public class UserDAO {
 			return row;
 		}
 		
-		//User Delete
+		//User Delete (admin)
 		public int userDelete(int idx) {
 		    int row = 0;
 		    String sql = "delete from tbl_user where idx=?";

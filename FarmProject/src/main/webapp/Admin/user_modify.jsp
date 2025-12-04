@@ -9,7 +9,7 @@
 body,td,tr,table{
     font-size:9pt; 
     font-family:tahoma; 
-    color:#666666;
+    color:#000;
     line-height:160%;
 }
 .inputBox {
@@ -67,7 +67,7 @@ body,td,tr,table{
 
                 <tr bgcolor="#FFFFFF">
                     <td bgcolor="#EcECEC" align="center"><strong>닉네임</strong></td>
-                    <td><input type="text" name="n_name" value="${dto.n_name}" class="inputBox"></td>
+                    <td>${dto.n_name}</td>
                 </tr>
 
                 <tr bgcolor="#FFFFFF">
@@ -88,8 +88,12 @@ body,td,tr,table{
                 <tr bgcolor="#FFFFFF">
                     <td colspan="2" align="center">
                         <input type="submit" value="수정완료" class="btn">
-                    </td>
-                </tr>
+                    		&nbsp;&nbsp;
+				        <input type="button" value="리스트로 돌아가기" class="btn"
+				               onclick="location.href='/Admin/user_list.do'">
+				    </td>
+				</tr>
+                
 
             </table>
         </td>
