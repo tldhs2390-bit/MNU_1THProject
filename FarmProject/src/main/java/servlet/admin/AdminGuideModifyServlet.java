@@ -2,9 +2,11 @@ package servlet.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,62 +16,65 @@ import javax.servlet.http.Part;
 import guide.model.GuideDAO;
 import guide.model.GuideDTO;
 
-/**
- * Servlet implementation class AdminGuideModifyServlet
- */
 @WebServlet("/admin_guide_modify.do")
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)   // 10MB 업로드 허용
 public class AdminGuideModifyServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public AdminGuideModifyServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
+    // 수정 폼 이동
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String id = request.getParameter("id");
         GuideDAO dao = new GuideDAO();
-        GuideDTO dto = dao.guideSelect(Integer.parseInt(id));  // 단건 조회
+        GuideDTO dto = dao.guideSelect(Integer.parseInt(id));
 
         request.setAttribute("dto", dto);
-		
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_modify.jsp");
-		rd.forward(request, response);
-	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+        RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_modify.jsp");
+        rd.forward(request, response);
+    }
 
-        int id = Integer.parseInt(request.getParameter("id"));
+    // 수정 처리
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        // ---- 일반 데이터 ----
-        String name = request.getParameter("name");
-        String category = request.getParameter("category");
-        String best_date = request.getParameter("best_date");
-        String level = request.getParameter("level");
-        String water = request.getParameter("water");
-        String medicine = request.getParameter("medicine");
-        String last_date = request.getParameter("last_date");
-        String[] placeArr = request.getParameterValues("place");
-        String place = String.join(",", placeArr);
-        String link = request.getParameter("link");
+        request.setCharacterEncoding("UTF-8");
 
-        // ---- 이미지 파일 ----
-        Part part = request.getPart("image_filename");
-        String newFile = part.getSubmittedFileName();
+        // ----------- Multipart 방식으로 파라미터 읽기 -----------
+        int id = Integer.parseInt(getValue(request.getPart("id")));
+        String name = getValue(request.getPart("name"));
+        String category = getValue(request.getPart("category"));
+        String best_date = getValue(request.getPart("best_date"));
+        String level = getValue(request.getPart("level"));
+        String water = getValue(request.getPart("water"));
+        String medicine = getValue(request.getPart("medicine"));
+        String last_date = getValue(request.getPart("last_date"));
+        String link = getValue(request.getPart("link"));
 
+        // checkbox는 여러 개이므로 getParameterValues처럼 따로 처리
+        String place = "";
+        for (Part p : request.getParts()) {
+            if ("place".equals(p.getName())) {
+                String v = getValue(p);
+                if (v != null && !v.equals("")) {
+                    if (!place.equals("")) place += ",";
+                    place += v;
+                }
+            }
+        }
+
+        // 기존 데이터 조회
         GuideDAO dao = new GuideDAO();
-        GuideDTO old = dao.guideSelect(id);   // 기존 데이터
+        GuideDTO old = dao.guideSelect(id);
+
+        // -------------- 이미지 업로드 처리 ------------------
+        Part imgPart = request.getPart("image_filename");
+        String newFile = imgPart.getSubmittedFileName();
 
         String savePath = request.getServletContext().getRealPath("/img/guide");
         File dir = new File(savePath);
@@ -77,9 +82,9 @@ public class AdminGuideModifyServlet extends HttpServlet {
 
         String image_filename;
 
-        if (newFile != null && !newFile.equals("")) {  
-            // 새로운 파일 업로드
-            part.write(savePath + File.separator + newFile);
+        if (newFile != null && !newFile.equals("")) {
+            // 새 파일 업로드
+            imgPart.write(savePath + File.separator + newFile);
 
             // 기존 파일 삭제
             File oldFile = new File(savePath + File.separator + old.getImage_filename());
@@ -87,11 +92,11 @@ public class AdminGuideModifyServlet extends HttpServlet {
 
             image_filename = newFile;
         } else {
-            // 기존 파일 유지
+            // 새 파일 업로드 안했으면 기존 파일 유지
             image_filename = old.getImage_filename();
         }
 
-        // ---- DTO 담기 ----
+        // DTO 담기
         GuideDTO dto = new GuideDTO();
         dto.setId(id);
         dto.setName(name);
@@ -108,5 +113,11 @@ public class AdminGuideModifyServlet extends HttpServlet {
         dao.guideUpdate(dto);
 
         response.sendRedirect("admin_guide_list.do");
+    }
+
+    // ----------- Part → String 변환용 메서드 -------------
+    private String getValue(Part part) throws IOException {
+        if (part == null) return null;
+        return new String(part.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
 }

@@ -154,7 +154,6 @@
                         <option value="채소">채소</option>
                         <option value="과일">과일</option>
                         <option value="허브">허브</option>
-                        <option value="기타">기타</option>
                     </select>
                 </div>
 

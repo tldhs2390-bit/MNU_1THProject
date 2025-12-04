@@ -9,6 +9,11 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <style>
+    .form-row input[type="checkbox"] {
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 4px 0 0;
+}
         .page-wrapper { display: flex; }
         .left-menu { width: 200px; }
         .content { flex: 1; padding: 30px; }
@@ -69,9 +74,17 @@
 
         .btn-cancel { background: #9E9E9E; }
         .btn-cancel:hover { background: #757575; }
+        .chk-label {
+	    display: inline-flex !important;
+	    align-items: center;
+	    gap: 6px;
+	    margin-right: 12px;
+	    font-weight: normal;
+		}
     </style>
+    
 <script>
-    function write_send(){
+    function modify_send(){
     	if(!guide_modify.name.value){
     		alert("식물 이름을 입력해주세요.");
     		guide_modify.name.focus();
@@ -81,11 +94,6 @@
     		alert("카데고리를 선택해주세요.");
     		guide_modify.category.focus();
     		return;
-    	}
-    	if (!guide_modify.image_filename.value) {
-    	    alert("파일을 선택해주세요.");
-    	    guide_modify.image_filename.focus();
-    	    return;
     	}
     	if(!guide_modify.best_date.value){
     		alert("파종 시기를 입력해주세요.");
@@ -155,7 +163,6 @@
 			            <option value="채소" ${dto.category=="채소"?"selected":""}>채소</option>
 			            <option value="과일" ${dto.category=="과일"?"selected":""}>과일</option>
 			            <option value="허브" ${dto.category=="허브"?"selected":""}>허브</option>
-			            <option value="기타" ${dto.category=="기타"?"selected":""}>기타</option>
 			        </select>
 			    </div>
 			
@@ -197,23 +204,28 @@
 			    </div>
 			
 			    <div class="form-row">
-			        <label>재배 장소</label>
-			
-			        <c:set var="places" value="${fn:split(dto.place, ',')}" />
-			
-			        <label><input type="checkbox" name="place" value="실내"
-			            <c:if test="${fn:contains(dto.place, '실내')}">checked</c:if>> 실내</label>
-			
-			        <label><input type="checkbox" name="place" value="실외"
-			            <c:if test="${fn:contains(dto.place, '실외')}">checked</c:if>> 실외</label>
-			    </div>
+				    <label style="margin-bottom:8px;">재배 장소</label>
+				
+				    <label class="chk-label">
+				        <input type="checkbox" name="place" value="실내"
+				            ${fn:contains(dto.place, '실내') ? 'checked' : ''}> 실내
+				    </label>
+				
+				    <label class="chk-label">
+				        <input type="checkbox" name="place" value="실외"
+				            ${fn:contains(dto.place, '실외') ? 'checked' : ''}> 실외
+				    </label>
+				</div>
 			
 			    <div class="form-row">
 			        <label>자세히 보기 링크</label>
 			        <input type="text" name="link" value="${dto.link}">
 			    </div>
 			
-			    <button type="submit">수정 완료</button>
+			   <div class="btn-wrap">
+                   <button type="button" class="btn btn-submit" onclick="modify_send()">수정</button>
+                   <a href="admin_guide_list.do" class="btn btn-cancel">취소</a>
+               </div>
 			</form>
 			</body>
 			</html>

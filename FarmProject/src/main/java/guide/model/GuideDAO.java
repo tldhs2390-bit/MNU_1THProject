@@ -26,6 +26,7 @@ public class GuideDAO {
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -189,7 +190,7 @@ public class GuideDAO {
 
 	        return row;
 	    }
-		//5.id 검색
+		//5.id에 대한 목록 출력
 		public GuideDTO guideSelect(int id) {
 			GuideDTO dto = new GuideDTO();
 			String sql="select * from tbl_guide where id=?";
