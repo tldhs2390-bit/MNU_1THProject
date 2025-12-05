@@ -13,10 +13,6 @@
 
 <table width="100%" border="0">
 <tr>
-<td class="left-menu">
-
-</tr>
-<tr>
 
     <!-- 왼쪽 로그인 -->
     <td class="left-menu" width="20%" valign="top">
@@ -43,6 +39,7 @@
                 <p>아파트에서도 쉽게 키울 수 있는 <br> 향기 좋은 초보자 허브 5종</p>
                 <a class="guide-btn" href="/guide_herb_list.do">바로가기</a>
             </div>
+
 
             <div class="guide-card">
                 <h3>🍓 과일 가이드</h3>
