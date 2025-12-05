@@ -111,13 +111,15 @@ body {
     color:white;
     font-weight:bold;
     border-radius:12px;
-    margin-top:10px;
+    margin:6px 3px 0;
     font-size:13px;
 }
 
 .hash-yellow { background:#ffd966 !important; }
 .hash-blue   { background:#8fd3ff !important; }
 .hash-green  { background:#98e698 !important; }
+.hash-pink   { background:#ff85c0 !important; }
+.hash-purple { background:#d1b3ff !important; }
 
 /* --------------------------- */
 /* ⭐ 귀여운 검색창 */
@@ -175,9 +177,6 @@ body {
     background:#a6dfb1;
     transform:translateY(-2px);
     box-shadow:0 4px 10px rgba(0,0,0,0.12);
-}
-.search-btn:active {
-    transform:translateY(0px);
 }
 
 /* --------------------------- */
@@ -266,7 +265,7 @@ body {
 .tag-purple { background:#d1b3ff; }
 
 /* --------------------------- */
-/* ⭐ 귀여운 페이징 버튼 */
+/* ⭐ 페이징 버튼 */
 /* --------------------------- */
 .pagination {
     text-align:center;
@@ -303,7 +302,7 @@ body {
 }
 
 /* --------------------------- */
-/* ⭐ 글쓰기 버튼 (오른쪽) */
+/* ⭐ 글쓰기 버튼 */
 /* --------------------------- */
 .write-btn-wrap {
     width:100%;
@@ -329,8 +328,29 @@ body {
 }
 </style>
 
-<!-- ⭐ 목록 태그 2개 랜덤 생성 JS -->
+<!-- ⭐ 랜덤 태그 2개 생성 JS (Top3 & 목록 공용) -->
 <script>
+    const topTags = [
+        {text:"#성장중", class:"hash-green"},
+        {text:"#오늘도성공", class:"hash-blue"},
+        {text:"#새싹등장", class:"hash-pink"},
+        {text:"#꿀팁공유", class:"hash-yellow"},
+        {text:"#햇빛듬뿍", class:"hash-purple"}
+    ];
+
+    function putTopTags(targetId) {
+        const box = document.getElementById(targetId);
+        const shuffled = topTags.sort(() => Math.random() - 0.5);
+        const pick2 = shuffled.slice(0, 2);
+
+        pick2.forEach(t => {
+            const span = document.createElement("span");
+            span.className = "top3-hashtag " + t.class;
+            span.innerText = t.text;
+            box.appendChild(span);
+        });
+    }
+
     const tags = [
         {text:"#성장중", class:"tag-green"},
         {text:"#오늘도성공", class:"tag-blue"},
@@ -380,11 +400,9 @@ body {
                     <a href="/Success/read.do?idx=${t.idx}">${t.subject}</a>
                 </div>
 
-                <c:choose>
-                    <c:when test='${s.index == 0}'><span class="top3-hashtag hash-green">#성장성공</span></c:when>
-                    <c:when test='${s.index == 1}'><span class="top3-hashtag hash-yellow">#화사함</span></c:when>
-                    <c:otherwise><span class="top3-hashtag hash-blue">#성공팁</span></c:otherwise>
-                </c:choose>
+                <!-- ⭐ 랜덤 해시태그 2개 -->
+                <div id="topTag-${s.index}" style="margin-top:10px;"></div>
+                <script> putTopTags("topTag-${s.index}"); </script>
 
             </div>
         </c:forEach>
@@ -449,7 +467,7 @@ body {
         </c:forEach>
     </div>
 
-    <!-- ⭐ 글쓰기 버튼 (오른쪽) -->
+    <!-- ⭐ 글쓰기 버튼 -->
     <div class="write-btn-wrap">
         <a href="/Success/write.do" class="write-btn">✏️ 글쓰기</a>
     </div>
