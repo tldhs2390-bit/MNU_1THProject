@@ -9,6 +9,44 @@ public class GuideDTO {
 	private String water;
 	private String medicine;
 	private String last_date;
+	private String link;
+	private String image_filename;
+	private String place;
+	private String image;
+	private int id;
+	
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place = place;
+	}
+	public String getImage_filename() {
+		return image_filename;
+	}
+	public void setImage_filename(String image_filename) {
+		this.image_filename = image_filename;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
 	public String getName() {
 		return name;
 	}
@@ -51,10 +89,6 @@ public class GuideDTO {
 	public void setLast_date(String last_date) {
 		this.last_date = last_date;
 	}
-	
-	
-	
-	
 	
 	
 }

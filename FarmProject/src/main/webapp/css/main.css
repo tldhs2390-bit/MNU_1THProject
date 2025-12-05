@@ -10,6 +10,28 @@ body {
     font-family: 'Noto Sans KR';
     color: #333;
 }
+/* 전체 레이아웃을 flex로 구성 */
+.page-layout {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* 로그인 창: 어떤 화면이어도 절대 폭이 변하지 않음 */
+.left-menu {
+    width: 250px;   
+    min-width: 250px;  
+    max-width: 250px;  
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* 오른쪽 본문 영역 */
+.content {
+    flex: 1;
+    padding: 30px;
+    box-sizing: border-box;
+}
 
 /* 상단 메뉴 */
 .top-menu {
@@ -28,15 +50,20 @@ body {
 }
 
 
-
 /* 로그인 전체 상자 */
 .login-box {
-    background: linear-gradient(180deg, #C8E6C9, #A5D6A7);  /* 연녹색 */
+    width: 400px;               /* 어떤 화면이든 같은 크기 유지 */
+    max-width: 400px;           /* 더 이상 줄어들지 않도록 */
+    margin: 40px auto;          /* 화면 가운데 정렬 */
+    
+    background: linear-gradient(180deg, #C8E6C9, #A5D6A7);
     padding: 20px;
     border-radius: 8px;
     text-align: center;
     color: #1B5E20;
+    box-sizing: border-box;
 }
+
 
 
 
@@ -52,6 +79,7 @@ body {
 
 /* input 감싸는 박스 */
 .input-wrap {
+    width: 100%;                /* 부모 너비 기준 유지 */
     display: flex;
     align-items: center;
     background: #E8F5E9;
@@ -80,8 +108,9 @@ body {
 
 /* 로그인 버튼 */
 .login-btn {
-    margin-top: 5px;
-    width: 80px;
+    width: 100%;                /* 버튼도 박스 너비에 맞추기 */
+    padding: 10px 0;
+    font-size: 12pt;
 }
 
 
