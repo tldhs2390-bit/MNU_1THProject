@@ -6,33 +6,59 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class DBManager {
-	public static Connection getConn() {
-		Connection conn = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/farm?serverTimezone=UTC", "root", "kso212055");
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return conn;
-	}
-	
-	public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-		try {
-			rs.close();
-			pstmt.close();
-			conn.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	//메소드 오버로딩 메소드 이름은 같지만 기능 개수가 다름
-	public static void close(Connection conn, PreparedStatement pstmt) {
-		try {
-			pstmt.close();
-			conn.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+    public static Connection getConn() {
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/farm?serverTimezone=UTC",
+                "root",
+                "0110"
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
+
+    // ================================
+    // ⭐ 안전한 close (rs, pstmt, conn 순서)
+    // ================================
+    public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
+        try {
+            if (rs != null) rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (pstmt != null) pstmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (conn != null) conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ================================
+    // ⭐ rs 없는 경우 close
+    // ================================
+    public static void close(Connection conn, PreparedStatement pstmt) {
+        try {
+            if (pstmt != null) pstmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (conn != null) conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
