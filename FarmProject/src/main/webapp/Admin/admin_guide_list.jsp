@@ -55,13 +55,6 @@
 
 <body>
 <div class="page-wrapper">
-
-    <!-- 왼쪽 로그인 -->
-    <div class="left-menu">
-        <%@ include file="/Include/login_form.jsp" %>
-    </div>
-
-    <!-- 오른쪽 -->
     <div class="content">
     <h1 class="main-title">🌿 초심자 가이드(관리자용)</h1>
     	<div style="margin-top: 30px; text-align: left;">
@@ -98,10 +91,11 @@
 							       style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">
 							        수정
 							    </a>
-							    <a href="/Admin/Guide?cmd=guide_delete&id=${g.id}"
-							       style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;">
-							        삭제
-							    </a>
+							    <a href="/admin_guide_delete.do?id=${g.id}"
+								 	style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;"
+								 	onclick="return confirm('정말 삭제하시겠습니까?');">
+								    삭제
+								</a>
 							</div>
                     </div>
                 

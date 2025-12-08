@@ -55,13 +55,6 @@
 
 <body>
 <div class="page-wrapper">
-
-    <!-- 왼쪽 로그인 -->
-    <div class="left-menu">
-        <%@ include file="/Include/login_form.jsp" %>
-    </div>
-
-    <!-- 오른쪽 -->
     <div class="content">
         <h1 class="main-title">🌿 허브 가이드(관리자용)</h1>
 		<p>향기 좋은 초보자 허브 5종</p>

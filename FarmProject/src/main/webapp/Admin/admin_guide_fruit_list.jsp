@@ -55,13 +55,6 @@
 
 <body>
 <div class="page-wrapper">
-
-    <!-- 왼쪽 로그인 -->
-    <div class="left-menu">
-        <%@ include file="/Include/login_form.jsp" %>
-    </div>
-
-    <!-- 오른쪽 -->
     <div class="content">
         <h1 class="main-title">🍓 과일 가이드(관리자용)</h1>
 		<p>직접 키워보는 과일 13종</p>

@@ -13,13 +13,6 @@
 
 <table width="100%" border="0">
 <tr>
-
-    <!-- 왼쪽 로그인 -->
-    <td class="left-menu">
-        <%@ include file="/Include/login_form.jsp" %>
-    </td>
-
-    <!-- 오른쪽 본문 -->
     <td class="content">
 
         <h1 class="main-title">🌿 FarmProject(관리자용)</h1>
@@ -29,28 +22,29 @@
         <div class="guide-wrap">
 
             <div class="guide-card">
-                <h3>🥬 채소 가이드</h3>
-                <p>실내,실외에서도 <br> 쉽게 키울 수 있는 12종 채소</p>
+                <h3>🥬 채소 가이드(관리자용)</h3>
+                <p>실내,실외에서도 <br> 쉽게 키울 수 있는 채소</p>
                 <a class="guide-btn" href="admin_guide_veg_list.do">바로가기</a>
             </div>
 
             <div class="guide-card">
-                <h3>🌿 허브 가이드</h3>
-                <p>아파트에서도 쉽게 키울 수 있는 <br> 향기 좋은 초보자 허브 5종</p>
-                <a class="guide-btn" href="admin_guide_herb_list.do">바로가기</a>
+                <h3>🌿 허브 가이드(관리자용)</h3>
+                <p>아파트에서도 쉽게 키울 수 있는 <br> 향기 좋은 초보자 허브</p>
+                <a class="guide-btn" href="/admin_guide_herb_list.do">바로가기</a>
             </div>
 
+
             <div class="guide-card">
-                <h3>🍓 과일 가이드</h3>
-                <p>텃밭과 실내에서   <br> 직접 키워보는 13종 과일</p>
-                <a class="guide-btn" href="admin_guide_fruit_list.do">바로가기</a>
+                <h3>🍓 과일 가이드(관리자용)</h3>
+                <p>텃밭과 실내에서   <br> 직접 키워보는 과일</p>
+                <a class="guide-btn" href="/admin_guide_fruit_list.do">바로가기</a>
             </div>
 
         </div>
 
         <!-- 성공 최신 글 -->
         <div class="latest-box">
-            <h3>🌱 쑥쑥 성장 이야기</h3>
+            <h3>🌱 쑥쑥 성장 이야기(관리자용)</h3>
             <table class="latest-mini">
                 <c:forEach var="s" items="${successList}">
                     <tr>
@@ -63,7 +57,7 @@
 
         <!-- 실패 최신 글 -->
         <div class="latest-box">
-            <h3>💧 아쉬운 성장 노트</h3>
+            <h3>💧 아쉬운 성장 노트(관리자용)</h3>
             <table class="latest-mini">
                 <c:forEach var="f" items="${failList}">
                     <tr>
@@ -76,7 +70,7 @@
 
         <!-- 자유 최신 글 -->
         <div class="latest-box">
-            <h3>📢 자유게시판 최신 글</h3>
+            <h3>📢 자유게시판 최신 글(관리자용)</h3>
             <table class="latest-mini">
                 <c:forEach var="b" items="${boardList}">
                     <tr>

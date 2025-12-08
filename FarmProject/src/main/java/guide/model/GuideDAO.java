@@ -52,7 +52,7 @@ public class GuideDAO {
 		//1-1. 채소, 과일, 허브  검색 조회 메소드
 		public List<GuideDTO> GuideList(String search,String key) {
 			//반환타입
-			List<GuideDTO> guidelist = new ArrayList();
+			List<GuideDTO> guideList = new ArrayList();
 			//쿼리
 			String sql = "select * from tbl_guide where "+ search + " like ? ORDER BY name ASC";
 			try {
@@ -74,14 +74,14 @@ public class GuideDAO {
 					dto.setImage_filename(rs.getString("image_filename").trim());
 					dto.setPlace(rs.getString("place"));
 					
-					guidelist.add(dto);
+					guideList.add(dto);
 				}
 			}catch(Exception e) {
 				e.printStackTrace();
 			}finally{
 				DBManager.close(conn, pstmt,rs);
 			}
-			return guidelist;
+			return guideList;
 		}
 		//2. 채소,조회 메소드
 		public List<GuideDTO> vegList(){
@@ -120,18 +120,19 @@ public class GuideDAO {
 			return vegList;
 		}
 		//2-2 채소,조회 검색 메소드
-		public List<GuideDTO> vegList(String search, String key){
-			//반환값 정의
-			List<GuideDTO> vegList = new ArrayList<GuideDTO>();
+		public List<GuideDTO> vegList(String search,String key) {
+			//반환타입
+			List<GuideDTO> vegList = new ArrayList();
 			//쿼리
-			String sql = "SELECT * FROM tbl_guide WHERE category = '채소' ORDER BY name ASC";
+			String sql = "select * from tbl_guide where "+ search + " like ? ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
-				
+				pstmt.setString(1, "%"+key+"%");
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -143,15 +144,12 @@ public class GuideDAO {
 					dto.setImage_filename(rs.getString("image_filename").trim());
 					dto.setPlace(rs.getString("place"));
 					
-
 					vegList.add(dto);
 				}
-				
 			}catch(Exception e) {
 				e.printStackTrace();
-			}finally {
-				//insert, update, delete
-				DBManager.close(conn, pstmt);
+			}finally{
+				DBManager.close(conn, pstmt,rs);
 			}
 			return vegList;
 		}
@@ -192,18 +190,19 @@ public class GuideDAO {
 			return herbList;
 		}
 		//3-3. 허브,조회 검색메소드
-		public List<GuideDTO> herbList(String search, String key){
-			//반환값 정의
-			List<GuideDTO> herbList = new ArrayList<GuideDTO>();
+		public List<GuideDTO> herbList(String search,String key) {
+			//반환타입
+			List<GuideDTO> herbList = new ArrayList();
 			//쿼리
-			String sql = "SELECT * FROM tbl_guide WHERE category = '허브' ORDER BY name ASC";
+			String sql = "select * from tbl_guide where "+ search + " like ? ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
-				
+				pstmt.setString(1, "%"+key+"%");
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -214,15 +213,13 @@ public class GuideDAO {
 					dto.setLink(rs.getString("link"));
 					dto.setImage_filename(rs.getString("image_filename").trim());
 					dto.setPlace(rs.getString("place"));
-
+					
 					herbList.add(dto);
 				}
-				
 			}catch(Exception e) {
 				e.printStackTrace();
-			}finally {
-				//insert, update, delete
-				DBManager.close(conn, pstmt);
+			}finally{
+				DBManager.close(conn, pstmt,rs);
 			}
 			return herbList;
 		}
@@ -261,19 +258,20 @@ public class GuideDAO {
 			}
 			return fruitList;
 		}
-		//4. 과일,조회 메소드
-		public List<GuideDTO> fruitList(String search, String key){
-			//반환값 정의
-			List<GuideDTO> fruitList = new ArrayList<GuideDTO>();
+		//4-4. 과일,조회 검색 메소드
+		public List<GuideDTO> fruitList(String search,String key) {
+			//반환타입
+			List<GuideDTO> fruitList = new ArrayList();
 			//쿼리
-			String sql = "SELECT * FROM tbl_guide WHERE category = '과일' ORDER BY name ASC";
+			String sql = "select * from tbl_guide where "+ search + " like ? ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
-				
+				pstmt.setString(1, "%"+key+"%");
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -284,15 +282,13 @@ public class GuideDAO {
 					dto.setLink(rs.getString("link"));
 					dto.setImage_filename(rs.getString("image_filename").trim());
 					dto.setPlace(rs.getString("place"));
-
+					
 					fruitList.add(dto);
 				}
-				
 			}catch(Exception e) {
 				e.printStackTrace();
-			}finally {
-				//insert, update, delete
-				DBManager.close(conn, pstmt);
+			}finally{
+				DBManager.close(conn, pstmt,rs);
 			}
 			return fruitList;
 		}

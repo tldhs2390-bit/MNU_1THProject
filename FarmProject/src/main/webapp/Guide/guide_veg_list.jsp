@@ -96,13 +96,12 @@ function guide_search(){
         <p>아파트에서도 쉽게 키우는 채소</p>
 
         <!-- 검색창 (초심자 페이지와 동일 구조) -->
-        <form name="guide" method="get" action="veg_list.do">
+        <form name="guide" method="get" action="guide_veg_list.do">
             <table>
                 <tr>
                     <td>
                         <select name="search">
                             <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
-                            <option value="category" <c:if test="${search=='category'}">selected</c:if>>카테고리</option>
                             <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
                         </select>
                     </td>
