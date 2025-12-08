@@ -18,7 +18,7 @@ public class GuideDAO {
 			//반환값 정의
 			List<GuideDTO> guideList = new ArrayList<GuideDTO>();
 			//쿼리
-			String sql="select * from tbl_guide";
+			String sql="select * from tbl_guide ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
@@ -54,7 +54,7 @@ public class GuideDAO {
 					//반환값 정의
 					List<GuideDTO> vegList = new ArrayList<GuideDTO>();
 					//쿼리
-					String sql = "SELECT * FROM tbl_guide WHERE category = '채소'";
+					String sql = "SELECT * FROM tbl_guide WHERE category = '채소' ORDER BY name ASC";
 					try {
 						conn = DBManager.getConn();
 						pstmt = conn.prepareStatement(sql);
@@ -91,7 +91,7 @@ public class GuideDAO {
 			//반환값 정의
 			List<GuideDTO> herbList = new ArrayList<GuideDTO>();
 			//쿼리
-			String sql = "SELECT * FROM tbl_guide WHERE category = '허브'";
+			String sql = "SELECT * FROM tbl_guide WHERE category = '허브' ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
@@ -126,7 +126,7 @@ public class GuideDAO {
 			//반환값 정의
 			List<GuideDTO> fruitList = new ArrayList<GuideDTO>();
 			//쿼리
-			String sql = "SELECT * FROM tbl_guide WHERE category = '과일'";
+			String sql = "SELECT * FROM tbl_guide WHERE category = '과일' ORDER BY name ASC";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);
