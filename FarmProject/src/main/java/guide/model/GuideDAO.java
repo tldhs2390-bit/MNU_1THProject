@@ -253,6 +253,24 @@ public class GuideDAO {
 		    }
 		    return row;
 		}
-		
+		//7. 초심자 가이드 삭제
+		public int guideDelete(int id) {
+		    int row = 0;
+		    String sql = "DELETE FROM tbl_guide WHERE id=?";
+
+		    try {
+		        conn = DBManager.getConn();
+		        pstmt = conn.prepareStatement(sql);
+
+		        pstmt.setInt(1, id);
+		        row = pstmt.executeUpdate();
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        DBManager.close(conn, pstmt);
+		    }
+		    return row;
+		}
 		
 }
