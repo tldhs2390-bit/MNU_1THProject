@@ -40,8 +40,11 @@ public class AdminGuideListServlet extends HttpServlet {
 			return;
 		}
 		
+<<<<<<< HEAD
 		
 		
+=======
+>>>>>>> refs/remotes/origin/kso
 		//DB 연결
 		GuideDAO dao = new GuideDAO();
 		//메소드 호출

@@ -15,10 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/index.do")
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
       
 	
 	
 	
+=======
+       
+>>>>>>> refs/remotes/origin/kso
     /**
      * @see HttpServlet#HttpServlet()
      */

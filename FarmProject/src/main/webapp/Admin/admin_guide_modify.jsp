@@ -90,9 +90,25 @@
     		guide_modify.name.focus();
     		return;
     	}
+<<<<<<< HEAD
     	if(!guide_modify.best_date.value){
     		alert("파종 시기를 입력해주세요.");
     		guide_modify.best_date.focus();
+=======
+    	if(guide_modify.category.selectedIndex==0){
+    		alert("카데고리를 선택해주세요.");
+    		guide_modify.category.focus();
+    		return;
+    	}
+    	if(!guide_modify.best_date.value){
+    		alert("파종 시기를 입력해주세요.");
+    		guide_modify.best_date.focus();
+    		return;
+    	}
+    	if(guide_modify.level.selectedIndex==0){
+    		alert("난이도를 선택해주세요.");
+    		guide_modify.level.focus();
+>>>>>>> refs/remotes/origin/kso
     		return;
     	}
     	if(!guide_modify.water.value){

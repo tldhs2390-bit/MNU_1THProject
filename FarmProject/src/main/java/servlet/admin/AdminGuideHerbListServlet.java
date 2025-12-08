@@ -29,7 +29,10 @@ public class AdminGuideHerbListServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> refs/remotes/origin/kso
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
