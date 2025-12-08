@@ -38,9 +38,16 @@ public class GuideListServlet extends HttpServlet {
 		List<GuideDTO> guideList = dao.GuideList();
 		//값을 넘기기
 		request.setAttribute("guideList", guideList);
+<<<<<<< Upstream, based on branch 'kso' of https://github.com/tldhs2390-bit/MNU_1THProject.git
 		RequestDispatcher rd = request.getRequestDispatcher("/Guide/guide_list.jsp");
 		rd.forward(request, response);
 		
+=======
+		
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/Guide/guide_list.jsp");
+		rd.forward(request, response);
+>>>>>>> 51dc2d0 12월 2일
 	}
 
 	/**
