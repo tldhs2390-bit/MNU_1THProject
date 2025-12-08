@@ -13,6 +13,10 @@
 
 <table width="100%" border="0">
 <tr>
+<td class="left-menu">
+
+</tr>
+<tr>
 
     <!-- 왼쪽 로그인 -->
     <td class="left-menu" width="20%" valign="top">
