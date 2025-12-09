@@ -1,4 +1,4 @@
-package servlet.admin.guide;
+package servlet.admin.main;
 
 import java.io.IOException;
 

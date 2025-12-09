@@ -96,6 +96,7 @@ public class GuideDAO {
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -167,6 +168,7 @@ public class GuideDAO {
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));
@@ -236,6 +238,7 @@ public class GuideDAO {
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					GuideDTO dto = new GuideDTO();
+					dto.setId(rs.getInt("id"));
 					dto.setName(rs.getString("name").trim());
 					dto.setCategory(rs.getString("category"));
 					dto.setBest_date(rs.getString("best_date"));

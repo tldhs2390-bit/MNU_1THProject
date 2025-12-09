@@ -87,6 +87,12 @@
                 </tr>
             </table>
         </form>
+        <div style="margin-top: 30px; text-align: left;">
+		    <a href="admin_guide_fruit_write.do" 
+		       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">
+		        카드 등록
+		    </a>
+		</div>
         	<table class="guide-table">
     			<tr>
         		<c:set var="count" value="0"/>
@@ -111,6 +117,18 @@
                    			<a href="${fruit.link}" target="_blank" class="detail-btn">
                         	🔍 자세히 보기
                         	</a>
+                        	<!-- 수정 / 삭제 버튼 추가 -->
+							<div style="margin-top:10px;">
+							    <a href="admin_guide_fruit_modify.do?id=${fruit.id}"
+							       style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">
+							        수정
+							    </a>
+							    <a href="/admin_guide_fruit_delete.do?id=${fruit.id}"
+								 	style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;"
+								 	onclick="return confirm('정말 삭제하시겠습니까?');">
+								    삭제
+								</a>
+							</div>
                     </div>
                 	</td>
 

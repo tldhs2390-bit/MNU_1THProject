@@ -90,11 +90,6 @@
     		guide_modify.name.focus();
     		return;
     	}
-    	if(guide_modify.category.selectedIndex==0){
-    		alert("카데고리를 선택해주세요.");
-    		guide_modify.category.focus();
-    		return;
-    	}
     	if(!guide_modify.best_date.value){
     		alert("파종 시기를 입력해주세요.");
     		guide_modify.best_date.focus();
@@ -143,7 +138,7 @@
         <div class="form-box">
             <h2>🌿 초심자 가이드 등록(관리자용)</h2>
 			<span style="color:#D32F2F; font-size:10pt;">*등록 시 전부 기입해주세요.</span>
-            <form action="admin_guide_modify.do" method="post" name="guide_modify" enctype="multipart/form-data">
+            <form action="admin_guide_veg_modify.do" method="post" name="guide_modify" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${dto.id}">
 			
                 <div class="form-row">
@@ -218,7 +213,7 @@
 			
 			   <div class="btn-wrap">
                    <button type="button" class="btn btn-submit" onclick="modify_send()">수정</button>
-                   <a href="admin_guide_list.do" class="btn btn-cancel">취소</a>
+                   <a href="admin_guide_veg_list.do" class="btn btn-cancel">취소</a>
                </div>
 			</form>
 			</body>
