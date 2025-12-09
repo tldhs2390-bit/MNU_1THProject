@@ -7,7 +7,7 @@
 /* 전체 배경 */
 body { 
     font-family: 'Noto Sans KR', 돋움, Verdana, sans-serif;
-    background:#f5f5f5;
+    background:#F1F8E9;
     margin:0;
     padding:0;
 }
