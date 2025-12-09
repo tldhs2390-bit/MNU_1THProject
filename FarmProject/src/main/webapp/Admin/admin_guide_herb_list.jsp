@@ -129,6 +129,15 @@ function guide_search(){
     }
     guide.submit();
 }
+//팝업 열기
+	function openPopup(url){
+	    window.open(
+	        url,
+	        "guidePopup",
+	        "width=900,height=700,scrollbars=yes,resizable=yes"
+	    );
+}
+</script>
 </script>
 </head>
 
@@ -166,9 +175,12 @@ function guide_search(){
                 <c:if test="${herb.category eq '허브'}">
                     <c:set var="count" value="${count + 1}" />
                     <td>
-                        <a href="${herb.link}" target="_blank">
+                     
                         <div class="guide-card">
-                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}" alt="${herb.name}"></a>
+                            <!-- 이미지 클릭 → 팝업 -->
+                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}"
+                                 alt="${herb.name}"
+                                 onclick="openPopup('${herb.link}')">
                             <h3>${herb.name}</h3>
                             <p>카테고리: ${herb.category}</p>
                             <p>파종 시기: ${herb.best_date}</p>
@@ -178,7 +190,9 @@ function guide_search(){
                             <p>수확 기간: ${herb.last_date}</p>
                             <p>재배 장소: ${herb.place}</p>
 
-                            <a href="${herb.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+                            <!-- 자세히 보기 → 팝업 -->
+                            <a href="javascript:void(0)" class="detail-btn"
+                               onclick="openPopup('${herb.link}')">🔍 자세히 보기</a>
                             <div style="margin-top:10px;">
                                 <a href="admin_guide_herb_modify.do?id=${herb.id}" 
                                    style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">수정</a>

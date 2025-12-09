@@ -10,7 +10,7 @@
 
     <style>
         .main-title {
-            text-align: center;  /* 가운데 정렬 */
+            text-align: center;
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 20px;
@@ -20,6 +20,7 @@
             display: flex;
             justify-content: center;
         }
+
         .content {
             flex: none;
             padding: 20px;
@@ -69,7 +70,7 @@
         }
         .search-btn:hover { background: #43a047; }
 
-        /* 카드 테이블 & 카드 스타일 */
+        /* 카드 테이블 */
         .guide-table {
             width: auto;
             margin: 0 auto;
@@ -84,7 +85,7 @@
 
         .guide-card {
             width: 160px;
-            background: #fff4e0; /* 연한 베이지 + 살짝 갈색 느낌 */
+            background: #fff4e0;
             border: 1px solid #C8E6C9;
             border-radius: 10px;
             padding: 10px;
@@ -99,6 +100,7 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 8px;
+            cursor: pointer;
         }
 
         .detail-btn {
@@ -111,6 +113,7 @@
             border-radius: 6px;
             text-decoration: none;
             transition: background 0.2s;
+            cursor: pointer;
         }
         .detail-btn:hover { background: #43A047; }
     </style>
@@ -124,6 +127,15 @@ function guide_search(){
     }
     guide.submit();
 }
+
+// 팝업 열기
+function openPopup(url){
+    window.open(
+        url,
+        "guidePopup",
+        "width=900,height=700,scrollbars=yes,resizable=yes"
+    );
+}
 </script>
 </head>
 
@@ -131,7 +143,7 @@ function guide_search(){
 <div class="page-wrapper">
     <div class="content">
         <h1 class="main-title">🥬 채소 가이드(관리자용)</h1>
-        <p style="text-align:center;">아파트에서도 쉽게 키우는 채소</p>
+        
 
         <!-- 검색폼 -->
         <form name="guide" method="get" action="admin_guide_veg_list.do">
@@ -160,10 +172,15 @@ function guide_search(){
             <c:forEach var="veg" items="${vegList}">
                 <c:if test="${veg.category eq '채소'}">
                     <c:set var="count" value="${count + 1}" />
+
                     <td>
-                        <a href="${veg.link}" target="_blank">
                         <div class="guide-card">
-                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}" alt="${veg.name}"></a>
+
+                            <!-- 이미지 클릭 → 팝업 -->
+                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}"
+                                 alt="${veg.name}"
+                                 onclick="openPopup('${veg.link}')">
+
                             <h3>${veg.name}</h3>
                             <p>카테고리: ${veg.category}</p>
                             <p>파종 시기: ${veg.best_date}</p>
@@ -173,16 +190,23 @@ function guide_search(){
                             <p>수확 기간: ${veg.last_date}</p>
                             <p>재배 장소: ${veg.place}</p>
 
-                            <a href="${veg.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+                            <!-- 자세히 보기 → 팝업 -->
+                            <a href="javascript:void(0)" class="detail-btn"
+                               onclick="openPopup('${veg.link}')">🔍 자세히 보기</a>
+
                             <div style="margin-top:10px;">
                                 <a href="admin_guide_veg_modify.do?id=${veg.id}" 
                                    style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">수정</a>
+
                                 <a href="/admin_guide_veg_delete.do?id=${veg.id}" 
                                    style="padding:6px 10px; background:#F44336; color:white; border-radius:6px; text-decoration:none;" 
-                                   onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                                   onclick="return confirm('정말 삭제하시겠습니까?');">
+                                   삭제
+                                </a>
                             </div>
                         </div>
                     </td>
+
                     <c:if test="${count % 5 == 0}"></tr><tr></c:if>
                 </c:if>
             </c:forEach>

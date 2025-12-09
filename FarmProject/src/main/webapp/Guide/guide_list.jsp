@@ -42,8 +42,21 @@
 
 <script>
 function guide_search(){
-    if(guide.key.value==""){ alert("검색어를 입력하세요"); guide.key.focus(); return; }
+    if(guide.key.value==""){ 
+        alert("검색어를 입력하세요"); 
+        guide.key.focus(); 
+        return; 
+    }
     guide.submit();
+}
+
+// 팝업 열기 함수
+function openPopup(url){
+    window.open(
+        url,
+        "guidePopup",
+        "width=900,height=700,scrollbars=yes,resizable=yes"
+    );
 }
 </script>
 </head>
@@ -76,7 +89,12 @@ function guide_search(){
                     <c:set var="count" value="${count + 1}" />
                     <td>
                         <div class="guide-card">
-                            <a href="${g.link}" target="_blank"><img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(g.image_filename)}" alt="${g.name}"></a>
+                            <!-- 이미지 클릭 → 팝업으로 열기 -->
+                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(g.image_filename)}"
+                                 alt="${g.name}"
+                                 style="cursor:pointer"
+                                 onclick="openPopup('${g.link}')">
+
                             <h3>${g.name}</h3>
                             <p>카테고리: ${g.category}</p>
                             <p>파종 시기: ${g.best_date}</p>
@@ -85,7 +103,13 @@ function guide_search(){
                             <p>비료: ${g.medicine}</p>
                             <p>수확 기간: ${g.last_date}</p>
                             <p>재배 장소: ${g.place}</p>
-                            <a href="${g.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+
+                            <!-- 자세히 보기 → 팝업 -->
+                            <a href="javascript:void(0)" 
+                               class="detail-btn"
+                               onclick="openPopup('${g.link}')">
+                               🔍 자세히 보기
+                            </a>
                         </div>
                     </td>
                     <c:if test="${count % 5 == 0}"></tr><tr></c:if>

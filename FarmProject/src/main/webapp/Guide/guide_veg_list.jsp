@@ -7,6 +7,7 @@
 <head>
     <title>채소 가이드 목록</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+
     <style>
         .page-wrapper { display:flex; gap:20px; justify-content:flex-start; }
         .left-menu { width:20%; }
@@ -35,17 +36,30 @@
 
         .detail-btn { display:inline-block; margin-top:10px; padding:6px 10px; background:#4CAF50; color:white; font-size:12pt; border-radius:6px; text-decoration:none; transition:background 0.2s; }
         .detail-btn:hover { background: #43A047; }
-		/* 검색했을 때 카드가 5개 미만이어도 레이아웃 고정 */
-		.search-result-mode .guide-table {
-		    min-width: 900px;
-		    margin: 0 auto;
-		}
+
+        .search-result-mode .guide-table {
+            min-width: 900px;
+            margin: 0 auto;
+        }
     </style>
-    </style>
+
 <script>
 function guide_search(){
-    if(guide.key.value==""){ alert("검색어를 입력하세요"); guide.key.focus(); return; }
+    if(guide.key.value==""){
+        alert("검색어를 입력하세요");
+        guide.key.focus();
+        return;
+    }
     guide.submit();
+}
+
+// 팝업 열기 함수
+function openPopup(url){
+    window.open(
+        url,
+        "guidePopup",
+        "width=900,height=700,scrollbars=yes,resizable=yes"
+    );
 }
 </script>
 </head>
@@ -65,6 +79,7 @@ function guide_search(){
                     <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
                     <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
                 </select>
+
                 <input type="text" name="key" class="search-input" value="${key}">
                 <button type="button" class="search-btn" onclick="guide_search()">검색</button>
             </div>
@@ -76,9 +91,16 @@ function guide_search(){
                 <c:forEach var="veg" items="${vegList}">
                     <c:if test="${veg.category eq '채소'}">
                         <c:set var="count" value="${count + 1}" />
+
                         <td>
                             <div class="guide-card">
-                                <a href="${veg.link}" target="_blank"><img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}" alt="${veg.name}"></a>
+
+                                <!-- 이미지 클릭 → 팝업 -->
+                                <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(veg.image_filename)}"
+                                     alt="${veg.name}"
+                                     style="cursor:pointer"
+                                     onclick="openPopup('${veg.link}')">
+
                                 <h3>${veg.name}</h3>
                                 <p>카테고리: ${veg.category}</p>
                                 <p>파종 시기: ${veg.best_date}</p>
@@ -87,9 +109,16 @@ function guide_search(){
                                 <p>비료: ${veg.medicine}</p>
                                 <p>수확 기간: ${veg.last_date}</p>
                                 <p>재배 장소: ${veg.place}</p>
-                                <a href="${veg.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+
+                                <!-- 자세히 보기 → 팝업 -->
+                                <a href="javascript:void(0)"
+                                   class="detail-btn"
+                                   onclick="openPopup('${veg.link}')">
+                                   🔍 자세히 보기
+                                </a>
                             </div>
                         </td>
+
                         <c:if test="${count % 5 == 0}"></tr><tr></c:if>
                     </c:if>
                 </c:forEach>

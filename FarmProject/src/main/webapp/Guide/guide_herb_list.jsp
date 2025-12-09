@@ -42,6 +42,15 @@ function guide_search(){
     if(guide.key.value==""){ alert("검색어를 입력하세요"); guide.key.focus(); return; }
     guide.submit();
 }
+
+//팝업 열기 함수
+function openPopup(url){
+    window.open(
+        url,
+        "guidePopup",
+        "width=900,height=700,scrollbars=yes,resizable=yes"
+    );
+}
 </script>
 </head>
 
@@ -73,7 +82,10 @@ function guide_search(){
                         <c:set var="count" value="${count + 1}" />
                         <td>
                             <div class="guide-card">
-                                <a href="${herb.link}" target="_blank"><img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}" alt="${herb.name}"></a>
+                                <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(herb.image_filename)}"
+                                     alt="${herb.name}"
+                                     style="cursor:pointer"
+                                     onclick="openPopup('${herb.link}')">
                                 <h3>${herb.name}</h3>
                                 <p>카테고리: ${herb.category}</p>
                                 <p>파종 시기: ${herb.best_date}</p>
@@ -82,7 +94,12 @@ function guide_search(){
                                 <p>비료: ${herb.medicine}</p>
                                 <p>수확 기간: ${herb.last_date}</p>
                                 <p>재배 장소: ${herb.place}</p>
-                                <a href="${herb.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+                                <!-- 자세히 보기 → 팝업 -->
+                                <a href="javascript:void(0)"
+                                   class="detail-btn"
+                                   onclick="openPopup('${herb.link}')">
+                                   🔍 자세히 보기
+                                </a>
                             </div>
                         </td>
                         <c:if test="${count % 5 == 0}"></tr><tr></c:if>

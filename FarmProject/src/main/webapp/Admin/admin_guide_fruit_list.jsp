@@ -129,6 +129,14 @@ function guide_search(){
     }
     guide.submit();
 }
+//팝업 열기
+		function openPopup(url){
+		    window.open(
+		        url,
+		        "guidePopup",
+		        "width=900,height=700,scrollbars=yes,resizable=yes"
+		    );
+}
 </script>
 </head>
 
@@ -166,9 +174,12 @@ function guide_search(){
                 <c:if test="${fruit.category eq '과일'}">
                     <c:set var="count" value="${count + 1}" />
                     <td>
-                        <a href="${fruit.link}" target="_blank">
+                        
                         <div class="guide-card">
-                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(fruit.image_filename)}" alt="${fruit.name}"></a>
+                            <!-- 이미지 클릭 → 팝업 -->
+                            <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(fruit.image_filename)}"
+                                 alt="${fruit.name}"
+                                 onclick="openPopup('${fruit.link}')">
                             <h3>${fruit.name}</h3>
                             <p>카테고리: ${fruit.category}</p>
                             <p>파종 시기: ${fruit.best_date}</p>
@@ -178,7 +189,9 @@ function guide_search(){
                             <p>수확 기간: ${fruit.last_date}</p>
                             <p>재배 장소: ${fruit.place}</p>
 
-                            <a href="${fruit.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
+                            <!-- 자세히 보기 → 팝업 -->
+                            <a href="javascript:void(0)" class="detail-btn"
+                               onclick="openPopup('${fruit.link}')">🔍 자세히 보기</a>
                             <div style="margin-top:10px;">
                                 <a href="admin_guide_fruit_modify.do?id=${fruit.id}" 
                                    style="padding:6px 10px; background:#FFC107; color:white; border-radius:6px; text-decoration:none; margin-right:5px;">수정</a>
