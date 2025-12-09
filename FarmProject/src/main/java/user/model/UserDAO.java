@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.DBManager;
+import util.UserSHA256;
 
 public class UserDAO {
 	Connection conn = null;
@@ -67,47 +68,50 @@ public class UserDAO {
 		return row;
 	}
 	//로그인
-		public int userLogin(String user_id, String user_pass) {
-			int row = 0;
-			String sql = "select user_pass from tbl_user where user_id=?";
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
+	public int userLogin(String user_id, String user_pass) {
+	    int row = 0;
+	    String sql = "select user_pass from tbl_user where user_id=?";
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
 
-			try {
-				conn = DBManager.getConn();
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, user_id);
-				rs = pstmt.executeQuery();
+	    try {
+	        conn = DBManager.getConn();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, user_id);
+	        rs = pstmt.executeQuery();
 
-				if(rs.next()) {
-					String dbPass = rs.getString("user_pass");
-					if(dbPass != null && user_pass.equals(dbPass.trim())) {			
-						row = 1;
-						try {
+	        if(rs.next()) {
+	            String dbPass = rs.getString("user_pass");
 
-							if(rs != null) rs.close();
-							if(pstmt != null) pstmt.close();
-							sql = "update tbl_user set last_time = now() where user_id=?";
-							pstmt = conn.prepareStatement(sql);
-							pstmt.setString(1, user_id);
-							pstmt.executeUpdate();
-						} catch(Exception e) {
-							
-						}
-					} else {
-						row = 0; // 비밀번호 불일치
-					}
-				} else {
-					row = -1; // 아이디 없음
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			} finally {
-				DBManager.close(conn, pstmt, rs);
-			}
-			return row;
-		}
+	            // 입력 비밀번호 암호화
+	            String encPass = UserSHA256.getSHA256(user_pass);
+
+	            if(dbPass != null && encPass.equals(dbPass.trim())) {			
+	                row = 1;
+	                try {
+	                    if(rs != null) rs.close();
+	                    if(pstmt != null) pstmt.close();
+	                    sql = "update tbl_user set last_time = now() where user_id=?";
+	                    pstmt = conn.prepareStatement(sql);
+	                    pstmt.setString(1, user_id);
+	                    pstmt.executeUpdate();
+	                } catch(Exception e) {
+	                    e.printStackTrace();
+	                }
+	            } else {
+	                row = 0; // 비밀번호 불일치
+	            }
+	        } else {
+	            row = -1; // 아이디 없음
+	        }
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBManager.close(conn, pstmt, rs);
+	    }
+	    return row;
+	}
 	//로그인 성공시 세션 -- 수정시 사용
 	public UserDTO userSelect(String userid) {
 		UserDTO dto = new UserDTO();

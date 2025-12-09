@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html; charset=UTF-8" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 
 <html>
 <head>
@@ -32,14 +33,15 @@ body,td,tr,table{
 
 <body>
 
-<jsp:include page="/Include/topmenu.jsp" />
+
 
 <br><br>
 
 <!-- 전체 form을 table 바깥으로 뺌 -->
-<form action="/Admin/user_modify_pro.do" method="post">
+<form action="admin_user_modify_pro.do" method="post">
 
 <input type="hidden" name="user_id" value="${dto.user_id}">
+<input type="hidden" name="n_name" value="${dto.n_name}">
 
 <!-- 제목 박스 -->
 <table width="30%" border="1" cellspacing="0" cellpadding="3"
@@ -91,7 +93,7 @@ body,td,tr,table{
                         <input type="submit" value="수정완료" class="btn">
                     		&nbsp;&nbsp;
 				        <input type="button" value="리스트로 돌아가기" class="btn"
-				               onclick="location.href='/Admin/user_list.do'">
+				               onclick="location.href='/admin_user_list.do'">
 				    </td>
 				</tr>
                 

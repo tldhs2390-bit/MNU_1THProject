@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import user.model.UserDAO;
 import user.model.UserDTO;
+import util.UserSHA256;
 
 /**
  * Servlet implementation class UserModifyServlet
@@ -45,28 +46,37 @@ public class UserModifyServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		UserDTO dto = new UserDTO();
+		    request.setCharacterEncoding("utf-8");
 
-		
-		dto.setUser_name(request.getParameter("user_name"));
-		dto.setN_name(request.getParameter("n_name"));
-		dto.setTel(request.getParameter("tel"));
-		dto.setEmail(request.getParameter("email"));
-		dto.setAddress(request.getParameter("address"));
-		dto.setUser_rank(request.getParameter("user_rank"));
-		dto.setUser_id(request.getParameter("user_id"));
-		dto.setUser_pass(request.getParameter("user_pass"));		
-		
-		UserDAO dao = UserDAO.getInstance();
-		
-		int row = dao.userModify(dto);
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("user", dto);
-		session.setMaxInactiveInterval(1800);
-		
-		response.sendRedirect("/index.do");
+		    HttpSession session = request.getSession();
+		    UserDTO old = (UserDTO) session.getAttribute("user");
+
+		    UserDTO dto = new UserDTO();
+
+		    dto.setUser_name(request.getParameter("user_name"));
+		    dto.setN_name(request.getParameter("n_name"));
+		    dto.setTel(request.getParameter("tel"));
+		    dto.setEmail(request.getParameter("email"));
+		    dto.setAddress(request.getParameter("address"));
+		    dto.setUser_rank(request.getParameter("user_rank"));
+		    dto.setUser_id(request.getParameter("user_id"));
+
+		    String pass = request.getParameter("user_pass");
+
+		    if(pass == null || pass.equals("")) {
+		        dto.setUser_pass(old.getUser_pass());
+		    } else {
+		        dto.setUser_pass(UserSHA256.getSHA256(pass));
+		    }
+
+		    UserDAO dao = UserDAO.getInstance();
+		    int row = dao.userModify(dto);
+
+		    // 세션 업데이트
+		    session.setAttribute("user", dto);
+		    session.setMaxInactiveInterval(1800);
+
+		    response.sendRedirect("/admin_index.do");
+		}
 	}
-
-}
+	

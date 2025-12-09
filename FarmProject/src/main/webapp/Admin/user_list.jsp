@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
+<%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 <html>
 <head>
 <title>관리자페이지</title>
@@ -21,7 +21,7 @@ A:hover {font-family:tahoma;font-size:9pt;color:#009900;text-decoration:underlin
 
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr><td><jsp:include page="/Include/topmenu.jsp" flush="true" /></td></tr>
+	
 	<tr>
 		<td align="center" height="100%" valign=middle><br>
 			<table width="30%" border="1" cellspacing="0" cellpadding="3" bgcolor="#FFCC66" bordercolor="#FFFFFF" bordercolorlight="#000000">
@@ -59,12 +59,12 @@ A:hover {font-family:tahoma;font-size:9pt;color:#009900;text-decoration:underlin
 						<td align="center" bgcolor="#FFFFFF">${uDto.user_rank}</td>
 						<td align="center" bgcolor="#FFFFFF">${uDto.point}</td>
 						<td align="center" bgcolor="#FFFFFF">
-					        <form action="/Admin/user_modify.do" method="get" style="display:inline;">
+					        <form action="admin_user_modify.do" method="get" style="display:inline;">
 					            <input type="hidden" name="user_id" value="${uDto.user_id}">
 					            <input type="submit" value="수정">
 					        </form>
 					
-					        <form action="/Admin/user_delete.do" method="get"
+					        <form action="admin_user_delete.do" method="get"
 					              onsubmit="return confirm('정말 삭제할까요?');" style="display:inline;">
 					            <input type="hidden" name="idx" value="${uDto.idx}">
 					            <input type="submit" value="삭제">
