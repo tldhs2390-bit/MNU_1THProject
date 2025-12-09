@@ -133,7 +133,7 @@
             <input type="submit" value="로그인" class="side-login-btn">
         </form>
 
-        <p><a href="/User/user_join.do">회원가입</a></p>
+        <p><a href="/User/user_join_agree.jsp">회원가입</a></p>
     </div>
 </c:if>
 

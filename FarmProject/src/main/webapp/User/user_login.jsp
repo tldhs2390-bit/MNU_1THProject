@@ -146,7 +146,7 @@
             <div class="login-footer"> 
 			    <a href="<%= request.getContextPath() %>/User/user_find_id.do">아이디 찾기</a> |
 			    <a href="<%= request.getContextPath() %>/User/user_find_pass.do">비밀번호 찾기</a> |
-			    <a href="<%= request.getContextPath() %>/User/user_join.do">회원가입</a>
+			    <a href="<%= request.getContextPath() %>/User/user_join_agree.jsp">회원가입</a>
 			</div>
         </form>
     </div>
