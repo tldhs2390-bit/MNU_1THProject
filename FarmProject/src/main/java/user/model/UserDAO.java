@@ -318,4 +318,34 @@ public class UserDAO {
 
 		    return row;
 		}
+		
+		// 포인트 상위 5명 랭킹
+		public List<UserDTO> getPointRankTop5() {
+		    List<UserDTO> list = new ArrayList<>();
+
+		    String sql = "select user_id, n_name, point "
+		               + "from tbl_user "
+		               + "order by point desc "
+		               + "limit 5";
+
+		    try {
+		        conn = DBManager.getConn();
+		        pstmt = conn.prepareStatement(sql);
+		        rs = pstmt.executeQuery();
+
+		        while(rs.next()) {
+		            UserDTO dto = new UserDTO();
+		            dto.setUser_id(rs.getString("user_id"));
+		            dto.setN_name(rs.getString("n_name"));
+		            dto.setPoint(rs.getInt("point"));
+		            list.add(dto);
+		        }
+		    } catch(Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        DBManager.close(conn, pstmt, rs);
+		    }
+
+		    return list;
+		}
 }

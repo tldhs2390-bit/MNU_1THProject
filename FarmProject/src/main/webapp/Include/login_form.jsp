@@ -60,6 +60,63 @@
         margin: 11px 0;
         text-align: center;
     }
+    .side-rank-box {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-sizing: border-box;
+    text-align:center;
+	}
+	
+	.side-rank-title {
+	    font-weight: bold;
+	    color: #4CAF50; ;
+	    margin-bottom: 8px;
+	    text-align: center;
+	}
+	
+	.side-rank-table {
+	    width: 100%;
+	    font-size: 9pt;
+	}
+	/* 포인트 랭킹 테이블 정렬 */
+	.side-rank-table {
+	    width: 100%;
+	    font-size: 11pt;
+	    border-collapse: collapse;
+	}
+	
+	.side-rank-table th {
+	    padding: 6px 0;
+	    font-weight: bold;
+	    border-bottom: 1px solid #e5e5e5;
+	    text-align: center;
+	}
+	
+	.side-rank-table td {
+	    padding: 6px 0;
+	    text-align: center; /* 기본 가운데 정렬 */
+	}
+	
+	/* 열 폭 설정 */
+	.side-rank-rank {
+	    width: 20%;
+	    text-align:center;
+	}
+	
+	.side-rank-name {
+	    width: 45%;
+	    text-align:center;
+	}
+	
+	.side-rank-point {
+	    width: 35%;
+	    text-align:center; /* 숫자 오른쪽 정렬 */
+	    padding-right: 10px;
+	}
 </style>
 
 <!-- 로그인 안 된 상태 -->
@@ -95,3 +152,38 @@
         <p><a href="/User/user_logout.do">로그아웃</a></p>
     </div>
 </c:if>
+
+<%@ page import="user.model.UserDAO,user.model.UserDTO" %>
+<%
+    UserDAO dao = UserDAO.getInstance();
+    request.setAttribute("rankList", dao.getPointRankTop5());
+%>
+<!-- 상위랭킹 5명 -->
+<div class="side-rank-box">
+    <div class="side-rank-title">포인트 랭킹</div>
+
+    <c:choose>
+        <c:when test="${empty rankList}">
+            <div style="text-align:center; color:#777; font-size:9pt;">
+                랭킹 정보 없음
+            </div>
+        </c:when>
+        <c:otherwise>
+            <table class="side-rank-table">
+                <tr>
+                    <th class="side-rank-rank">랭킹</th>
+                    <th class="side-rank-name">닉네임</th>
+                    <th class="side-rank-point">포인트</th>
+                </tr>
+
+                <c:forEach var="r" items="${rankList}" varStatus="st">
+                    <tr>
+                        <td class="side-rank-rank">${st.index + 1}</td>
+                        <td class="side-rank-name">${r.n_name}</td>
+                        <td class="side-rank-point">${r.point}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:otherwise>
+    </c:choose>
+</div>
