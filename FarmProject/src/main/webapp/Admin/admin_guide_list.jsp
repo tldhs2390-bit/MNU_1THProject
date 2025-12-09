@@ -9,12 +9,25 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <style>
-        .page-wrapper { display: flex; }
-        .left-menu { width: 200px; }
-        .content { flex: 1; padding: 20px; }
+        .page-wrapper {
+		    display: flex;
+		    justify-content: center; /* 수평 가운데 */
+		}
+		.content {
+		    flex: none; /* 기존 flex:1 제거 */
+		    padding: 20px;
+		}
 
-        table.guide-table { width: 100%; border-collapse: collapse; }
-        table.guide-table td { padding: 15px; text-align: center; }
+        .guide-table {
+		    width: auto; /* content만큼 */
+		    margin: 0 auto; /* 가운데 정렬 */
+		    border-collapse: collapse;
+		}
+		.guide-table td {
+		    padding: 15px;
+		    text-align: center;
+		    vertical-align: top;
+		}
 
         .guide-card {
             width: 160px;
