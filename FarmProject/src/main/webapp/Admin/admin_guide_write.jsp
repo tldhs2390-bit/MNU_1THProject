@@ -129,11 +129,6 @@
 <body>
 <div class="page-wrapper">
 
-    <!-- 왼쪽 로그인 -->
-    <div class="left-menu">
-        <%@ include file="/Include/login_form.jsp" %>
-    </div>
-
     <!-- 오른쪽 내용 -->
     <div class="content">
 

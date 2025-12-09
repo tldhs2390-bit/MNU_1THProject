@@ -51,12 +51,45 @@
 		    background: #43A047;
 		}
     </style>
+<script>
+function guide_search(){
+    if(guide.key.value == ""){
+        alert("검색어를 입력하세요");
+        guide.key.focus();
+        return;
+    }
+    guide.submit();
+}
+</script>
 </head>
 
 <body>
 <div class="page-wrapper">
     <div class="content">
     <h1 class="main-title">🌿 초심자 가이드(관리자용)</h1>
+    <!-- 검색 -->
+        <form name="guide" method="get" action="admin_guide_list.do">
+            <table>
+                <tr>
+                    <td>
+                        <select name="search">
+                            <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
+                            <option value="category" <c:if test="${search=='category'}">selected</c:if>>카테고리</option>
+                            <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="text" size="20" name="key" value="${key}">
+                    </td>
+
+                    <td>
+                        <button type="button" class="search-btn" onclick="guide_search()">검색</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        
     	<div style="margin-top: 30px; text-align: left;">
 		    <a href="admin_guide_write.do" 
 		       style="padding:10px 20px; background:#4CAF50; color:white; border-radius:8px; text-decoration:none; margin-right:10px;">

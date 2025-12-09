@@ -1,4 +1,4 @@
-package servlet.admin;
+package servlet.admin.guide;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,20 +15,21 @@ import guide.model.GuideDAO;
 import guide.model.GuideDTO;
 
 /**
- * Servlet implementation class AdminGuideVegListServlet
+ * Servlet implementation class AdminGuideHerbListServlet
  */
-@WebServlet("/admin_guide_veg_list.do")
-public class AdminGuideVegListServlet extends HttpServlet {
+@WebServlet("/admin_guide_herb_list.do")
+public class AdminGuideHerbListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminGuideVegListServlet() {
+    public AdminGuideHerbListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
 
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -42,15 +43,37 @@ public class AdminGuideVegListServlet extends HttpServlet {
 		
 		//DB 연결
 		GuideDAO dao = new GuideDAO();
-		//메소드 호출
-		List<GuideDTO> vegList = dao.vegList();
-		//값을 넘기기
-		request.setAttribute("vegList", vegList);
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_veg_list.jsp");
+		// 검색값 받기
+        String search = request.getParameter("search");
+        String key = request.getParameter("key");
+
+        // null 방지 처리
+        if (search == null || search.trim().equals("")) {
+            search = "name"; // 기본 검색 기준
+        }
+        if (key == null) {
+            key = "";
+        }
+
+        // 검색 적용
+        List<GuideDTO> herbList;
+
+        if (key.trim().equals("")) {
+            // 검색어 없을 때 전체 목록
+            herbList = dao.herbList();
+        } else {
+            // 검색어 있을 때 조건 검색
+            herbList = dao.herbList(search, key);
+        }
+
+        // JSP로 값 전달
+        request.setAttribute("herbList", herbList);
+        request.setAttribute("search", search);
+        request.setAttribute("key", key);
+		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_guide_herb_list.jsp");
 		rd.forward(request, response);
 		
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

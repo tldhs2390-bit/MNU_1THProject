@@ -51,6 +51,16 @@
 		    background: #43A047;
 		}
     </style>
+<script>
+	function guide_search(){
+    	if(guide.key.value == ""){
+        	alert("검색어를 입력하세요");
+        	guide.key.focus();
+        	return;
+    	}
+    	guide.submit();
+	}
+</script>
 </head>
 
 <body>
@@ -58,6 +68,27 @@
     <div class="content">
         <h1 class="main-title">🌿 허브 가이드(관리자용)</h1>
 		<p>향기 좋은 초보자 허브 5종</p>
+		<!-- 검색창 추가 -->
+        <form name="guide" method="get" action="admin_guide_herb_list.do">
+            <table>
+                <tr>
+                    <td>
+                        <select name="search">
+                            <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
+                            <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="text" size="20" name="key" value="${key}">
+                    </td>
+
+                    <td>
+                        <button type="button" class="search-btn" onclick="guide_search()">검색</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
         	<table class="guide-table">
     			<tr>
         		<c:set var="count" value="0"/>
