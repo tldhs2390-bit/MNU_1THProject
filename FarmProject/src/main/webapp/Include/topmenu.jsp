@@ -81,7 +81,7 @@
         <td><a href="/User/user_logout.do">로그아웃</a></td>
         </c:if>
         <c:if test="${empty user }">
-        <td><a href="/User/user_join.do">회원가입</a></td>
+        <td><a href="/User/user_join_agree.jsp">회원가입</a></td>
         </c:if>
         <c:if test="${!empty user }">
         <td><a href="/User/user_modify.do">정보수정</a></td>

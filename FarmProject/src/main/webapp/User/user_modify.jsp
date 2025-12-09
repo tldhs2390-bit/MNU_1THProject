@@ -41,38 +41,31 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 	$(function(){
 
 		$("#btn1").click(function(){
-			// 닉네임
 			if($("#n_name").val()==''){
 				alert("닉네임을 입력하세요");
 				$("#n_name").focus();
 				return;
 			}
-			// 비밀번호
 			if($("#user_pass").val()==''){
 				alert("비밀번호를 입력하세요");
 				$("#user_pass").focus();
 				return;
 			}
-			// 비밀번호 확인
 			if($("#user_repass").val()==''){
 				alert("비밀번호 확인을 입력하세요");
 				$("#user_repass").focus();
 				return;
 			}
-			// 비밀번호 일치 여부 최종 확인
 			if($("#user_pass").val() != $("#user_repass").val()){
 				alert("비밀번호가 일치하지 않습니다.");
 				$("#user_repass").focus();
 				return;
 			}
-			// 전화번호
 			if($("#tel").val()==''){
 				alert("전화번호를 입력하세요");
 				$("#tel").focus();
 				return;
 			}
-			
-			// 전송
 			alert("회원정보수정 성공!");
 			$("#user").submit();		
 		});
@@ -93,6 +86,12 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 			}else{
 				$("#repasswd_c").text("비밀번호가 일치하지 않습니다.").css("color", "red");
 			}
+		});
+		// 회원탈퇴
+		$("#btn3").click(function(){
+		    if(confirm("정말로 회원탈퇴하시겠습니까? \n모든 정보가 삭제됩니다.")){
+		        location.href = "<%=request.getContextPath()%>/User/user_delete.do?user_id=" + $("#user_id").val();
+		    }
 		});
 	});
 </script>
@@ -191,25 +190,30 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 								</td>
 							</tr>
 							
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;등급</td>
-								<td bgcolor=WHITE valign=middle>
-									<select name="user_rank" style="width:150px; height:30px;">
-										<option>등급을 선택하세요</option>
-										<option value="고수" ${dto.user_rank == '고수' ? 'selected' : '' }>고수</option>
-										<option value="초심자" ${dto.user_rank == '초심자' ? 'selected' : '' }>초심자</option>
-									</select>
-								</td>
-							</tr>
+							
 						</table>
 						<table cellpadding="0" cellspacing="0" border="0" width="100%">
 							<tr bgcolor="#ffffff">
-                                <td colspan="2" style="text-align: center; padding: 30px 0;">
-									<input type="button" value="수정 확인" id="btn1" class="btn-style btn-submit" style="width:120px; height:40px; font-weight:bold; cursor:pointer; background:#4CAF50; color:white; border:none;">
-                                    &nbsp;&nbsp; 
-									<input type="button" value="수정 취소" id="btn2" class="btn-style btn-cancel" style="width:120px; height:40px; font-weight:bold; cursor:pointer; background:#ccc; color:black; border:none;">
-								</td>
-							</tr>
+						    <td colspan="2" style="padding: 30px 0; position:relative;">
+						
+						        <!-- 가운데 버튼 그룹 -->
+						        <div style="text-align:center;">
+						            <input type="button" value="수정 확인" id="btn1"
+						                   style="width:120px; height:40px; font-weight:bold; cursor:pointer;
+						                          background:#4CAF50; color:white; border:none;">
+						            &nbsp;&nbsp;
+						            <input type="button" value="수정 취소" id="btn2"
+						                   style="width:120px; height:40px; font-weight:bold; cursor:pointer;
+						                          background:#ccc; color:black; border:none;">
+						        </div>
+						        <div style="position:absolute; right:0; top:50%; transform:translateY(-50%);">
+						            <input type="button" value="회원 탈퇴" id="btn3"
+						                   style="width:90px; height:30px; font-weight:bold; cursor:pointer;
+						                          background:#e53935; color:white; border:none;">
+						        </div>
+						
+						    </td>
+						</tr>
 						</table>
 					</td>
 				</tr>

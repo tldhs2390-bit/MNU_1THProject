@@ -74,16 +74,6 @@ body,td,tr,table{
                 </tr>
 
                 <tr bgcolor="#FFFFFF">
-                    <td bgcolor="#EcECEC" align="center"><strong>등급</strong></td>
-                    <td>
-                        <select name="user_rank" class="selectBox">
-                            <option value="초심자" ${dto.user_rank=='초심자'?'selected':''}>초심자</option>
-                            <option value="고수"   ${dto.user_rank=='고수'?'selected':''}>고수</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr bgcolor="#FFFFFF">
                     <td bgcolor="#EcECEC" align="center"><strong>포인트</strong></td>
                     <td><input type="text" name="point" value="${dto.point}" class="inputBox"></td>
                 </tr>

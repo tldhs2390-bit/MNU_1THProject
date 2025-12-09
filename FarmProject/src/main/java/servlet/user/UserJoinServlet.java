@@ -48,7 +48,6 @@ public class UserJoinServlet extends HttpServlet {
 		dto.setTel(request.getParameter("tel"));
 		dto.setEmail(request.getParameter("email"));
 		dto.setAddress(request.getParameter("address"));
-		dto.setUser_rank(request.getParameter("user_rank"));
 		dto.setUser_id(request.getParameter("user_id"));
 		
 		//비밀번호 암호화
