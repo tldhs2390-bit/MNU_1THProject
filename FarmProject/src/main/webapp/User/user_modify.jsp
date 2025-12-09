@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>회원정보수정</title>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
 <style type="text/css">
 /* CSS 주석 수정 및 스타일 정리 */
 body { font-family: 돋움, Verdana; font-size: 9pt}
@@ -102,10 +103,9 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
 <!-- 왼쪽 로그인 배너 -->
 <table border="0" width="100%">
 	<tr>
-  	<td width="20%"  bgcolor="#ecf1ef" valign="top" style="padding-left:0;">
-
-	<%@ include file="/Include/login_form.jsp" %>
-  </td>
+  	 <td class="left-menu" width="20%" valign="top">
+        <%@ include file="/Include/login_form.jsp" %>
+    </td>
   <td width="80%" valign="top">&nbsp;<br>    
 
 	<form name="user" id="user" method="post" action="/User/user_modify.do">
