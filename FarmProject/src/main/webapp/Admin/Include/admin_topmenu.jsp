@@ -69,7 +69,9 @@
 
         <!-- 연녹색 로고 / 로그인 블록 -->
         <td class="logo-area" style="width:20%;">
-            <a href="admin_index.do" style="font-size:14pt; font-weight:bold; color:#1B5E20;">🌿 FarmProject(관리자용)</a>
+            <a href="admin_index.do" style="font-size:14pt; font-weight:bold; color:#1B5E20;">
+    		🌿 FarmProject(관리자용)
+		 	</a>
             <small>Total 136,489 | Now 178</small>
         </td>
 
