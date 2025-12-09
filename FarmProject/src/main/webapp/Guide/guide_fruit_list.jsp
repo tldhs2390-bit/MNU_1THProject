@@ -8,113 +8,64 @@
     <title>과일 가이드 목록</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
-<style>
-    /* 페이지 전체 구조 */
-    .content { padding: 20px; }
+    <style>
+        .page-wrapper { display:flex; gap:20px; justify-content:flex-start; }
+        .left-menu { width:20%; }
+        .content { flex:1; padding:20px; }
 
-    /* 가이드 카드 */
-    .guide-table { width: 100%; border-collapse: collapse; }
-    .guide-table td { padding: 15px; text-align: center; }
+        .main-title { text-align:center; font-size:28px; font-weight:700; margin-bottom:20px; }
 
-    .guide-card {
-        width: 160px;
-        background: white;
-        border: 1px solid #C8E6C9;
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-        transition: transform 0.2s;
-    }
-    .guide-card:hover { transform: scale(1.05); }
+        .search-container {
+            display:flex; align-items:center; gap:12px;
+            background:#f5ffe9; border:2px solid #d8eec5;
+            padding:15px 20px; border-radius:18px;
+            margin:0 auto 22px auto; width:66%;
+        }
+        .search-select { padding:10px 14px; border:2px solid #cfe8c8; border-radius:10px; background:white; font-size:14px; font-weight:700; color:#4CAF50; cursor:pointer; }
+        .search-input { flex:1; padding:10px 14px; border:2px solid #cfe8c8; border-radius:10px; font-size:14px; }
+        .search-btn { padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; transition:.25s; }
+        .search-btn:hover { background:#43A047; }
 
-    .guide-card img {
-        width: 100%;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 8px;
-    }
+        .guide-table { width:auto; margin:0 auto; border-collapse:collapse; }
+        .guide-table td { padding:15px; text-align:center; vertical-align:top; }
 
-    .detail-btn {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 6px 10px;
-        background: #4CAF50;
-        color: white;
-        font-size: 12pt;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: background 0.2s;
-    }
-    .detail-btn:hover { background: #43A047; }
+        .guide-card { width:160px; background:#fff4e0; border:1px solid #C8E6C9; border-radius:10px; padding:10px; box-shadow:0 3px 6px rgba(0,0,0,0.05); transition:transform 0.2s; }
+        .guide-card:hover { transform:scale(1.05); }
+        .guide-card img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
 
-    /* 검색 버튼 스타일 */
-    .search-btn {
-        background: #5cb85c;
-        color: white;
-        border: none;
-        padding: 8px 18px;
-        font-size: 14px;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: 0.2s;
-        font-weight: bold;
-    }
-    .search-btn:hover {
-        background: #4cae4c;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-</style>
+        .detail-btn { display:inline-block; margin-top:10px; padding:6px 10px; background:#4CAF50; color:white; font-size:12pt; border-radius:6px; text-decoration:none; transition:background 0.2s; }
+        .detail-btn:hover { background:#43A047; }
+    </style>
 
 <script>
 function guide_search(){
-    if(guide.key.value == ""){
-        alert("검색어를 입력하세요");
-        guide.key.focus();
-        return;
-    }
+    if(guide.key.value==""){ alert("검색어를 입력하세요"); guide.key.focus(); return; }
     guide.submit();
 }
 </script>
-
 </head>
 
 <body>
-
-<table width="100%" border="0">
-<tr>
-    <!-- 왼쪽 로그인 영역 -->
-    <td class="left-menu" width="20%" valign="top">
+<div class="page-wrapper">
+    <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
-    </td>
+    </div>
 
-    <!-- 오른쪽 본문 -->
-    <td class="content">
-
+    <div class="content">
         <h1 class="main-title">🍓 과일 가이드</h1>
-        <p>직접 키워보는 과일</p>
 
-        <!-- 검색창 -->
+
         <form name="guide" method="get" action="guide_fruit_list.do">
-            <table>
-                <tr>
-                    <td>
-                        <select name="search">
-                            <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
-                            <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text" size="20" name="key" value="${key}">
-                    </td>
-                    <td>
-                        <button type="button" class="search-btn" onclick="guide_search()">검색</button>
-                    </td>
-                </tr>
-            </table>
+            <div class="search-container">
+                <select name="search" class="search-select">
+                    <option value="name" <c:if test="${search=='name'}">selected</c:if>>이름</option>
+                    <option value="place" <c:if test="${search=='place'}">selected</c:if>>재배 장소</option>
+                </select>
+                <input type="text" name="key" class="search-input" value="${key}">
+                <button type="button" class="search-btn" onclick="guide_search()">검색</button>
+            </div>
         </form>
 
-        <!-- 카드 목록 -->
         <table class="guide-table">
             <tr>
                 <c:set var="count" value="0"/>
@@ -123,11 +74,7 @@ function guide_search(){
                         <c:set var="count" value="${count + 1}" />
                         <td>
                             <div class="guide-card">
-                                <a href="${fruit.link}" target="_blank">
-                                    <img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(fruit.image_filename)}"
-                                         alt="${fruit.name}">
-                                </a>
-
+                                <a href="${fruit.link}" target="_blank"><img src="${pageContext.request.contextPath}/img/guide/${fn:escapeXml(fruit.image_filename)}" alt="${fruit.name}"></a>
                                 <h3>${fruit.name}</h3>
                                 <p>카테고리: ${fruit.category}</p>
                                 <p>파종 시기: ${fruit.best_date}</p>
@@ -136,23 +83,15 @@ function guide_search(){
                                 <p>비료: ${fruit.medicine}</p>
                                 <p>수확 기간: ${fruit.last_date}</p>
                                 <p>재배 장소: ${fruit.place}</p>
-
                                 <a href="${fruit.link}" target="_blank" class="detail-btn">🔍 자세히 보기</a>
                             </div>
                         </td>
-
-                        <c:if test="${count % 5 == 0}">
-                            </tr><tr>
-                        </c:if>
-
+                        <c:if test="${count % 5 == 0}"></tr><tr></c:if>
                     </c:if>
                 </c:forEach>
             </tr>
         </table>
-
-    </td>
-</tr>
-</table>
-
+    </div>
+</div>
 </body>
 </html>
