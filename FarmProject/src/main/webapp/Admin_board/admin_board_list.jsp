@@ -109,6 +109,13 @@ function board_search(){
                 <button type="button" class="search-btn" onclick="board_search()">검색</button>
             </div>
         </form>
+		<div style="text-align:right; margin-bottom:15px;">
+		    <a href="admin_board_write.do" 
+		       style="display:inline-block; padding:10px 18px; background:#4CAF50; color:white; 
+		              font-weight:700; border-radius:6px; text-decoration:none; transition:0.25s;">
+		       📝 등록
+		    </a>
+		</div>
 
         <!-- 게시판 상단 정보 -->
         <div style="text-align:right; margin-bottom:10px;">

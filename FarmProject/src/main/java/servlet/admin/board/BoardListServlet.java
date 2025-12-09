@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.board.BoardDAO;
 import model.board.BoardDTO;
@@ -33,6 +34,13 @@ public class BoardListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//관리자가 로그인 하지 않은 경우 관리자 로그인 페이지로 이동 
+		HttpSession session = request.getSession();
+		if(session.getAttribute("admin") == null) {
+			response.sendRedirect("admin_login.do");
+			return;
+		}
+		
 		//DB연결
 		//BoardDAO dao = new BoardDAO();
 		BoardDAO dao = BoardDAO.getInstance();

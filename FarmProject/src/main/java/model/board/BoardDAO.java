@@ -222,7 +222,7 @@ public class BoardDAO {
 		public int boardWrite(BoardDTO dto) {
 			int row=0;
 			String sql="insert into tbl_board(name,subject,contents,pass) \n"
-					+ "	value(?,?,?,?,?)";
+					+ "	value(?,?,?,?)";
 			try {
 				conn = DBManager.getConn();
 				pstmt = conn.prepareStatement(sql);

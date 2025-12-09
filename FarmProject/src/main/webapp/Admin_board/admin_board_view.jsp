@@ -7,13 +7,12 @@
 <meta charset="UTF-8">
 <title>공지사항 보기(관리자용)</title>
 
-<!-- 공통 CSS -->
 <style>
     body {
         margin: 0;
         padding: 0;
         font-family: "Noto Sans KR", sans-serif;
-        background-color: #f3f8e4; /* 초심자가이드와 같은 배경 */
+        background-color: #f3f8e4;
     }
 
     .container {
@@ -23,7 +22,6 @@
 
     .board-wrapper {
         background: #ffffff;
-        border-radius: 16px;
         padding: 30px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
@@ -53,21 +51,20 @@
         font-size: 15px;
         line-height: 1.8;
         background: #ffffff;
-        border-radius: 12px;
         border: 1px solid #dfe7c7;
         min-height: 200px;
         white-space: pre-line;
     }
 
+    /* 버튼 영역 */
     .btn-area {
         margin-top: 25px;
-        text-align: right;
         display: flex;
-        gap: 10px;
-        justify-content: flex-end;
+        justify-content: flex-end; /* 오른쪽 정렬 */
+        gap: 15px; /* 버튼 간격 */
     }
 
-    .btn {
+    .btn-area .btn {
         padding: 10px 16px;
         border-radius: 10px;
         border: none;
@@ -76,20 +73,24 @@
         font-weight: 600;
     }
 
-    .btn-list {
-        background: #8bc34a;
+    .btn-register {
+        background: #4CAF50; /* 등록 초록 */
         color: #fff;
     }
 
     .btn-modify {
-        background: #ffd54f;
+        background: #ffd54f; /* 수정 노랑 */
     }
 
     .btn-delete {
-        background: #ef5350;
+        background: #ef5350; /* 삭제 빨강 */
         color: #fff;
     }
 
+    .btn-list {
+        background: #4db6ac;; 
+        color: #fff;
+    }
 </style>
 
 </head>
@@ -99,8 +100,7 @@
 
         <!-- 제목 -->
         <div class="board-title">
-           
-            자유게시판 - 글읽기
+            공지사항 - 글읽기
         </div>
 
         <!-- 글 정보 -->
@@ -120,11 +120,13 @@
 
         <!-- 버튼 영역 -->
         <div class="btn-area">
+            <button class="btn btn-register" onclick="location.href='admin_board_write.do'">등록</button>
+            <button class="btn btn-modify" onclick="location.href='admin_board_modify.do?idx=${dto.idx}&page=${page}'">수정</button>
+            <button class="btn btn-delete" onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='admin_board_delete.do?idx=${dto.idx}&page=${page}'">삭제</button>
             <button class="btn btn-list" onclick="location.href='admin_board_list.do?page=${page}'">목록</button>
         </div>
 
     </div>
 </div>
-
 </body>
 </html>
