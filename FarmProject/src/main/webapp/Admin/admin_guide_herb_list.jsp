@@ -112,6 +112,12 @@
             transition: background 0.2s;
         }
         .detail-btn:hover { background: #43A047; }
+		/* 검색했을 때 카드가 5개 미만이어도 레이아웃 고정 */
+		.search-result-mode .guide-table {
+		    min-width: 900px;
+		    margin: 0 auto;
+		}
+    </style>
     </style>
 
 <script>
@@ -126,7 +132,7 @@ function guide_search(){
 </script>
 </head>
 
-<body>
+<body <c:if test="${not empty key}">class="search-result-mode"</c:if>>
 <div class="page-wrapper">
     <div class="content">
         <h1 class="main-title">🌿 허브 가이드(관리자용)</h1>

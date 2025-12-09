@@ -34,7 +34,13 @@
         .guide-card img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
 
         .detail-btn { display:inline-block; margin-top:10px; padding:6px 10px; background:#4CAF50; color:white; font-size:12pt; border-radius:6px; text-decoration:none; transition:background 0.2s; }
-        .detail-btn:hover { background:#43A047; }
+        .detail-btn:hover { background: #43A047; }
+		/* 검색했을 때 카드가 5개 미만이어도 레이아웃 고정 */
+		.search-result-mode .guide-table {
+		    min-width: 900px;
+		    margin: 0 auto;
+		}
+    </style>
     </style>
 <script>
 function guide_search(){
@@ -44,7 +50,7 @@ function guide_search(){
 </script>
 </head>
 
-<body>
+<body <c:if test="${not empty key}">class="search-result-mode"</c:if>>
 <div class="page-wrapper">
     <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
