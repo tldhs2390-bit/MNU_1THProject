@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="/Include/topmenu.jsp" %>
+<%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공지사항 보기</title>
+<title>공지사항 보기(관리자용)</title>
 
 <!-- 공통 CSS -->
 <style>
@@ -100,7 +100,7 @@
         <!-- 제목 -->
         <div class="board-title">
            
-            공지사항 - 글읽기
+            자유게시판 - 글읽기
         </div>
 
         <!-- 글 정보 -->
@@ -120,7 +120,7 @@
 
         <!-- 버튼 영역 -->
         <div class="btn-area">
-            <button class="btn btn-list" onclick="location.href='board_list.do?page=${page}'">목록</button>
+            <button class="btn btn-list" onclick="location.href='admin_board_list.do?page=${page}'">목록</button>
         </div>
 
     </div>
