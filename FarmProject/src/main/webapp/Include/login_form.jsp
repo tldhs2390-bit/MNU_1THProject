@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <style>
     /* modify.jsp 왼쪽 20% 영역에 정확히 맞는 크기 */
@@ -142,9 +143,19 @@
     <div class="side-login-box">
         <h4 class="side-login-title">이용자 정보</h4>
 
-        <p><b>${user.user_name}</b> 님</p>
+		<p><b>${fn:substring(user.user_name,0,1)}**</b> 님</p>
         <p>닉네임 : ${user.n_name}</p>
-
+		
+		<p>등급 : 
+		<c:choose>
+			<c:when test="${user.point <=1999}">A</c:when>
+			<c:when test="${user.point <=2999}">B</c:when>
+			<c:when test="${user.point <=3999}">C</c:when>
+			<c:when test="${user.point <=4999}">D</c:when>
+			<c:otherwise>Master</c:otherwise>
+		</c:choose>
+		</p>
+        
         <p>포인트 : ${user.point }</p>
         
 
