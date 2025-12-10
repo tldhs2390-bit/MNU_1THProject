@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- 탑 메뉴 영역 -->
 <%@ include file="/Include/topmenu.jsp" %>
 <html>
@@ -123,21 +124,19 @@
 
 <div class="login-wrapper">
     <div class="login-box">
+
         <div class="login-header">
             LOGIN
         </div>
         
-        <!-- action을 로그인 처리 서블릿 주소로 변경해야 합니다 -->
-        <form name="user_login" id="user_login" method="post" action="<%= request.getContextPath() %>/User/user_login.do">
+        <form name="user_login" id="user_login" method="post" action="<%= request.getContextPath() %>/user_login.do">
             <div class="input-group">
                 <label for="user_id">아이디</label>
-                <!-- DTO와 이름 통일을 위해 name="user_id"로 설정 -->
                 <input type="text" id="user_id" name="user_id" class="input-field" placeholder="ID를 입력하세요" maxlength="20">
             </div>
             
             <div class="input-group">
                 <label for="user_pass">비밀번호</label>
-                <!-- DTO와 이름 통일을 위해 name="user_pass"로 설정 -->
                 <input type="password" id="user_pass" name="user_pass" class="input-field" placeholder="비밀번호를 입력하세요" maxlength="20">
             </div>
             
@@ -146,7 +145,7 @@
             <div class="login-footer"> 
 			    <a href="<%= request.getContextPath() %>/User/user_find_id.do">아이디 찾기</a> |
 			    <a href="<%= request.getContextPath() %>/User/user_find_pass.do">비밀번호 찾기</a> |
-			    <a href="<%= request.getContextPath() %>/User/user_join.do">회원가입</a>
+			    <a href="<%= request.getContextPath() %>/User/user_join_agree.jsp">회원가입</a>
 			</div>
         </form>
     </div>

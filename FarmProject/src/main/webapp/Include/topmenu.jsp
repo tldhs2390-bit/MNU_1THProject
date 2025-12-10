@@ -75,21 +75,20 @@
 
         <!-- 메뉴들 -->
         <c:if test="${empty user }">
-        <td><a href="/User/user_login.do">로그인</a></td>
+        <td><a href="/user_login.do">로그인</a></td>
         </c:if>
         <c:if test="${!empty user }">
-        <td><a href="/User/user_logout.do">로그아웃</a></td>
+        <td><a href="/user_logout.do">로그아웃</a></td>
         </c:if>
         <c:if test="${empty user }">
-        <td><a href="/User/user_join.do">회원가입</a></td>
+        <td><a href="/user_join.do">회원가입</a></td>
         </c:if>
         <c:if test="${!empty user }">
-        <td><a href="/User/user_modify.do">정보수정</a></td>
+        <td><a href="/user_modify.do">정보수정</a></td>
         </c:if>
-
+		<td><a href="/board_list.do">공지사항</a></td>
         <td><a href="/guide_list.do">초심자가이드</a></td>
-        <td><a href="/board_list.do">공지사항</a></td>
-        <td><a href="/Success/success_list.jsp">성장게시판</a></td>
+        <td><a href="/growth_list.do">성장 게시판</a></td>
         <td><a href="/admin_login.do">관리자</a></td>
 
     </tr>

@@ -13,7 +13,7 @@ import model.user.MailSender;
 /**
  * Servlet implementation class UserEmailServlet
  */
-@WebServlet("/User/emailSend.do")
+@WebServlet("/emailSend.do")
 public class UserEmailSendServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

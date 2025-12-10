@@ -63,7 +63,7 @@
         </p>
     <% } %>
 
-    <button class="btn" onclick="location.href='<%=request.getContextPath()%>/User/user_login.do'">
+    <button class="btn" onclick="location.href='<%=request.getContextPath()%>user_login.do'">
         로그인 하러 가기
     </button>
 </div>

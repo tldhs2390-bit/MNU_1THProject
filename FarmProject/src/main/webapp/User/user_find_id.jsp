@@ -27,12 +27,12 @@
 <div class="find-box">
     <h2>아이디 찾기</h2>
 
-    <form name="findid" method="post" action="<%=request.getContextPath()%>/User/user_find_id.do">
+    <form name="findid" method="post" action="<%=request.getContextPath()%>user_find_id.do">
         <input type="text" name="email" class="input-field" placeholder="가입한 이메일 입력" value="">
 
         <button type="button" class="btn" onclick="checkFindId()">아이디 찾기</button>
         <button type="button" class="btn-back"
-        onclick="location.href='<%=request.getContextPath()%>/User/user_login.do'">로그인 페이지로 이동</button>
+        onclick="location.href='<%=request.getContextPath()%>user_login.do'">로그인 페이지로 이동</button>
     </form>
 </div>
 </body>

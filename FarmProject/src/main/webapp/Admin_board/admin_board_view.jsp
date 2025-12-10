@@ -117,7 +117,7 @@
             <button class="btn btn-register" onclick="location.href='admin_board_write.do'">등록</button>
             <button class="btn btn-modify" onclick="location.href='admin_board_modify.do?idx=${dto.idx}&page=${page}'">수정</button>
             <button class="btn btn-delete" onclick="deleteBoard(${dto.idx}, ${page})">삭제</button>
-            <button class="btn btn-list" onclick="location.href='admin_board_list.do?page=${page}'">목록</button>
+            <button class="btn btn-list" onclick="if(history.length>1){history.back();}else{location.href='admin_board_list.do?page=${page}';}">목록</button>
         </div>
 
     </div>

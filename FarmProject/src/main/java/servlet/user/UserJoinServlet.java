@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.user.UserDAO;
 import model.user.UserDTO;
+import util.UserSHA256;
 
 /**
  * Servlet implementation class UserJoinServlet
  */
-@WebServlet("/User/user_join.do")
+@WebServlet("/user_join.do")
 public class UserJoinServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +31,7 @@ public class UserJoinServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("user_join.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/User/user_join.jsp");
 		rd.forward(request, response);
 	}
 
@@ -38,7 +39,7 @@ public class UserJoinServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
+request.setCharacterEncoding("utf-8");
 		
 		UserDTO dto = new UserDTO();
 		
@@ -47,9 +48,13 @@ public class UserJoinServlet extends HttpServlet {
 		dto.setTel(request.getParameter("tel"));
 		dto.setEmail(request.getParameter("email"));
 		dto.setAddress(request.getParameter("address"));
-		dto.setUser_rank(request.getParameter("user_rank"));
 		dto.setUser_id(request.getParameter("user_id"));
-		dto.setUser_pass(request.getParameter("user_pass"));		
+		
+		//비밀번호 암호화
+		String pass = request.getParameter("user_pass");
+		dto.setUser_pass(UserSHA256.getSHA256(pass));
+		
+		
 		
 		UserDAO dao = UserDAO.getInstance();
 		

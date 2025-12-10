@@ -14,7 +14,7 @@ import model.user.UserDAO;
 /**
  * Servlet implementation class UserFindPassServlet
  */
-@WebServlet("/User/user_find_pass.do")
+@WebServlet("/user_find_pass.do")
 public class UserFindPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

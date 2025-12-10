@@ -16,7 +16,7 @@ import model.user.UserDTO;
 /**
  * Servlet implementation class UserLoginServlet
  */
-@WebServlet("/User/user_login.do")
+@WebServlet("/user_login.do")
 public class UserLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -32,7 +32,7 @@ public class UserLoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("user_login.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/User/user_login.jsp");
 		rd.forward(request, response);
 	}
 
@@ -60,7 +60,7 @@ public class UserLoginServlet extends HttpServlet {
 		
 		request.setAttribute("row", row);
 
-		RequestDispatcher rd = request.getRequestDispatcher("user_login_ok.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/User/user_login_ok.jsp");
 		rd.forward(request, response);
 	}
 

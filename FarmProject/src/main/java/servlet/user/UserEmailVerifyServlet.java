@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class UserEmailVerifyServlet
  */
-@WebServlet("/User/emailVerify.do")
+@WebServlet("/emailVerify.do")
 public class UserEmailVerifyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -33,24 +33,36 @@ public class AdminUserListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//관리자가 로그인 하지 않은 경우 관리자 로그인 페이지로 이동 
 		HttpSession session = request.getSession();
-		if(session.getAttribute("admin") == null) {
-			response.sendRedirect("admin_login.do");
-			return;
-		}
-		UserDAO dao = UserDAO.getInstance();
-		
-		int totcount = dao.userCount();
-		List<UserDTO> uList = dao.userList();
-		
-		request.setAttribute("totcount", totcount);
-		request.setAttribute("uList", uList);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/Admin/user_list.jsp");
-		rd.forward(request, response);
-	}
+	    if(session.getAttribute("admin") == null) {
+	        response.sendRedirect("admin_login.do");
+	        return;
+	    }
 
+	    UserDAO dao = UserDAO.getInstance();
+
+	    // 검색 파라미터
+	    String keyword = request.getParameter("keyword");
+
+	    List<UserDTO> uList;
+
+	    if(keyword != null && !keyword.trim().equals("")) {
+	        // 검색 모드
+	        uList = dao.searchByNickname(keyword);
+	    } else {
+	        // 전체 회원 리스트
+	        uList = dao.userList();
+	    }
+
+	    int totcount = uList.size(); // 검색결과일 때도 카운트 적용
+
+	    request.setAttribute("totcount", totcount);
+	    request.setAttribute("uList", uList);
+	    request.setAttribute("keyword", keyword);
+
+	    RequestDispatcher rd = request.getRequestDispatcher("/Admin/user_list.jsp");
+	    rd.forward(request, response);
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

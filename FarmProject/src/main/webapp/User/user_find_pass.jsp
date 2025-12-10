@@ -31,13 +31,13 @@
 <div class="find-box">
     <h2>비밀번호 찾기</h2>
 
-    <form name="findpass" method="post" action="<%=request.getContextPath()%>/User/user_find_pass.do">
+    <form name="findpass" method="post" action="<%=request.getContextPath()%>user_find_pass.do">
         <input type="text" name="user_id" class="input-field" placeholder="아이디 입력">
         <input type="text" name="email" class="input-field" placeholder="가입한 이메일 입력">
 
         <button type="button" class="btn" onclick="checkFindPass()">비밀번호 찾기</button>
         <button type="button" class="btn-back"
-        onclick="location.href='<%=request.getContextPath()%>/User/user_login.do'">로그인 페이지로 이동</button>
+        onclick="location.href='<%=request.getContextPath()%>user_login.do'">로그인 페이지로 이동</button>
     </form>
 </div>
 </body>

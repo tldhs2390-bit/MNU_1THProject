@@ -120,7 +120,7 @@
 
         <!-- 버튼 영역 -->
         <div class="btn-area">
-            <button class="btn btn-list" onclick="location.href='board_list.do?page=${page}'">목록</button>
+            <button class="btn btn-list" onclick="if(history.length>1){history.back();}else{location.href='admin_board_list.do?page=${page}';}">목록</button>
         </div>
 
     </div>

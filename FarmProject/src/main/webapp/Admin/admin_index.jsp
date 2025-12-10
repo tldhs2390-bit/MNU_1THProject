@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ include file="/Admin/Include/admin_topmenu.jsp" %>
 
@@ -7,6 +8,58 @@
 <head>
     <title>FarmProject 메인(관리자용)</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <style>
+    .notice-section {
+        margin:20px 0;
+        width:100%;
+        background:#ffffff;     /* 배경을 흰색으로 변경 */
+        border:1px solid #d8eec5;
+        border-radius:6px;
+        padding:15px;
+    }
+
+    .notice-title {
+        font-size:16pt;
+        font-weight:700;
+        color:#4CAF50;
+        margin-bottom:10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .notice-table {
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    .notice-table th, .notice-table td {
+        padding:12px 8px;       /* 상하 간격 확대 */
+        font-size:11pt;
+        border-bottom:1px solid #eeeeee;
+        text-align:center;
+        line-height:1.6;        /* 줄 높이 */
+    }
+
+    .notice-table th { background:#f5f7e8; font-weight:700; } /* 헤더만 연한 색 유지 */
+
+    .notice-row:hover { background:#f0fff2; transition:0.2s; }
+
+    a.list { text-decoration:none; color:#2e7d32; font-weight:600; }
+    a.list:hover { text-decoration:underline; }
+
+    .more-btn {
+        padding:2px 8px;
+        font-size:10pt;
+        background:#4CAF50;
+        color:white;
+        font-weight:700;
+        border-radius:4px;
+        text-decoration:none;
+    }
+    .more-btn:hover { background:#43a047; }
+    
+</style>
 </head>
 
 <body>
@@ -42,43 +95,40 @@
 
         </div>
 
-        <!-- 성공 최신 글 -->
-        <div class="latest-box">
-            <h3>🌱 쑥쑥 성장 이야기(관리자용)</h3>
-            <table class="latest-mini">
-                <c:forEach var="s" items="${successList}">
-                    <tr>
-                        <td>✔</td>
-                        <td><a href="/success/success_read.do?idx=${s.idx}">${s.subject}</a></td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </div>
+        <!-- 최신 공지사항 섹션 -->
+<div class="notice-section">
+    <div class="notice-title">
+        <span>📢 최신 공지사항(관리자용)</span>
+        <a class="more-btn" href="admin_board_list.do">더보기</a>
+    </div>
 
-        <!-- 실패 최신 글 -->
-        <div class="latest-box">
-            <h3>💧 아쉬운 성장 노트(관리자용)</h3>
-            <table class="latest-mini">
-                <c:forEach var="f" items="${failList}">
-                    <tr>
-                        <td>•</td>
-                        <td><a href="/fail/fail_read.do?idx=${f.idx}">${f.subject}</a></td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </div>
+    <table class="notice-table">
+        <tr>
+            <th width="10%">번호</th>
+            <th width="50%">제목</th>
+            <th width="15%">작성자</th>
+            <th width="15%">작성일</th>
+            <th width="10%">조회수</th>
+        </tr>
 
-        <!-- 자유 최신 글 -->
-        <div class="latest-box">
-            <h3>📢 자유게시판 최신 글(관리자용)</h3>
-            <table class="latest-mini">
-                <c:forEach var="b" items="${boardList}">
-                    <tr>
-                        <td>•</td>
-                        <td><a href="/board/board_read.do?idx=${b.idx}">${b.subject}</a></td>
-                    </tr>
-                </c:forEach>
-            </table>
+        <c:set var="total" value="${fn:length(blist) }" />
+        <c:forEach var="bDto" items="${blist}" varStatus="status">
+            <c:if test="${status.index < 3}">
+                <tr class="notice-row">
+                    <!-- 번호를 밑에서부터 1,2,3 -->
+                    <td>${3 - status.index}</td>
+                    <td style="text-align:left; padding-left:8px;">
+                        <a class="list" href="admin_board_view.do?idx=${bDto.idx}&page=1">
+                            ${bDto.subject}
+                        </a>
+                    </td>
+                    <td>관리자</td>
+                    <td>${fn:substring(bDto.regdate,0,10)}</td>
+                    <td>${bDto.readcnt}</td>
+                </tr>
+            </c:if>
+        </c:forEach>
+    </table>
         </div>
 
     </td>

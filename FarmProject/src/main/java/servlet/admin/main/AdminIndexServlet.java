@@ -1,6 +1,7 @@
 package servlet.admin.main;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import model.board.BoardDAO;
+import model.board.BoardDTO;
 
 /**
  * Servlet implementation class AdminIndexServlet
@@ -35,6 +39,12 @@ public class AdminIndexServlet extends HttpServlet {
 			response.sendRedirect("admin_login.do");
 			return;
 		}
+		
+		BoardDAO dao = BoardDAO.getInstance();
+		List<BoardDTO> blist = dao.boardList(3);
+		
+		request.setAttribute("blist", blist);
+		
 		RequestDispatcher rd = request.getRequestDispatcher("/Admin/admin_index.jsp");
 		rd.forward(request, response);
 	}

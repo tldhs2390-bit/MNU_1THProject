@@ -13,7 +13,7 @@ import model.user.UserDAO;
 /**
  * Servlet implementation class UserIdCheckServlet
  */
-@WebServlet("/User/user_idCheck.do")
+@WebServlet("/user_idCheck.do")
 public class UserIdCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

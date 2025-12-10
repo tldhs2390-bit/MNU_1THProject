@@ -37,22 +37,22 @@ public class AdminUserModifyProServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 	request.setCharacterEncoding("utf-8");
+		request.setCharacterEncoding("utf-8");
 
-	        UserDTO dto = new UserDTO();
-	        dto.setUser_id(request.getParameter("user_id"));
-	        dto.setN_name(request.getParameter("n_name"));
-	        dto.setUser_rank(request.getParameter("user_rank"));
-	        dto.setPoint(Integer.parseInt(request.getParameter("point")));
+        UserDTO dto = new UserDTO();
+        dto.setUser_id(request.getParameter("user_id"));
+        dto.setN_name(request.getParameter("n_name"));
 
-	        UserDAO dao = UserDAO.getInstance();
-	        int row = dao.adminUserUpdate(dto);
+        dto.setPoint(Integer.parseInt(request.getParameter("point")));
 
-	        if(row > 0){
-	            response.sendRedirect("/admin_user_list.do");
-	        } else {
-	            response.getWriter().println("<script>alert('수정 실패'); history.back();</script>");
-	        }
+        UserDAO dao = UserDAO.getInstance();
+        int row = dao.adminUserUpdate(dto);
+
+        if(row > 0){
+            response.sendRedirect("/admin_user_list.do");
+        } else {
+            response.getWriter().println("<script>alert('수정 실패'); history.back();</script>");
+        }
 	}
 
 }

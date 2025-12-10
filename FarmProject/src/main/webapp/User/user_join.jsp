@@ -123,7 +123,7 @@ body {
 /* 이메일 인증 버튼 */
 .btn-inline, .btn-email {
     min-width: 80px;
-    height: 40px;
+    height: 28px;
     padding: 0 16px;
     background: #03c75a;
     color: white;
@@ -162,6 +162,11 @@ body {
 }
 .cancel-link:hover {
     text-decoration:underline;
+}
+.input-row input[type="text"],
+.input-row input[type="password"] {
+    height: 25px;      /* 버튼 높이와 동일하게 */
+    line-height: 25px;
 }
 </style>
 
@@ -234,7 +239,7 @@ $(function(){
         if(email.trim() == ""){ alert("이메일을 입력하세요"); return; }
 
         $.ajax({
-            url: "/User/emailSend.do",
+            url: "emailSend.do",
             type: "get",
             data: { email: email },
             success: function(result){
@@ -248,7 +253,7 @@ $(function(){
         let code = $("#emailCode").val();
 
         $.ajax({
-            url: "/User/emailVerify.do",
+            url: "emailVerify.do",
             type: "get",
             data: { code: code },
             success: function(result){
@@ -261,6 +266,24 @@ $(function(){
         });
     });
 
+ // 닉네임 중복 검사
+    $("#n_name").keyup(function(){
+        var n_name = $("#n_name").val();
+
+
+        $.ajax({
+        	url: "<%=request.getContextPath()%>/User/user_nickCheck.do",
+            type:'post',
+            data:{'n_name':n_name},
+            success:function(result){
+                if(result.trim() == "0"){ 
+                    $("#nick_c").text("사용 가능한 닉네임입니다.").css("color", "blue");
+                }else{
+                    $("#nick_c").text("중복된 닉네임입니다.").css("color", "red");
+                }
+            }
+        });
+    });
 });
 </script>
 </head>
@@ -274,7 +297,6 @@ $(function(){
 
         <form name="user" id="user" method="post" action="user_join.do">
 
-            <!-- 아이디 -->
             <div class="field">
                 <div class="field-label">아이디</div>
                 <div class="input-row">
@@ -283,7 +305,6 @@ $(function(){
                 <div id="userID_c" class="helper-text">5~16자 이내의 영문 또는 숫자</div>
             </div>
 
-            <!-- 비밀번호 -->
             <div class="field">
                 <div class="field-label">비밀번호</div>
                 <div class="input-row">
@@ -291,7 +312,6 @@ $(function(){
                 </div>
             </div>
 
-            <!-- 비밀번호 확인 -->
             <div class="field">
                 <div class="field-label">비밀번호 확인</div>
                 <div class="input-row">
@@ -300,7 +320,6 @@ $(function(){
                 <div id="repasswd_c" class="helper-text">비밀번호를 한 번 더 입력해주세요.</div>
             </div>
 
-            <!-- 이름 -->
             <div class="field">
                 <div class="field-label">이름</div>
                 <div class="input-row">
@@ -308,15 +327,14 @@ $(function(){
                 </div>
             </div>
 
-            <!-- 닉네임 -->
             <div class="field">
                 <div class="field-label">닉네임</div>
                 <div class="input-row">
                     <input type="text" id="n_name" name="n_name" maxlength="20" placeholder="닉네임을 입력하세요">
                 </div>
+            	<div id="nick_c" class="helper-text">닉네임을 입력하세요</div>
             </div>
 
-            <!-- 휴대전화 -->
             <div class="field">
                 <div class="field-label">휴대전화</div>
                 <div class="input-row">
@@ -324,7 +342,6 @@ $(function(){
                 </div>
             </div>
 
-            <!-- 이메일 -->
             <div class="field">
                 <div class="field-label">이메일</div>
                 <div class="input-row">
@@ -338,7 +355,6 @@ $(function(){
                 <div id="emailMsg" class="helper-text"></div>
             </div>
 
-            <!-- 주거 형태 -->
             <div class="field">
                 <div class="field-label">주거 형태</div>
                 <div class="input-row">
@@ -349,15 +365,6 @@ $(function(){
                 </div>
             </div>
 
-            <!-- 등급 -->
-            <div class="field">
-                <div class="field-label">등급</div>
-                <select name="user_rank" class="select-basic">
-                    <option value="">등급을 선택하세요</option>
-                    <option value="고수">고수</option>
-                    <option value="초심자">초심자</option>
-                </select>
-            </div>
 
             <!-- 제출 버튼 -->
             <button type="button" id="btnMainSubmit" class="btn-submit-main">가입하기</button>
