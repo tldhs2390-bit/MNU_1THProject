@@ -8,7 +8,7 @@
 <title>🌱 성장 이야기 - 전체 목록</title>
 
 <style>
-/* (전체 스타일 그대로 — 수정 없음) */
+/* 1. 기본 스타일 */
 body {
     background:#f4fbe9;
     font-family:'Noto Sans KR', sans-serif;
@@ -16,43 +16,58 @@ body {
     padding:0;
 }
 
-/* ⭐ 추가: 화면 전체 구조 */
+/* ⭐ [핵심 수정] 전체 화면 구조: Flexbox 2단 레이아웃을 화면 전체 폭(100%)으로 확장 */
 .page-wrapper { 
-    width:90%;
-    margin:0 auto;
+    /* ★ 수정: 중앙 정렬 해제 및 100% 폭 사용 */
+    width:100%; 
+    margin:0;
+    
     display:flex;
     gap:20px;
+    
+    position: relative; 
 }
 
-/* ⭐ 추가: 왼쪽 사이드 메뉴 */
+/* ⭐ [핵심] 왼쪽 사이드 메뉴: 고정(fixed) 해제 및 왼쪽 가장자리에 붙임 */
 .left-menu {
-    width:22%;
+    /* left-menu가 이제 화면 가장 왼쪽에 붙습니다. */
+    
+    width: 220px; /* 고정 폭 */
+    flex-shrink: 0; /* 너비 고정 */
+
+    padding: 20px 10px; 
+    background: #f4fbe9;
+    box-sizing: border-box;
+    z-index: 100; 
 }
 
-/* ⭐ 기존 container 는 오른쪽 content 로 이동 */
+/* ⭐ 오른쪽 content 영역: 남은 공간 모두 차지 */
 .content-area {
+    /* 기존 flex: 1; 유지 */
     flex:1;
 }
 
 /* ----------------------------- */
-/*   기존 CSS (그대로 유지)     */
+/* 기존 CSS 수정 사항: .container의 폭 재조정 */
 /* ----------------------------- */
 
+/* page-wrapper가 100%가 되었으므로, .container의 내용을 다시 중앙에 모으거나 여백을 줘야 합니다. */
 .container {
-    width:85%;
-    max-width:900px;
-    margin:30px auto;
+    /* width:85%; max-width:900px; margin:30px 30px;로 변경하여 내용의 왼쪽/오른쪽 여백 확보 */
+    width: 95%; /* content-area 내에서 폭 조정 */
+    max-width: 900px;
+    margin: 30px auto; /* 다시 중앙 정렬 */
+    padding-left: 20px; /* 왼쪽 여백 추가 */
+    padding-right: 20px; /* 오른쪽 여백 추가 */
 }
 
-/* ----------------------------- */
-/*   카테고리 버튼               */
-/* ----------------------------- */
+
+/* ... (나머지 CSS는 변경 없이 그대로 유지) ... */
 .category-wrap {
     display:flex;
     justify-content:space-between;
     margin-bottom:25px;
 }
-
 .category-box {
     width:32%;
     padding:18px 10px;
@@ -75,9 +90,6 @@ body {
     transform:scale(1.05);
 }
 
-/* ----------------------------- */
-/*        검색 박스              */
-/* ----------------------------- */
 .search-container {
     display:flex;
     align-items:center;
@@ -130,9 +142,6 @@ body {
 }
 .reset-btn:hover { background:#e9f8dd; }
 
-/* ----------------------------- */
-/* 🌈 2×2 인기글 카드 CSS       */
-/* ----------------------------- */
 .pop-grid {
     display:grid;
     grid-template-columns:repeat(2, 1fr);
@@ -179,9 +188,6 @@ body {
     100% { transform:rotate(0deg); }
 }
 
-/* ----------------------------- */
-/*       테이블 스타일           */
-/* ----------------------------- */
 .list-table {
     width:100%;
     border-collapse:collapse;
@@ -211,9 +217,6 @@ body {
     background:#f9fff1;
 }
 
-/* ----------------------------- */
-/*   글쓰기 버튼                 */
-/* ----------------------------- */
 .write-btn-box {
     width:100%;
     display:flex;
@@ -236,9 +239,6 @@ body {
     transform:scale(1.07);
 }
 
-/* ----------------------------- */
-/*   ⭐ 새 파스텔 페이징 버튼    */
-/* ----------------------------- */
 .page-wrap {
     margin:25px 0 40px;
     text-align:center;
@@ -269,7 +269,6 @@ body {
     transform:translateY(-2px);
 }
 
-/* 현재 페이지 애니메이션 */
 .page-num.active {
     background:#4CAF50;
     border-color:#4CAF50;
@@ -288,27 +287,22 @@ body {
 
 <body>
 
-<!-- ⭐ 전체 화면 구조 시작 -->
 <div class="page-wrapper">
 
-    <!-- ⭐ 왼쪽 메뉴 추가 -->
     <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
     </div>
 
-    <!-- ⭐ 오른쪽 기존 성장게시판 영역 -->
     <div class="content-area">
 
         <div class="container">
 
-            <!-- 카테고리 버튼 -->
             <div class="category-wrap">
                 <div class="category-box" onclick="location.href='/growth_list.do?ctype=vegetable'">🥬 채소</div>
                 <div class="category-box" onclick="location.href='/growth_list.do?ctype=fruit'">🍎 과일</div>
                 <div class="category-box" onclick="location.href='/growth_list.do?ctype=herb'">🌿 허브</div>
             </div>
 
-            <!-- 검색 -->
             <form action="/growth_list.do" method="get" class="search-container">
 
                 <select name="key" class="search-select">
@@ -330,9 +324,7 @@ body {
 
             </form>
 
-            <!-- ⭐⭐⭐ 2×2 인기글 카드 -->
             <div class="pop-grid">
-
                 <c:if test="${not empty topVeg}">
                     <div class="pop-card pop-veg" onclick="location.href='/growth_read.do?idx=${topVeg.idx}'">
                         <div class="pop-title"><span class="icon-wiggle">🥬</span> 채소 인기글</div>
@@ -379,7 +371,6 @@ body {
 
             </div>
 
-            <!-- 목록 테이블 -->
             <table class="list-table">
                 <tr>
                     <th>번호</th>
@@ -424,12 +415,10 @@ body {
                 </c:if>
             </table>
 
-            <!-- 글쓰기 -->
             <div class="write-btn-box">
                 <a href="/growth_write.do" class="write-btn">✏️ 글쓰기</a>
             </div>
 
-            <!-- ⭐ 새 파스텔 페이징 (숫자만 표시) -->
             <div class="page-wrap">
                 <c:forEach var="i" begin="${startPage}" end="${endPage}">
                     <a href="?page=${i}&key=${keyValue}&search=${searchValue}&category=${categoryValue}"
@@ -439,11 +428,5 @@ body {
                 </c:forEach>
             </div>
 
-        </div> <!-- container end -->
-
-    </div> <!-- content-area end -->
-
-</div> <!-- page-wrapper end -->
-
-</body>
+        </div> </div> </div> </body>
 </html>

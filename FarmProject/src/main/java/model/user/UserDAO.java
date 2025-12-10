@@ -99,7 +99,7 @@ public class UserDAO {
                    // 마지막 로그인 시간 업데이트
                    DBManager.close(null, pstmt, rs);
 
-                   sql = "update tbl_user set last_time = now() where user_id=?";
+                 
                    pstmt = conn.prepareStatement(sql);
                    pstmt.setString(1, user_id);
                    pstmt.executeUpdate();
