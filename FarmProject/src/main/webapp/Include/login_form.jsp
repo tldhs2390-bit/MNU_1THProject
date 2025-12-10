@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style>
-    /* modify.jsp 왼쪽 20% 영역에 정확히 맞는 크기 */
+   /* modify.jsp 왼쪽 20% 영역에 정확히 맞는 크기 */
     .side-login-box {
         width: 100%;               /* td(20%) 안에서 꽉 차도록 */
         padding: 15px;
@@ -146,7 +146,7 @@
             <input type="submit" value="로그인" class="side-login-btn">
         </form>
 
-        <p><a href="user_join_agree.jsp">회원가입</a></p>
+        <p><a href="/User/user_join_agree.jsp">회원가입</a></p>
     </div>
 </c:if>
 
@@ -155,18 +155,28 @@
     <div class="side-login-box">
         <h4 class="side-login-title">이용자 정보</h4>
 
-        <p><b>${user.user_name}</b> 님</p>
+		<p><b>${fn:substring(user.user_name,0,1)}**</b> 님</p>
         <p>닉네임 : ${user.n_name}</p>
-        <p>등급 : ${user.user_rank}</p>
+		
+		<p>등급 : 
+		<c:choose>
+			<c:when test="${user.point <=1999}">A</c:when>
+			<c:when test="${user.point <=2999}">B</c:when>
+			<c:when test="${user.point <=3999}">C</c:when>
+			<c:when test="${user.point <=4999}">D</c:when>
+			<c:otherwise>Master</c:otherwise>
+		</c:choose>
+		</p>
+        
         <p>포인트 : ${user.point }</p>
         
 
-        <p><a href="user_modify.do">회원정보수정</a></p>
-        <p><a href="user_logout.do">로그아웃</a></p>
+        <p><a href="/User/user_modify.do">회원정보수정</a></p>
+        <p><a href="/User/user_logout.do">로그아웃</a></p>
     </div>
 </c:if>
 
-<%@ page import="model.user.UserDAO,model.user.UserDTO" %>
+<%@ page import="user.model.UserDAO,user.model.UserDTO" %>
 <%
     UserDAO dao = UserDAO.getInstance();
     request.setAttribute("rankList", dao.getPointRankTop5());

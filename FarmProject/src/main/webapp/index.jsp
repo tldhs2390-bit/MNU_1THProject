@@ -61,6 +61,17 @@
 </head>
 
 <body>
+<!-- 탈퇴 성공 -->
+<%
+String deleteMsg = request.getParameter("delete");
+if("success".equals(deleteMsg)){
+%>
+<script>
+    alert("회원 탈퇴가 완료되었습니다.");
+</script>
+<%
+}
+%>
 
 <table width="100%" border="0">
 <tr>
