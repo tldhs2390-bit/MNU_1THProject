@@ -17,13 +17,13 @@ import model.board.BoardDTO;
  * Servlet implementation class BoardWriteServlet
  */
 @WebServlet("/admin_board_write.do")
-public class BoardWriteServlet extends HttpServlet {
+public class AdminBoardWriteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardWriteServlet() {
+    public AdminBoardWriteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

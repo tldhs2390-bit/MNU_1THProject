@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.board.BoardDAO;
 
@@ -15,13 +16,13 @@ import model.board.BoardDAO;
  * Servlet implementation class BoardDeleteServlet
  */
 @WebServlet("/admin_board_delete.do")
-public class BoardDeleteServlet extends HttpServlet {
+public class AdminBoardDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardDeleteServlet() {
+    public AdminBoardDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,7 +31,12 @@ public class BoardDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		//관리자가 로그인 하지 않은 경우 관리자 로그인 페이지로 이동 
+		HttpSession session = request.getSession();
+		if(session.getAttribute("admin") == null) {
+			response.sendRedirect("admin_login.do");
+			return;
+		}
 		int idx = Integer.parseInt(request.getParameter("idx"));
 		int page = Integer.parseInt(request.getParameter("page"));
 		request.setAttribute("idx", idx);
