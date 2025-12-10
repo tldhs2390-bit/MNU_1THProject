@@ -216,7 +216,7 @@ $(function(){
             <div class="field">
                 <div class="field-label">회원 성명</div>
                 <div class="input-row">
-                    <input type="text" value="${dto.user_name}" readonly>
+                    <input type="text" name="user_name" value="${dto.user_name}" readonly>
                 </div>
                 <div class="helper-text">변경할 수 없습니다</div>
             </div>
@@ -267,7 +267,7 @@ $(function(){
             <div class="field">
                 <div class="field-label">E-mail</div>
                 <div class="input-row">
-                    <input type="text" value="${dto.email}" readonly>
+                    <input type="text" name="email" value="${dto.email}" readonly>
                 </div>
                 <div class="helper-text">변경할 수 없습니다</div>
             </div>
