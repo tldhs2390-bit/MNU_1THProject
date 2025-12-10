@@ -7,27 +7,46 @@
 <head>
 <title>공지 사항</title>
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-
 <style>
     body { 
         margin:0; 
-        background:#f0f7e8;   
+        background:#f0f7e8;   /* 전체 페이지 배경색 */
         font-family:"Noto Sans KR"; 
     }
 
-    /* 전체 레이아웃 */
-     .page-wrapper { display:flex; gap:20px; justify-content:flex-start; }
-        .left-menu { width:20%; }
-        .content { flex:1; padding:20px; }
+    /* 전체 레이아웃 (Flexbox) */
+     .page-wrapper { 
+         display:flex; 
+         gap:20px; 
+         justify-content:flex-start; 
+         width: 100%; /* 너비를 100%로 설정하여 왼쪽 가장자리에 붙도록 합니다. */
+         margin: 0;
+     }
+     
+    /* left-menu의 배경색을 body와 동일하게 설정하여 경계를 없앱니다. */
+    .left-menu { 
+        /* left_menu.css에서 설정된 width:20%를 오버라이드해야 할 수 있지만, 
+           left_menu.css를 사용한다고 가정하고 배경색만 통일합니다. */
+        /* ★ 배경색 통일 ★ */
+        background: #f0f7e8 !important; 
+        /* left-menu의 폭이 20%로 설정되어 있으나, 
+           이전 대화 흐름에서 220px 고정 폭 Flexbox가 제안되었으므로, 
+           이 클래스를 사용하는 모든 JSP는 통일된 CSS를 사용해야 합니다. 
+           여기서는 사용자님이 주신 20%를 기반으로 스타일을 정리합니다. */
+        width: 20%; 
+    }
+    
+    /* 기존 CSS에서 불필요한 .content 정의 제거 */
+    /* .content { flex:1; padding:20px; } */
 
 
-
-    /* 우측 컨텐츠 영역 */
+    /* ⭐ [핵심 수정] 우측 컨텐츠 영역 틀 제거 ⭐ */
     .content-area {
         flex:1;
-        background:#f5ffe9;
-        border:2px solid #d8eec5;
-        padding:25px;
+        /* 아래 배경색, 테두리, 패딩 속성 제거 */
+        /* background:#f5ffe9; */
+        /* border:2px solid #d8eec5; */
+        /* padding:25px; */
     }
 
     .board-title {
@@ -44,7 +63,10 @@
         background:#d8eec5;
         border:2px solid #b0d17c;
         padding:15px 20px; border-radius:18px;
-        margin:0 auto 22px auto; width:66%;
+        /* content-area 틀이 제거되었으므로, 검색창 중앙 정렬을 위해 max-width와 auto margin을 유지합니다. */
+        margin:0 auto 22px auto; 
+        width:90%; /* content-area 내에서 중앙 정렬을 위해 100% 대신 90% 사용 */
+        max-width: 800px; /* 최대 너비 지정 */
         box-shadow:0 4px 10px rgba(0,0,0,0.12);
     }
     .search-select { padding:10px 14px; border:2px solid #cfe8c8; border-radius:10px; background:white; font-size:14px; font-weight:700; color:#4CAF50; cursor:pointer; }
@@ -94,17 +116,14 @@ function board_search(){
 <body>
 <div class="page-wrapper">
 
-    <!-- 좌측 로그인 영역 -->
     <div class="left-menu">
         <%@ include file="/Include/login_form.jsp" %>
     </div>
 
-    <!-- 우측 컨텐츠 영역 -->
     <div class="content-area">
 
         <h1 class="board-title">🌿 공지 사항</h1>
 
-        <!-- 검색창 -->
         <form name="board" method="get" action="board_list.do">
             <div class="search-container">
                 <select name="search" class="search-select">
@@ -116,12 +135,10 @@ function board_search(){
             </div>
         </form>
 
-        <!-- 게시판 상단 정보 -->
         <div style="text-align:right; margin-bottom:10px;">
             전체 : <b>${totcount}</b>건 — ${page}/${totpage} pages
         </div>
 
-        <!-- 게시판 리스트 -->
         <table class="board-table">
             <tr>
                 <th width="10%">번호</th>
@@ -153,7 +170,6 @@ function board_search(){
             </c:if>
         </table>
 
-        <!-- 페이지 이동 -->
         <div style="text-align:center; margin-top:20px;">
             ${pageSkip}
         </div>
