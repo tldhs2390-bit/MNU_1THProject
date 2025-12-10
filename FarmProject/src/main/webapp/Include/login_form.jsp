@@ -117,6 +117,19 @@
 	    text-align:center; /* 숫자 오른쪽 정렬 */
 	    padding-right: 10px;
 	}
+	.side-banner-box {
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+	}
+	
+	.side-banner-img {
+	    width: 100%;
+	    border-radius: 8px;
+	    border: 1px solid #cfcfcf;
+	    box-sizing: border-box;
+	    cursor: pointer;
+	}
 </style>
 
 <!-- 로그인 안 된 상태 -->
@@ -133,7 +146,7 @@
             <input type="submit" value="로그인" class="side-login-btn">
         </form>
 
-        <p><a href="/User/user_join_agree.jsp">회원가입</a></p>
+        <p><a href="user_join_agree.jsp">회원가입</a></p>
     </div>
 </c:if>
 
@@ -148,8 +161,8 @@
         <p>포인트 : ${user.point }</p>
         
 
-        <p><a href="/User/user_modify.do">회원정보수정</a></p>
-        <p><a href="/User/user_logout.do">로그아웃</a></p>
+        <p><a href="user_modify.do">회원정보수정</a></p>
+        <p><a href="user_logout.do">로그아웃</a></p>
     </div>
 </c:if>
 
@@ -186,4 +199,16 @@
             </table>
         </c:otherwise>
     </c:choose>
+</div>
+<!-- 옥션 사이트 배너 -->
+<div class="side-banner-box">
+    <a href="https://www.auction.co.kr/" onclick="window.open(this.href,'popup','width=800,height=600'); return false;">
+        <img src="/img/auction.png" alt="Auction 배너" class="side-banner-img">
+    </a>
+</div>
+<!-- 쿠팡 사이트 배너 -->
+<div class="side-banner-box">
+    <a href="https://www.coupang.com/" onclick="window.open(this.href,'popup','width=800,height=600'); return false;">
+        <img src="/img/coupang.png" alt="Auction 배너" class="side-banner-img">
+    </a>
 </div>
