@@ -41,6 +41,7 @@ public class UserModifyServlet extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/User/user_modify.jsp");
 		rd.forward(request, response);
 	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -70,11 +71,12 @@ public class UserModifyServlet extends HttpServlet {
 	    UserDAO dao = UserDAO.getInstance();
 	    int row = dao.userModify(dto);
 
-	    // 세션 업데이트
-	    session.setAttribute("user", dto);
+	    UserDTO newDto = dao.userSelect(dto.getUser_id());
+
+	    session.setAttribute("user", newDto);
 	    session.setMaxInactiveInterval(1800);
 
-	    response.sendRedirect("/admin_index.do");
+	    response.sendRedirect("/index.do");
 		}
 	}
 	

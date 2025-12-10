@@ -135,7 +135,7 @@ function closeDeletePopup(){ document.getElementById("deletePopup").style.displa
     </div>
 
     <c:if test="${not empty dto.img}">
-        <img src="${pageContext.request.contextPath}/asset/growth/${dto.img}" class="read-img">
+        <img src="${pageContext.request.contextPath}/asset/growth/${dto.img}" width="300">
     </c:if>
 
     <div class="read-contents">${dto.contents}</div>

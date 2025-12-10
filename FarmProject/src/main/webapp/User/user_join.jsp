@@ -25,7 +25,7 @@ body {
 
 /* 중앙 흰 카드 */
 .signup-box {
-    width:700px;
+    width:870px;
     background:#ffffff;
     border-radius:8px;
     padding:32px 32px 28px;
@@ -239,7 +239,7 @@ $(function(){
         if(email.trim() == ""){ alert("이메일을 입력하세요"); return; }
 
         $.ajax({
-            url: "emailSend.do",
+            url: "/emailSend.do",
             type: "get",
             data: { email: email },
             success: function(result){
@@ -253,7 +253,7 @@ $(function(){
         let code = $("#emailCode").val();
 
         $.ajax({
-            url: "emailVerify.do",
+            url: "/emailVerify.do",
             type: "get",
             data: { code: code },
             success: function(result){
@@ -272,9 +272,9 @@ $(function(){
 
 
         $.ajax({
-        	url: "<%=request.getContextPath()%>/User/user_nickCheck.do",
-            type:'post',
-            data:{'n_name':n_name},
+        	url: "<%=request.getContextPath() %>/user_nickCheck.do",
+            type:"post",
+            data:{n_name: n_name},
             success:function(result){
                 if(result.trim() == "0"){ 
                     $("#nick_c").text("사용 가능한 닉네임입니다.").css("color", "blue");
@@ -355,21 +355,10 @@ $(function(){
                 <div id="emailMsg" class="helper-text"></div>
             </div>
 
-            <div class="field">
-                <div class="field-label">주거 형태</div>
-                <div class="input-row">
-                    <div class="inline-options">
-                        <label><input type="radio" name="address" value="아파트" checked> 아파트</label>
-                        <label><input type="radio" name="address" value="주택"> 주택</label>
-                    </div>
-                </div>
-            </div>
-
-
             <!-- 제출 버튼 -->
             <button type="button" id="btnMainSubmit" class="btn-submit-main">가입하기</button>
 
-            <div class="cancel-link" id="btnCancel">가입을 취소하고 이전 페이지로 돌아가기</div>
+            <div class="cancel-link" id="btnCancel">가입취소</div>
 
         </form>
     </div>

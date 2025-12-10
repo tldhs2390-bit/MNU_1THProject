@@ -47,7 +47,7 @@ public class AdminBoardListServlet extends HttpServlet {
 		
 	
 		String search ="", key="";
-		String url="board_list.do";
+		String url="admin_board_list.do";
 		int totcount = 0; //총게시글 수
 		if(request.getParameter("key") != null){
 			//post방식
@@ -106,7 +106,8 @@ public class AdminBoardListServlet extends HttpServlet {
 		
 		request.setAttribute("blist", blist); 
 		request.setAttribute("pageSkip", pageSkip); 
-		
+		request.setAttribute("search", search);
+		request.setAttribute("key", key);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/Admin_board/admin_board_list.jsp");
 		rd.forward(request, response);

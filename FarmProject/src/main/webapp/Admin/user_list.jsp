@@ -6,21 +6,28 @@
 <head>
 <title>관리자페이지</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!-- 이 페이지 전용 스타일만 적용되도록 격리 -->
 <style type="text/css"> 
-body,td,tr,table {
+#userListPage body,
+#userListPage td,
+#userListPage tr,
+#userListPage table {
     font-size:9pt; 
     font-family:tahoma;
     color:#666666;
     line-height:160%;
 }
-A:link {color:#666666;text-decoration:none;} 
-A:visited {color:#666666;text-decoration:none;} 
-A:active {color:#666666;text-decoration:none;} 
-A:hover {color:#009900;text-decoration:underline;} 
+
+#userListPage a:link {color:#666666;text-decoration:none;} 
+#userListPage a:visited {color:#666666;text-decoration:none;} 
+#userListPage a:active {color:#666666;text-decoration:none;} 
+#userListPage a:hover {color:#009900;text-decoration:underline;} 
 </style> 
 </head>
 
 <body>
+<div id="userListPage">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td align="center" height="100%" valign="middle"><br>
@@ -114,5 +121,6 @@ A:hover {color:#009900;text-decoration:underline;}
 </td>
 </tr>
 </table>
+</div>
 </body>
 </html>

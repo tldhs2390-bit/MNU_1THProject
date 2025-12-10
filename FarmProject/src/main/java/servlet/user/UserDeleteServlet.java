@@ -39,9 +39,9 @@ public class UserDeleteServlet extends HttpServlet {
 		if(row == 1) {
             HttpSession session = request.getSession();
             session.invalidate();  //로그아웃
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.do?delete=success");
         } else {
-            response.sendRedirect(request.getContextPath() + "/User/user_modify.do");
+            response.sendRedirect(request.getContextPath() + "/user_modify.do");
         }
 			
 		}

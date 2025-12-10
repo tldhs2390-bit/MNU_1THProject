@@ -187,7 +187,7 @@ $(function(){
     // 회원탈퇴
     $("#btn3").click(function(){
         if(confirm("정말로 회원탈퇴하시겠습니까?\n모든 정보가 삭제됩니다.")){
-            location.href = "<%=request.getContextPath()%>/User/user_delete.do?user_id=" + $("#user_id").val();
+            location.href = "<%=request.getContextPath()%>/user_delete.do?user_id=" + $("#user_id").val();
         }
     });
 
@@ -208,7 +208,7 @@ $(function(){
 
         <div class="signup-logo">회원정보수정</div>
 
-        <form name="user" id="user" method="post" action="/User/user_modify.do">
+        <form name="user" id="user" method="post" action="/user_modify.do">
 
             <input type="hidden" id="user_id" name="user_id" value="${dto.user_id}">
 
@@ -216,7 +216,7 @@ $(function(){
             <div class="field">
                 <div class="field-label">회원 성명</div>
                 <div class="input-row">
-                    <input type="text" value="${dto.user_name}" readonly>
+                    <input type="text" name="user_name" value="${dto.user_name}" readonly>
                 </div>
                 <div class="helper-text">변경할 수 없습니다</div>
             </div>
@@ -267,21 +267,12 @@ $(function(){
             <div class="field">
                 <div class="field-label">E-mail</div>
                 <div class="input-row">
-                    <input type="text" value="${dto.email}" readonly>
+                    <input type="text" name="email" value="${dto.email}" readonly>
                 </div>
                 <div class="helper-text">변경할 수 없습니다</div>
             </div>
 
-            <!-- 거주지 -->
-            <div class="field">
-                <div class="field-label">거주지</div>
-                <div class="input-row" style="gap:10px;">
-                    <label><input type="radio" name="address" value="아파트"
-                        ${dto.address=='아파트'?'checked':''}> 아파트</label>
-                    <label><input type="radio" name="address" value="주택"
-                        ${dto.address=='주택'?'checked':''}> 주택</label>
-                </div>
-            </div>
+            
 
             <button type="button" id="btn1" class="btn-submit-main">수정하기</button>
 

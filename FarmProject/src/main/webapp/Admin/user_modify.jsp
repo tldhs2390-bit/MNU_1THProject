@@ -7,20 +7,28 @@
 <head>
 <title>회원 정보 수정</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
 <style>
-body,td,tr,table{
+/* ★★★ 방법 1: 스타일을 content-area 내부에만 적용 ★★★ */
+.content-area body, 
+.content-area td, 
+.content-area tr, 
+.content-area table {
     font-size:9pt; 
     font-family:tahoma; 
     color:#000;
     line-height:160%;
 }
-.inputBox {
+
+.content-area .inputBox {
     width: 90%;
     padding: 5px;
     border: 1px solid #ccc;
 }
-.selectBox { padding: 4px; }
-.btn {
+
+.content-area .selectBox { padding: 4px; }
+
+.content-area .btn {
     padding: 6px 15px;
     background:#4CAF50;
     border:none;
@@ -29,15 +37,15 @@ body,td,tr,table{
     cursor:pointer;
 }
 </style>
+
 </head>
 
 <body>
 
-
+<div class="content-area"> <!-- ★ 전체 화면을 감싸 topmenu와 CSS 분리 -->
 
 <br><br>
 
-<!-- 전체 form을 table 바깥으로 뺌 -->
 <form action="admin_user_modify_pro.do" method="post">
 
 <input type="hidden" name="user_id" value="${dto.user_id}">
@@ -74,16 +82,6 @@ body,td,tr,table{
                 </tr>
 
                 <tr bgcolor="#FFFFFF">
-                    <td bgcolor="#EcECEC" align="center"><strong>등급</strong></td>
-                    <td>
-                        <select name="user_rank" class="selectBox">
-                            <option value="초심자" ${dto.user_rank=='초심자'?'selected':''}>초심자</option>
-                            <option value="고수"   ${dto.user_rank=='고수'?'selected':''}>고수</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr bgcolor="#FFFFFF">
                     <td bgcolor="#EcECEC" align="center"><strong>포인트</strong></td>
                     <td><input type="text" name="point" value="${dto.point}" class="inputBox"></td>
                 </tr>
@@ -91,12 +89,11 @@ body,td,tr,table{
                 <tr bgcolor="#FFFFFF">
                     <td colspan="2" align="center">
                         <input type="submit" value="수정완료" class="btn">
-                    		&nbsp;&nbsp;
-				        <input type="button" value="리스트로 돌아가기" class="btn"
-				               onclick="location.href='/admin_user_list.do'">
-				    </td>
-				</tr>
-                
+                        &nbsp;&nbsp;
+                        <input type="button" value="리스트로 돌아가기" class="btn"
+                               onclick="location.href='/admin_user_list.do'">
+                    </td>
+                </tr>
 
             </table>
         </td>
@@ -104,6 +101,8 @@ body,td,tr,table{
 </table>
 
 </form>
+
+</div> <!-- content-area 끝 -->
 
 </body>
 </html>

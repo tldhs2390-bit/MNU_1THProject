@@ -2,6 +2,7 @@ package servlet.growth;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.*;
 
 import model.growth.GrowthDAO;
 import model.growth.GrowthDTO;
+import model.user.UserDAO;
 import model.user.UserDTO;
 
 @WebServlet("/growth_write_ok.do")
@@ -25,7 +27,7 @@ public class GrowthWriteOkServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // 🔐 로그인 체크 — UserDTO 기반으로 변경
+        // 로그인 체크
         HttpSession session = request.getSession();
         UserDTO loginUser = (UserDTO) session.getAttribute("user");
 
@@ -34,79 +36,78 @@ public class GrowthWriteOkServlet extends HttpServlet {
             return;
         }
 
-        // 로그인한 사용자 닉네임
         String n_name = loginUser.getN_name();
 
-        // ======================================
-        // ⭐ 오늘 글쓰기 횟수 체크 (제한: 2회)
-        // ======================================
+        // 오늘 글쓰기 2회 제한
         GrowthDAO dao = new GrowthDAO();
         int todayCount = dao.getTodayWriteCount(n_name);
 
         if (todayCount >= 2) {
-            // 제한 초과 → 팝업 페이지로 이동
-            response.sendRedirect("/growth_limit.jsp");
+            response.sendRedirect("/Growth/growth_limit.jsp");
             return;
         }
 
+        // 게시글 정보 저장
         GrowthDTO dto = new GrowthDTO();
-
-        // -----------------------------
-        // 기본 데이터
-        // -----------------------------
         dto.setCategory(request.getParameter("category"));
         dto.setSubject(request.getParameter("subject"));
         dto.setContents(request.getParameter("contents"));
         dto.setHashtags(request.getParameter("hashtags"));
         dto.setPass(request.getParameter("pass"));
-        dto.setN_name(n_name);   // 로그인 사용자 닉네임 저장
+        dto.setN_name(n_name);
 
-        // -----------------------------
-        // ⭐ 이미지 업로드
-        // -----------------------------
+        // -------------------------------
+        // ⭐ 파일 업로드 — 예전 방식으로 수정
+        // -------------------------------
         Part filePart = request.getPart("img");
         String fileName = "";
 
         if (filePart != null && filePart.getSize() > 0) {
 
-            fileName = extractFileName(filePart);
+            // 1) 원본 파일명
+            String originalFileName = extractFileName(filePart);
 
-            String savePath = request.getServletContext().getRealPath("/")
-                    .replace("\\build\\", "\\")
-                    + "asset" + File.separator + "growth";
+            // 2) UUID를 이용해 중복 방지
+            String uuid = UUID.randomUUID().toString();
+            fileName = uuid + "_" + originalFileName;
+
+            // 3) 저장 경로 설정
+            String savePath = request.getServletContext().getRealPath("/asset/growth");
+
+            // 일부 서버에서 build 경로 문제 해결
+            savePath = savePath.replaceAll("\\\\build\\\\", "\\\\")
+                               .replaceAll("/build/", "/");
 
             File uploadDir = new File(savePath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
+            // 4) 실제 저장
             filePart.write(savePath + File.separator + fileName);
         }
 
         dto.setImg(fileName);
 
-        // -----------------------------
-        // DB 저장
-        // -----------------------------
+        // DB INSERT
         dao.insert(dto);
 
-        // ======================================
-        // ⭐ 글 작성 성공 → 사용자 포인트 +100
-        // ======================================
-        dao.updateUserPoint(n_name, 100);
+        // -------------------------------
+        // ⭐ 포인트 지급
+        // -------------------------------
+        UserDAO udao = UserDAO.getInstance();
+        boolean pointAdded = udao.addPointLimit(loginUser.getUser_id());
+        int addedPoint = pointAdded ? 100 : 0;
 
-        // ⭐⭐ 세션의 UserDTO 포인트도 함께 +100 증가 (UI에 바로 반영됨)
-        loginUser.setPoint(loginUser.getPoint() + 100);
-        session.setAttribute("user", loginUser);
+        if (addedPoint > 0) {
+            loginUser.setPoint(loginUser.getPoint() + addedPoint);
+            session.setAttribute("user", loginUser);
+        }
 
-        // ======================================
-        // ⭐ 포인트 증가 애니메이션 보여주는 페이지로 이동
-        // ======================================
-        request.setAttribute("pointPlus", 100);
-        request.getRequestDispatcher("/growth_write_success.jsp").forward(request, response);
+        request.setAttribute("pointPlus", addedPoint);
+
+        request.getRequestDispatcher("/Growth/growth_write_success.jsp").forward(request, response);
     }
 
-    // -----------------------------
-    // 파일명 추출
-    // -----------------------------
+    // 파일명 추출 (기존 방식 유지)
     private String extractFileName(Part part) {
         for (String cd : part.getHeader("content-disposition").split(";")) {
             if (cd.trim().startsWith("filename")) {

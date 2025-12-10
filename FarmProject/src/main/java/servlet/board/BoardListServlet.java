@@ -98,7 +98,8 @@ public class BoardListServlet extends HttpServlet {
 		
 		request.setAttribute("blist", blist); 
 		request.setAttribute("pageSkip", pageSkip); 
-		
+		request.setAttribute("search", search);
+		request.setAttribute("key", key);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/Board/board_list.jsp");
 		rd.forward(request, response);

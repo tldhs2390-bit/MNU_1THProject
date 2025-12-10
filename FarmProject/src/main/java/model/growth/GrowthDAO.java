@@ -13,7 +13,7 @@ public class GrowthDAO {
     ResultSet rs = null;
 
     // ============================================================
-    // ⭐ NEW 1) 오늘 작성한 글 수 조회 (하루 2회 제한)
+    // 1) 오늘 작성한 글 수 조회 (하루 2회 제한)
     // ============================================================
     public int getTodayWriteCount(String n_name) {  
         int count = 0;
@@ -40,41 +40,49 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // ⭐ NEW 2) 사용자 포인트 증가 (글 작성 시 +100)
+    // 2) 사용자 포인트 증가
     // ============================================================
-    public int updateUserPoint(String n_name, int plus) {
+    public int updateUserPoint(String n_name, int point) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
         int result = 0;
 
-        String sql =
-            "UPDATE tbl_user SET point = COALESCE(point,0) + ? " +
-            "WHERE n_name = ?";
-
         try {
             conn = DBManager.getConn();
+
+            String sql = "UPDATE tbl_user SET point = point + ? WHERE n_name = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, plus);
+
+            pstmt.setInt(1, point);
             pstmt.setString(2, n_name);
 
-            result = pstmt.executeUpdate();
+            result = pstmt.executeUpdate();  
 
         } catch (Exception e) {
-            System.out.println("updateUserPoint() 에러: " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
 
         return result;
     }
 
     // ============================================================
-    // 1) 검색 + 카테고리 + 전체 목록
+    // 공통 SELECT 컬럼 (명시적)
+    // ============================================================
+    private final String SELECT_COLUMNS =
+        "idx, category, subject, contents, img, hashtags, n_name, pass, " +
+        "regdate, readcnt, like_cnt, sym_cnt, sad_cnt";
+
+    // ============================================================
+    // 3) 검색 + 카테고리 + 전체 목록
     // ============================================================
     public List<GrowthDTO> getList(String key, String search, String category) {
 
         List<GrowthDTO> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM tbl_growth WHERE status = 1 ";
+        String sql = "SELECT " + SELECT_COLUMNS + " FROM tbl_growth WHERE status = 1 ";
 
         if (search != null && !search.equals("")) {
             sql += " AND " + key + " LIKE ? ";
@@ -116,13 +124,13 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 2) 페이징 목록
+    // 4) 페이징 목록
     // ============================================================
     public List<GrowthDTO> getListPaging(String key, String search, String category, int start, int limit) {
 
         List<GrowthDTO> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM tbl_growth WHERE status = 1 ";
+        String sql = "SELECT " + SELECT_COLUMNS + " FROM tbl_growth WHERE status = 1 ";
 
         if (search != null && !search.equals("")) {
             sql += " AND " + key + " LIKE ? ";
@@ -167,7 +175,7 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 3) 전체 글 개수
+    // 5) 전체 글 개수
     // ============================================================
     public int getTotalCount(String key, String search, String category) {
 
@@ -210,13 +218,13 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 4) 글 1개 조회
+    // 6) 글 1개 조회
     // ============================================================
     public GrowthDTO getOne(int idx) {
 
         GrowthDTO dto = null;
 
-        String sql = "SELECT * FROM tbl_growth WHERE idx=? AND status = 1";
+        String sql = "SELECT " + SELECT_COLUMNS + " FROM tbl_growth WHERE idx=? AND status = 1";
 
         try {
             conn = DBManager.getConn();
@@ -236,7 +244,7 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 5) 글 작성
+    // 7) 글 작성
     // ============================================================
     public int insert(GrowthDTO dto) {
 
@@ -263,14 +271,14 @@ public class GrowthDAO {
         } catch (Exception e) {
             System.out.println("insert() 에러: " + e.getMessage());
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
 
         return result;
     }
 
     // ============================================================
-    // 6) 글 수정
+    // 8) 글 수정
     // ============================================================
     public int update(GrowthDTO dto) {
 
@@ -295,14 +303,14 @@ public class GrowthDAO {
         } catch (Exception e) {
             System.out.println("update() 에러: " + e.getMessage());
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
 
         return result;
     }
 
     // ============================================================
-    // 7) 글 삭제
+    // 9) 글 삭제
     // ============================================================
     public int delete(int idx) {
 
@@ -320,14 +328,14 @@ public class GrowthDAO {
         } catch (Exception e) {
             System.out.println("delete() 에러: " + e.getMessage());
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
 
         return result;
     }
 
     // ============================================================
-    // 8) 조회수 증가
+    // 10) 조회수 증가
     // ============================================================
     public void increaseReadcnt(int idx) {
         String sql = "UPDATE tbl_growth SET readcnt = readcnt + 1 WHERE idx=?";
@@ -341,12 +349,12 @@ public class GrowthDAO {
         } catch (Exception e) {
             System.out.println("increaseReadcnt() 에러: " + e.getMessage());
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
     }
 
     // ============================================================
-    // 9) 감정 업데이트
+    // 11) 감정 업데이트
     // ============================================================
     public void updateEmotion(int idx, String type) {
 
@@ -380,19 +388,20 @@ public class GrowthDAO {
         } catch (Exception e) {
             System.out.println("updateEmotion() 에러: " + e.getMessage());
         } finally {
-            DBManager.close(conn, pstmt, null);
+            DBManager.close(conn, pstmt);
         }
     }
 
     // ============================================================
-    // 10) 인기글 Top1
+    // 12) 인기글 Top1
     // ============================================================
     public GrowthDTO getTopLike() {
 
         GrowthDTO dto = null;
 
         String sql =
-            "SELECT * FROM tbl_growth WHERE status = 1 ORDER BY like_cnt DESC LIMIT 1";
+            "SELECT " + SELECT_COLUMNS + 
+            " FROM tbl_growth WHERE status = 1 ORDER BY like_cnt DESC LIMIT 1";
 
         try {
             conn = DBManager.getConn();
@@ -411,14 +420,15 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 카테고리 인기글 Top1
+    // 13) 카테고리 인기글 Top1
     // ============================================================
     public GrowthDTO getTopByCategory(String category) {
 
         GrowthDTO dto = null;
 
         String sql =
-            "SELECT * FROM tbl_growth WHERE category = ? AND status = 1 " +
+            "SELECT " + SELECT_COLUMNS +
+            " FROM tbl_growth WHERE category = ? AND status = 1 " +
             "ORDER BY like_cnt DESC LIMIT 1";
 
         try {
@@ -439,7 +449,7 @@ public class GrowthDAO {
     }
 
     // ============================================================
-    // 감정 업데이트 후 패키지 반환
+    // 14) 감정 요약 객체
     // ============================================================
     public GrowthEmotionSummary getEmotionSummary(int idx) {
 
