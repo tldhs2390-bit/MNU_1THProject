@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <style>
    /* modify.jsp 왼쪽 20% 영역에 정확히 맞는 크기 */
     .side-login-box {
@@ -137,7 +137,7 @@
     <div class="side-login-box">
         <h3 class="side-login-title">Member Login</h3>
 
-        <form method="post" action="/User/user_login.do">
+        <form method="post" action="user_login.do">
 
             <input type="text" name="user_id" placeholder="아이디">
 
@@ -146,7 +146,7 @@
             <input type="submit" value="로그인" class="side-login-btn">
         </form>
 
-        <p><a href="/User/user_join_agree.jsp">회원가입</a></p>
+        <p><a href="user_join_agree.jsp">회원가입</a></p>
     </div>
 </c:if>
 
@@ -171,12 +171,12 @@
         <p>포인트 : ${user.point }</p>
         
 
-        <p><a href="/User/user_modify.do">회원정보수정</a></p>
-        <p><a href="/User/user_logout.do">로그아웃</a></p>
+        <p><a href="user_modify.do">회원정보수정</a></p>
+        <p><a href="user_logout.do">로그아웃</a></p>
     </div>
 </c:if>
 
-<%@ page import="user.model.UserDAO,user.model.UserDTO" %>
+<%@ page import="model.user.UserDAO,model.user.UserDTO" %>
 <%
     UserDAO dao = UserDAO.getInstance();
     request.setAttribute("rankList", dao.getPointRankTop5());

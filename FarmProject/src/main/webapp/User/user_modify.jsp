@@ -1,104 +1,201 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/Include/topmenu.jsp" %>
+
 <html>
 <head>
 <title>회원정보수정</title>
-<link rel="stylesheet" type="text/css" href="/css/main.css">
-<style type="text/css">
-/* CSS 주석 수정 및 스타일 정리 */
-body { font-family: 돋움, Verdana; font-size: 9pt}
-td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; color: #000000; background-position: left top; background-repeat: no-repeat;}
-.formbox {
-	background-color: #F0F0F0; font-family: "Verdana", "Arial", "Helvetica", "돋움"; font-size:9pt
-} 
-.form-table { 
-    width: 100%; 
-    border-collapse: separate; 
-    border-spacing: 1px; 
-    background-color: #cfcfcf; 
+
+<style>
+/* 전체 배경 */
+body { 
+    font-family: 'Noto Sans KR', 돋움, Verdana, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:0;
 }
-.form-label { 
-    background-color: #EFF4F8; 
-    width: 150px; /* 라벨 너비 고정 */
-    padding-left: 15px; 
-    font-weight: bold; 
-    height: 40px; /* 행 높이 조금 여유있게 */
+
+/* 화면 중앙 정렬 */
+.signup-wrapper {
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:0px;
+    box-sizing:border-box;
 }
-.form-input { 
-    background-color: #FFFFFF; 
-    padding-left: 10px; 
+
+/* 중앙 흰 카드 */
+.signup-box {
+    width:1000px;
+    background:#ffffff;
+    border-radius:8px;
+    padding:32px 32px 28px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.06);
+    box-sizing:border-box;
 }
-.input-field { 
-    height: 28px; 
-    border: 1px solid #ccc; 
-    padding-left: 5px; 
-    font-size: 12px;
+
+/* 상단 제목 */
+.signup-logo {
+    text-align:center;
+    font-size:24px;
+    font-weight:700;
+    color:#03c75a;
+    margin-bottom:24px;
+}
+
+/* 각 입력 블록 */
+.field {
+    margin-bottom:16px;
+}
+
+/* 라벨 */
+.field-label {
+    font-size:13px;
+    color:#333;
+    margin-bottom:6px;
+}
+
+/* input-row */
+.input-row {
+    border:1px solid #dadada;
+    border-radius:4px;
+    padding:10px 12px;
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    background:#fff;
+}
+.input-row:focus-within {
+    border-color:#03c75a;
+}
+
+.input-row input[type="text"],
+.input-row input[type="password"],
+.input-row input[type="tel"] {
+    border:none;
+    outline:none;
+    width:100%;
+    font-size:13px;
+    padding:0;
+    font-family:inherit;
+    background:transparent;
+}
+
+/* helper text */
+.helper-text {
+    font-size:11px;
+    color:#888;
+    margin-top:4px;
+}
+
+/* 버튼 */
+.btn-submit-main {
+    width:100%;
+    height:48px;
+    border:none;
+    border-radius:4px;
+    background:#03c75a;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:12px;
+}
+.btn-submit-main:hover {
+    background:#02b258;
+}
+
+.cancel-link {
+    margin-top:10px;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+    cursor:pointer;
+}
+.cancel-link:hover {
+    text-decoration:underline;
+}
+
+.btn-inline {
+    padding:8px 14px;
+    background:#e53935;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
 }
 </style>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-	$(function(){
+$(function(){
 
-		$("#btn1").click(function(){
-			if($("#n_name").val()==''){
-				alert("닉네임을 입력하세요");
-				$("#n_name").focus();
-				return;
-			}
-			if($("#user_pass").val()==''){
-				alert("비밀번호를 입력하세요");
-				$("#user_pass").focus();
-				return;
-			}
-			if($("#user_repass").val()==''){
-				alert("비밀번호 확인을 입력하세요");
-				$("#user_repass").focus();
-				return;
-			}
-			if($("#user_pass").val() != $("#user_repass").val()){
-				alert("비밀번호가 일치하지 않습니다.");
-				$("#user_repass").focus();
-				return;
-			}
-			if($("#tel").val()==''){
-				alert("전화번호를 입력하세요");
-				$("#tel").focus();
-				return;
-			}
-			alert("회원정보수정 성공!");
-			$("#user").submit();		
-		});
+    // 수정 확인
+    $("#btn1").click(function(){
+        if($("#n_name").val()==''){
+            alert("닉네임을 입력하세요");
+            $("#n_name").focus();
+            return;
+        }
+        if($("#user_pass").val()==''){
+            alert("비밀번호를 입력하세요");
+            $("#user_pass").focus();
+            return;
+        }
+        if($("#user_repass").val()==''){
+            alert("비밀번호 확인을 입력하세요");
+            $("#user_repass").focus();
+            return;
+        }
+        if($("#user_pass").val() != $("#user_repass").val()){
+            alert("비밀번호가 일치하지 않습니다.");
+            $("#user_repass").focus();
+            return;
+        }
+        if($("#tel").val()==''){
+            alert("전화번호를 입력하세요");
+            $("#tel").focus();
+            return;
+        }
+        alert("회원정보수정 성공!");
+        $("#user").submit();
+    });
 
-		$("#btn2").click(function(){
-            if(confirm("수정을 취소하시겠습니까?")){
-                history.back();
-            }
-        });
+    // 취소
+    $("#btn2").click(function(){
+        if(confirm("수정을 취소하시겠습니까?")){
+            history.back();
+        }
+    });
 
-		// 비밀번호 일치
-		$("#user_repass").keyup(function(){
-			var pass = $("#user_pass").val();
-			var repass = $(this).val();
-			
-			if(pass == repass){
-				$("#repasswd_c").text("비밀번호가 일치합니다.").css("color", "blue");
-			}else{
-				$("#repasswd_c").text("비밀번호가 일치하지 않습니다.").css("color", "red");
-			}
-		});
-		// 회원탈퇴
-		$("#btn3").click(function(){
-		    if(confirm("정말로 회원탈퇴하시겠습니까? \n모든 정보가 삭제됩니다.")){
-		        location.href = "<%=request.getContextPath()%>/User/user_delete.do?user_id=" + $("#user_id").val();
-		    }
-		});
-	});
+    // 비밀번호 일치 체크
+    $("#user_repass").keyup(function(){
+        var pass = $("#user_pass").val();
+        var repass = $(this).val();
+        
+        if(pass == repass){
+            $("#repasswd_c").text("비밀번호가 일치합니다.").css("color", "blue");
+        } else {
+            $("#repasswd_c").text("비밀번호가 일치하지 않습니다.").css("color", "red");
+        }
+    });
+
+    // 회원탈퇴
+    $("#btn3").click(function(){
+        if(confirm("정말로 회원탈퇴하시겠습니까?\n모든 정보가 삭제됩니다.")){
+            location.href = "<%=request.getContextPath()%>/User/user_delete.do?user_id=" + $("#user_id").val();
+        }
+    });
+
+});
 </script>
-</head>
 
-<body bgcolor="#FFFFFF" leftmargin=0 topmargin=0 >
- 
+</head>
+<body>
 <!-- 왼쪽 로그인 배너 -->
 <table border="0" width="100%">
 	<tr>
@@ -106,123 +203,98 @@ td   { font-family: 돋움, Verdana; font-size: 9pt; text-decoration: none; colo
         <%@ include file="/Include/login_form.jsp" %>
     </td>
   <td width="80%" valign="top">&nbsp;<br>    
+		<div class="signup-wrapper">
+		    <div class="signup-box">
 
-	<form name="user" id="user" method="post" action="/user_modify.do">
-	<input type="hidden" name="user_id" value="${dto.user_id}">
-	<table border=0 cellpadding=0 cellspacing=0 width=800 valign=top>
-		<tr><td align=center><br>                            
-			<table cellpadding=0 cellspacing=0 border=0 width=100% align="center">       
-				<tr>
-					<td bgcolor="#7AAAD5">            
-						<table cellpadding=0 cellspacing=0 border=0 width=100%>
-							<tr bgcolor=#7AAAD5>
-								<td align=left border="0" hspace="0" vspace="0"></td>
-								<td align=center bgcolor="#7AAAD5" style="padding: 8px 0;">
-									<font color="#FFFFFF"><b>회원정보수정&nbsp;</b><font color=black></font>(<font color=red>&nbsp;*&nbsp;</font>은 필수항목 입니다.)<font color=black></font></font>
-								</td>
-								<td align=right border="0" hspace="0" vspace="0"></td>
-							</tr>
-						</table>
-						<table cellpadding=5 cellspacing=1 border=0 width=100%>
-							<tr>
-								<td width=200 bgcolor=#EFF4F8>&nbsp;회원 성명</td>
-								<td bgcolor=WHITE>
-									<input type=text id=user_name name=user_name maxlength=20 readonly value="${dto.user_name }" style="width:300px; height:30px; font-size:12px;">&nbsp;변경 할 수 없습니다.
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor=#EFF4F8>&nbsp;닉네임</td>
-								<td bgcolor=WHITE>
-									<input type=text id=n_name name=n_name maxlength=20 value="${dto.n_name }" style="width:300px; height:30px; font-size:12px;">
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;아이디</td>
-								<td bgcolor=WHITE>
-									<table cellspacing=0 cellpadding=0>
-										<tr>
-											<td align=absmiddle>
-												<input type=text id=user_id name=user_id maxlength=16 style="width:300px; height:30px; font-size:12px;" readonly value="${dto.user_id }">
-											</td>
-											<td id="userID_c" style="padding-left: 10px; font-size: 11px; color: black;">
-                   									&nbsp;변경할 수 없습니다.
-                  							</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;비밀번호<font color=red>&nbsp;*</font></td>
-								<td bgcolor=WHITE>
-								    <input type=password id=user_pass name=user_pass maxlength=12 style="width:300px; height:30px; font-size:12px;">
-									 &nbsp; 6~12자 이내의 영문이나 숫자만 가능합니다.
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;비밀번호확인<font color=red>&nbsp;*</font></td>
-								<td bgcolor=WHITE>
-									<input type=password id=user_repass name=user_repass maxlength=12 value="" style="width:300px; height:30px; font-size:12px;">
-									
-                                    
-									<font id="repasswd_c" color="red" style="font-size: 11px; margin-top: 5px; display: inline-block;">&nbsp; 비밀번호 확인을 위해서 비밀번호를 한번 더 입력해주세요.</font> 
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;전화번호</td>
-								<td bgcolor=WHITE>
-									<input type=text id=tel name=tel maxlength=13 value="${dto.tel }" style="width:300px; height:30px; font-size:12px;">&nbsp; "-" 포함
-								</td>
-							</tr>
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;E-mail</td>
-								<td bgcolor=WHITE valign=middle>
-									<input type="text" id=email name="email" maxlength="50" style="width:300px; height:30px; font-size:12px;" readonly value="${dto.email }">변경할 수 없습니다.
+        <div class="signup-logo">회원정보수정</div>
 
-								</td>
-							</tr>
+        <form name="user" id="user" method="post" action="/User/user_modify.do">
 
-							<tr>
-								<td bgcolor="#EFF4F8">&nbsp;거주지</td>
-								<td bgcolor=WHITE valign=middle style="height:40px;">
-									<input type="radio" name="address" value="아파트" checked>아파트
-									&nbsp;&nbsp;&nbsp;
-									<input type="radio" name="address" value="주택">주택
-								</td>
-							</tr>
-							
-							
-						</table>
-						<table cellpadding="0" cellspacing="0" border="0" width="100%">
-							<tr bgcolor="#ffffff">
-						    <td colspan="2" style="padding: 30px 0; position:relative;">
-						
-						        <!-- 가운데 버튼 그룹 -->
-						        <div style="text-align:center;">
-						            <input type="button" value="수정 확인" id="btn1"
-						                   style="width:120px; height:40px; font-weight:bold; cursor:pointer;
-						                          background:#4CAF50; color:white; border:none;">
-						            &nbsp;&nbsp;
-						            <input type="button" value="수정 취소" id="btn2"
-						                   style="width:120px; height:40px; font-weight:bold; cursor:pointer;
-						                          background:#ccc; color:black; border:none;">
-						        </div>
-						        <div style="position:absolute; right:0; top:50%; transform:translateY(-50%);">
-						            <input type="button" value="회원 탈퇴" id="btn3"
-						                   style="width:90px; height:30px; font-weight:bold; cursor:pointer;
-						                          background:#e53935; color:white; border:none;">
-						        </div>
-						
-						    </td>
-						</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</td></tr>
-	</table>
-	</form>
-  </td>
-</tr>
-</table>
+            <input type="hidden" id="user_id" name="user_id" value="${dto.user_id}">
+
+            <!-- 이름 -->
+            <div class="field">
+                <div class="field-label">회원 성명</div>
+                <div class="input-row">
+                    <input type="text" value="${dto.user_name}" readonly>
+                </div>
+                <div class="helper-text">변경할 수 없습니다</div>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="field">
+                <div class="field-label">닉네임</div>
+                <div class="input-row">
+                    <input type="text" id="n_name" name="n_name" value="${dto.n_name}">
+                </div>
+            </div>
+
+            <!-- 아이디 -->
+            <div class="field">
+                <div class="field-label">아이디</div>
+                <div class="input-row">
+                    <input type="text" value="${dto.user_id}" readonly>
+                </div>
+                <div class="helper-text">변경할 수 없습니다</div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="field">
+                <div class="field-label">비밀번호 *</div>
+                <div class="input-row">
+                    <input type="password" id="user_pass" name="user_pass">
+                </div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="field">
+                <div class="field-label">비밀번호 확인 *</div>
+                <div class="input-row">
+                    <input type="password" id="user_repass" name="user_repass">
+                </div>
+                <div id="repasswd_c" class="helper-text">비밀번호를 다시 입력해주세요.</div>
+            </div>
+
+            <!-- 전화번호 -->
+            <div class="field">
+                <div class="field-label">전화번호</div>
+                <div class="input-row">
+                    <input type="text" id="tel" name="tel" value="${dto.tel}">
+                </div>
+            </div>
+
+            <!-- 이메일 -->
+            <div class="field">
+                <div class="field-label">E-mail</div>
+                <div class="input-row">
+                    <input type="text" value="${dto.email}" readonly>
+                </div>
+                <div class="helper-text">변경할 수 없습니다</div>
+            </div>
+
+            <!-- 거주지 -->
+            <div class="field">
+                <div class="field-label">거주지</div>
+                <div class="input-row" style="gap:10px;">
+                    <label><input type="radio" name="address" value="아파트"
+                        ${dto.address=='아파트'?'checked':''}> 아파트</label>
+                    <label><input type="radio" name="address" value="주택"
+                        ${dto.address=='주택'?'checked':''}> 주택</label>
+                </div>
+            </div>
+
+            <button type="button" id="btn1" class="btn-submit-main">수정하기</button>
+
+            <div class="cancel-link" id="btn2">수정 취소</div>
+
+            <div style="text-align:right; margin-top:20px;">
+                <button type="button" id="btn3" class="btn-inline">회원 탈퇴</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
 </body>
 </html>
