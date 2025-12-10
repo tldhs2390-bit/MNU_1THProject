@@ -60,8 +60,8 @@
     .btn-area {
         margin-top: 25px;
         display: flex;
-        justify-content: flex-end; /* 오른쪽 정렬 */
-        gap: 15px; /* 버튼 간격 */
+        justify-content: flex-end; 
+        gap: 15px; 
     }
 
     .btn-area .btn {
@@ -73,24 +73,11 @@
         font-weight: 600;
     }
 
-    .btn-register {
-        background: #4CAF50; /* 등록 초록 */
-        color: #fff;
-    }
+    .btn-register { background: #4CAF50; color: #fff; }
+    .btn-modify { background: #ffd54f; }
+    .btn-delete { background: #ef5350; color: #fff; }
+    .btn-list { background: #4db6ac; color: #fff; }
 
-    .btn-modify {
-        background: #ffd54f; /* 수정 노랑 */
-    }
-
-    .btn-delete {
-        background: #ef5350; /* 삭제 빨강 */
-        color: #fff;
-    }
-
-    .btn-list {
-        background: #4db6ac;; 
-        color: #fff;
-    }
 </style>
 
 </head>
@@ -118,15 +105,36 @@
             ${dto.contents}
         </div>
 
+        <!-- 삭제 폼 (hidden, POST 전송용) -->
+        <form id="deleteForm" method="post" action="admin_board_delete.do">
+            <input type="hidden" name="idx" value="${dto.idx}">
+            <input type="hidden" name="page" value="${page}">
+            <input type="hidden" name="pass" value="">
+        </form>
+
         <!-- 버튼 영역 -->
         <div class="btn-area">
             <button class="btn btn-register" onclick="location.href='admin_board_write.do'">등록</button>
             <button class="btn btn-modify" onclick="location.href='admin_board_modify.do?idx=${dto.idx}&page=${page}'">수정</button>
-            <button class="btn btn-delete" onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='admin_board_delete.do?idx=${dto.idx}&page=${page}'">삭제</button>
+            <button class="btn btn-delete" onclick="deleteBoard(${dto.idx}, ${page})">삭제</button>
             <button class="btn btn-list" onclick="location.href='admin_board_list.do?page=${page}'">목록</button>
         </div>
 
     </div>
 </div>
+
+<script>
+function deleteBoard(idx, page) {
+    if(confirm('정말 삭제하시겠습니까?')) {
+        let pass = prompt('비밀번호를 입력하세요.');
+        if(pass != null) {
+            let form = document.getElementById('deleteForm');
+            form.pass.value = pass;
+            form.submit();
+        }
+    }
+}
+</script>
+
 </body>
 </html>

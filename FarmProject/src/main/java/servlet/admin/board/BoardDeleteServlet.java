@@ -36,7 +36,7 @@ public class BoardDeleteServlet extends HttpServlet {
 		request.setAttribute("idx", idx);
 		request.setAttribute("page", page);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/Board/board_delete.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/Admin_board/admin_board_delete.jsp");
 		rd.forward(request, response);
 	}
 
@@ -44,21 +44,25 @@ public class BoardDeleteServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int idx = Integer.parseInt(request.getParameter("idx"));
-		int page = Integer.parseInt(request.getParameter("page"));
-		
-		String pass = request.getParameter("pass");
-		
-		BoardDAO dao = BoardDAO.getInstance();
-		
-		int row = dao.boardDelete(idx,pass);
-		
-		request.setAttribute("row", row);
-		request.setAttribute("page", page);
-		RequestDispatcher rd = request.getRequestDispatcher("/Board/board_delete_pro.jsp");
-		rd.forward(request, response);
-		
-		
-	}
+	    int idx = Integer.parseInt(request.getParameter("idx"));
+	    int page = Integer.parseInt(request.getParameter("page"));
+	    String pass = request.getParameter("pass");
 
+	    BoardDAO dao = BoardDAO.getInstance();
+	    int row = dao.boardDelete(idx, pass); // 비밀번호 확인 포함
+
+	    response.setContentType("text/html;charset=UTF-8");
+	    java.io.PrintWriter out = response.getWriter();
+
+	    if(row > 0) {
+	        // 삭제 성공 → 목록으로 이동
+	        response.sendRedirect("admin_board_list.do?page=" + page);
+	    } else {
+	        // 삭제 실패 → 팝업 후 다시 이전 화면
+	        out.println("<script>");
+	        out.println("alert('비밀번호가 틀렸습니다.');");
+	        out.println("history.back();");
+	        out.println("</script>");
+	    }
+	}
 }
