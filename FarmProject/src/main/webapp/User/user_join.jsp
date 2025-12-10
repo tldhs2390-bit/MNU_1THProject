@@ -25,7 +25,7 @@ body {
 
 /* 중앙 흰 카드 */
 .signup-box {
-    width:700px;
+    width:870px;
     background:#ffffff;
     border-radius:8px;
     padding:32px 32px 28px;
@@ -369,7 +369,7 @@ $(function(){
             <!-- 제출 버튼 -->
             <button type="button" id="btnMainSubmit" class="btn-submit-main">가입하기</button>
 
-            <div class="cancel-link" id="btnCancel">가입을 취소하고 이전 페이지로 돌아가기</div>
+            <div class="cancel-link" id="btnCancel">가입 취소</div>
 
         </form>
     </div>

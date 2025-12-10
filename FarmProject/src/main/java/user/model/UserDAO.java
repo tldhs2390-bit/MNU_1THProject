@@ -318,10 +318,7 @@ public class UserDAO {
 		public List<UserDTO> getPointRankTop5() {
 		    List<UserDTO> list = new ArrayList<>();
 
-		    String sql = "select user_id, n_name, point "
-		               + "from tbl_user "
-		               + "order by point desc "
-		               + "limit 5";
+		    String sql = "select user_id, n_name, point from tbl_user order by point desc limit 5";
 
 		    try {
 		        conn = DBManager.getConn();
@@ -344,8 +341,7 @@ public class UserDAO {
 		    return list;
 		}
 		
-		//회원정보 검색 (admin)
-		// 닉네임으로 회원 검색
+		//회원정보 닉네임 검색 (admin)
 		public List<UserDTO> searchByNickname(String keyword) {
 		    List<UserDTO> list = new ArrayList<>();
 		    String sql = "select * from tbl_user where n_name like ? order by point desc";

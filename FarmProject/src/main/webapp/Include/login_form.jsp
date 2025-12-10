@@ -144,7 +144,7 @@
 
         <p><b>${user.user_name}</b> 님</p>
         <p>닉네임 : ${user.n_name}</p>
-        <p>등급 : ${user.user_rank}</p>
+
         <p>포인트 : ${user.point }</p>
         
 

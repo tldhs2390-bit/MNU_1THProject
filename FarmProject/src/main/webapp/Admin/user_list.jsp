@@ -38,10 +38,25 @@ A:hover {color:#009900;text-decoration:underline;}
 
 	<!-- 메인 내용 -->
 	<table width="80%" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td height="20">* 총 회원수 : <font color="red">${totcount}</font> 명</td>
-		</tr>
+    <tr>
+        <td height="20">
 
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                <div>* 총 회원수 : <font color="red">${totcount}</font> 명</div>
+
+                <form action="admin_user_list.do" method="get" style="margin:0;">
+                    <input type="text" name="keyword" value="${keyword}"
+                           placeholder="닉네임을 입력하세요"
+                           style="width:200px; height:28px; padding:3px;">
+                    <input type="submit" value="검색"
+                           style="height:28px; padding:3px 10px;">
+                </form>
+            </div>
+<br>
+        </td>
+    </tr>
+
+	
 		<tr>
 			<td>
 			<!-- 회원 리스트 테이블 -->
@@ -92,19 +107,7 @@ A:hover {color:#009900;text-decoration:underline;}
 			</td>
 		</tr>
 
-		<tr>
-			<td align="center">
-				<br>
-				<form action="admin_user_list.do" method="get" style="text-align:center;">
-					<input type="text" name="keyword" value="${keyword}" 
-					       placeholder="닉네임을 입력하세요"
-					       style="width:200px; height:28px; padding:3px;">
-					<input type="submit" value="검색" 
-					       style="height:28px; padding:3px 10px;">
-				</form>
-				<br>
-			</td>
-		</tr>
+		
 
 	</table>
 

@@ -24,7 +24,7 @@ body {
 }
 
 .signup-box {
-    width:700px;
+    width:870px;
     background:#ffffff;
     border-radius:8px;
     padding:32px 32px 28px;
@@ -152,7 +152,7 @@ function goCancel() {
             </button>
         </form>
 
-        <div class="cancel-link" onclick="goCancel()">가입 취소하고 이전으로 돌아가기</div>
+        <div class="cancel-link" onclick="goCancel()">가입 취소</div>
     </div>
 </div>
 
