@@ -127,7 +127,7 @@ function board_send(){
 <body>
 <div class="page-wrapper">
     <div class="content-area">
-        <div class="board-title">📝 게시판 작성</div>
+        <div class="board-title">📝 공지사항 작성</div>
 
         <form name="board" method="post" action="admin_board_write.do">
             <table class="form-table">

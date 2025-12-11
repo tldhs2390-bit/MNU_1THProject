@@ -141,8 +141,8 @@
     <div class="content">
 
         <div class="form-box">
-            <h2>🌿 초심자 가이드 등록(관리자용)</h2>
-			<span style="color:#D32F2F; font-size:10pt;">*등록 시 전부 기입해주세요.</span>
+            <h2>🌿 초심자 가이드 수정(관리자용)</h2>
+			<span style="color:#D32F2F; font-size:10pt;"></span>
             <form action="admin_guide_modify.do" method="post" name="guide_modify" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${dto.id}">
 			

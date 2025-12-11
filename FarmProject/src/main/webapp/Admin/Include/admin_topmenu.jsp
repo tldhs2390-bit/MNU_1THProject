@@ -79,7 +79,7 @@
         <td><a href="/index.do">관리자 로그아웃</a></td>
         <td><a href="admin_user_list.do">회원 관리</a></td>
         <td><a href="admin_board_list.do">공지사항 관리</a></td>
-        <td><a href="admin_guide_list.do">초심자가이드</a></td>
+        <td><a href="admin_guide_list.do">초심자가이드 관리</a></td>
         <td><a href="admin_growth_list.do">성장 게시판 관리</a></td>
         
 
