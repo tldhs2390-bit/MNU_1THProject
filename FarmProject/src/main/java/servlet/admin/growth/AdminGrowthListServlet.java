@@ -57,6 +57,9 @@ public class AdminGrowthListServlet extends HttpServlet {
             key, word, sort, statusFilter, start, PAGE_SIZE
         );
 
+        // ⭐⭐⭐ 번호 역순 계산 위해 totalCount 반드시 전달해야 함
+        request.setAttribute("totalCount", totalCount);
+
         // JSP로 전달
         request.setAttribute("list", list);
         request.setAttribute("page", page);

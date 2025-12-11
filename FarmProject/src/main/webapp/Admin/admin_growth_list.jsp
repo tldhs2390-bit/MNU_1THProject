@@ -245,7 +245,10 @@ function deletePost(idx) {
 <c:forEach var="dto" items="${list}" varStatus="st">
 
 <tr class="${dto.status == 0 ? 'hidden-row' : ''}">
-    <td>${st.index + 1}</td>
+
+    <!-- ⭐⭐⭐ 번호 역순 공식 적용 (성장게시판과 동일) -->
+    <td>${totalCount - ((page - 1) * 10 + st.index)}</td>
+
     <td>${dto.category}</td>
 
     <td>
@@ -283,6 +286,7 @@ function deletePost(idx) {
     <td>
         <button class="btn btn-del" onclick="deletePost(${dto.idx})">삭제</button>
     </td>
+
 </tr>
 
 </c:forEach>

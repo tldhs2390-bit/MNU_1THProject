@@ -88,7 +88,9 @@ public class GrowthListServlet extends HttpServlet {
 
         if (endPage > totalPage) endPage = totalPage;
 
-        // JSP 전달
+        // ----------------------------
+        // ⭐⭐ JSP 전달값 (여기 중요!!)
+        // ----------------------------
         request.setAttribute("startPage", startPage);
         request.setAttribute("endPage", endPage);
 
@@ -104,6 +106,9 @@ public class GrowthListServlet extends HttpServlet {
 
         request.setAttribute("page", page);
         request.setAttribute("totalPage", totalPage);
+
+        // ⭐⭐⭐ 여기 추가됨 — 번호 정상 표시 위해 반드시 필요!!
+        request.setAttribute("totalCount", totalCount);
 
         // ----------------------------
         // 카테고리 전용 JSP 분기
