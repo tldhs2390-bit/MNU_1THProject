@@ -82,58 +82,56 @@ body { background:#f4fbe9; font-family:'Noto Sans KR',sans-serif; margin:0; padd
 </style>
 
 <script>
-function emotion(idx, type){
-    fetch("/growth_emotion.do", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "idx=" + idx + "&type=" + type
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.result === "limit-over") {
-            document.getElementById("emotionLimitPopup").style.display="flex";
-            return;
-        }
-        document.getElementById("post-emotion-like").innerHTML = "❤️ " + data.current.like;
-        document.getElementById("post-emotion-sym").innerHTML  = "👍 " + data.current.sym;
-        document.getElementById("post-emotion-sad").innerHTML  = "😢 " + data.current.sad;
-    });
-}
+/* ====================================================
+   ⚡ 게시글 & 댓글 감정 통합 함수
+   - 새로고침 없이 바로 반영
+   - 게시글(post) / 댓글(reply) 구분
+==================================================== */
+function sendEmotion(target, idx, type) {
+    let url = target === "post" ? "/growth_emotion.do" : "/reply_emotion.do";
+    let body = target === "post" ? "idx=" + idx + "&type=" + type : "r_idx=" + idx + "&type=" + type;
 
-/* -------------------------
-   ⚡ 수정된 replyEmotion
--------------------------- */
-function replyEmotion(ridx, type){
-    fetch("/reply_emotion.do", {
+    fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "r_idx=" + ridx + "&type=" + type
+        body: body
     })
     .then(res => res.json())
     .then(data => {
-        switch(data.status){
-            case "login-required":
-                alert("로그인이 필요합니다.");
-                break;
-            case "already-pressed":
-                alert("이미 누른 감정입니다!");
-                break;
-            case "success":
-                // 버튼별 count 갱신
-                if(type === "like")
-                    document.getElementById("reply-" + ridx + "-like").innerHTML = "❤️ " + data.count;
-                else if(type === "sym")
-                    document.getElementById("reply-" + ridx + "-sym").innerHTML = "👍 " + data.count;
-                else if(type === "sad")
-                    document.getElementById("reply-" + ridx + "-sad").innerHTML = "😢 " + data.count;
-                break;
-            default:
-                alert("오류가 발생했습니다.");
+        if (target === "post") {
+            switch (data.result) {
+                case "login-required": alert("로그인이 필요합니다."); break;
+                case "already-pressed": alert("이미 누른 감정입니다!"); break;
+                case "success":
+                    document.getElementById("post-emotion-like").innerText = "❤️ " + data.current.like_cnt;
+                    document.getElementById("post-emotion-sym").innerText  = "👍 " + data.current.sym_cnt;
+                    document.getElementById("post-emotion-sad").innerText  = "😢 " + data.current.sad_cnt;
+                    break;
+            }
+        } else {
+            switch (data.status) {
+                case "login-required": alert("로그인이 필요합니다."); break;
+                case "already-pressed": alert("이미 누른 감정입니다!"); break;
+                case "success":
+                    let btnId = "reply-" + idx + "-";
+                    if(type === "like") document.getElementById(btnId + "like").innerText = "❤️ " + data.count;
+                    else if(type === "sym") document.getElementById(btnId + "sym").innerText = "👍 " + data.count;
+                    else if(type === "sad") document.getElementById(btnId + "sad").innerText = "😢 " + data.count;
+                    break;
+            }
         }
     })
     .catch(err => console.error(err));
 }
 
+// ▶ 게시글 버튼
+function emotion(idx, type){ sendEmotion("post", idx, type); }
+// ▶ 댓글 버튼
+function replyEmotion(ridx, type){ sendEmotion("reply", ridx, type); }
+
+/* -------------------------
+   댓글 수정 팝업 관련
+-------------------------- */
 function openModifyPopup(r_idx, raw) {
     let decoded = raw.replace(/&lt;/g,"<")
                      .replace(/&gt;/g,">")
@@ -145,11 +143,14 @@ function openModifyPopup(r_idx, raw) {
     document.getElementById("modify_contents").value = decoded;
     document.getElementById("replyModifyPopup").style.display = "flex";
 }
-function closeModifyPopup(){ document.getElementById("replyModifyPopup").style.display="none"; }
+function closeModifyPopup(){ document.getElementById("replyModifyPopup").style.display = "none"; }
 function submitModify(){ document.getElementById("modifyForm").submit(); }
 
-function openDeletePopup(){ document.getElementById("deletePopup").style.display="flex"; }
-function closeDeletePopup(){ document.getElementById("deletePopup").style.display="none"; }
+/* -------------------------
+   게시글 삭제 팝업
+-------------------------- */
+function openDeletePopup(){ document.getElementById("deletePopup").style.display = "flex"; }
+function closeDeletePopup(){ document.getElementById("deletePopup").style.display = "none"; }
 </script>
 
 </head>
@@ -182,11 +183,9 @@ function closeDeletePopup(){ document.getElementById("deletePopup").style.displa
     <br>
 
     <!-- 게시글 감정 -->
-    <div>
-        <span id="post-emotion-like" class="emotion-btn" onclick="emotion(${dto.idx}, 'like')">❤️ ${dto.like_cnt}</span>
-        <span id="post-emotion-sym" class="emotion-btn" onclick="emotion(${dto.idx}, 'sym')">👍 ${dto.sym_cnt}</span>
-        <span id="post-emotion-sad" class="emotion-btn" onclick="emotion(${dto.idx}, 'sad')">😢 ${dto.sad_cnt}</span>
-    </div>
+		<span id="post-emotion-like" class="emotion-btn" onclick="emotion(${dto.idx}, 'like')">❤️ ${dto.like_cnt}</span>
+		<span id="post-emotion-sym"  class="emotion-btn" onclick="emotion(${dto.idx}, 'sym')">👍 ${dto.sym_cnt}</span>
+		<span id="post-emotion-sad"  class="emotion-btn" onclick="emotion(${dto.idx}, 'sad')">😢 ${dto.sad_cnt}</span>
 
     <!-- ⭐ 한 줄: 목록 + 수정 + 삭제 -->
     <div class="btn-area btn-row">
@@ -212,28 +211,23 @@ function closeDeletePopup(){ document.getElementById("deletePopup").style.displa
         <hr style="margin:25px 0;">
 
         <c:forEach items="${replyList}" var="r">
+            <div class="reply-item ${r.parent != 0 ? 'reply-child' : ''}">
+                <div class="reply-name">${r.n_name}</div>
+                <div class="reply-text">${r.contents}</div>
 
-    <div class="reply-item ${r.parent != 0 ? 'reply-child' : ''}">
-        <div class="reply-name">${r.n_name}</div>
-        <div class="reply-text">${r.contents}</div>
+                <!-- 댓글 감정 -->
+				<span id="reply-${r.r_idx}-like" class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'like')">❤️ ${r.like_cnt}</span>
+				<span id="reply-${r.r_idx}-sym"  class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'sym')">👍 ${r.sym_cnt}</span>
+				<span id="reply-${r.r_idx}-sad"  class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'sad')">😢 ${r.sad_cnt}</span>
 
-        <!-- 댓글 감정 버튼 -->
-        <div style="margin-top:7px;">
-            <span id="reply-${r.r_idx}-like" class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'like')">❤️ ${r.like_cnt}</span>
-            <span id="reply-${r.r_idx}-sym" class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'sym')">👍 ${r.sym_cnt}</span>
-            <span id="reply-${r.r_idx}-sad" class="reply-emoji" onclick="replyEmotion(${r.r_idx}, 'sad')">😢 ${r.sad_cnt}</span>
-        </div>
-
-        <c:if test="${loginUser == r.n_name}">
-        <div class="reply-actions">
-            <a class="modify" onclick="openModifyPopup(${r.r_idx}, '${fn:escapeXml(r.contents)}')">수정</a>
-            <a class="delete" href="/reply_delete.do?r_idx=${r.r_idx}&post_idx=${dto.idx}">삭제</a>
-        </div>
-        </c:if>
-    </div>
-
-</c:forEach>
-
+                <c:if test="${loginUser == r.n_name}">
+                    <div class="reply-actions">
+                        <a class="modify" onclick="openModifyPopup(${r.r_idx}, '${fn:escapeXml(r.contents)}')">수정</a>
+                        <a class="delete" href="/reply_delete.do?r_idx=${r.r_idx}&post_idx=${dto.idx}">삭제</a>
+                    </div>
+                </c:if>
+            </div>
+        </c:forEach>
     </div>
 </div>
 
@@ -241,12 +235,10 @@ function closeDeletePopup(){ document.getElementById("deletePopup").style.displa
 <div id="replyModifyPopup" class="popup-bg">
     <div class="popup-box">
         <div class="popup-title">댓글 수정</div>
-
         <form id="modifyForm" method="post" action="/reply_modify.do">
             <input type="hidden" id="modify_r_idx" name="r_idx">
             <input type="hidden" name="post_idx" value="${dto.idx}">
             <textarea id="modify_contents" name="contents" class="popup-input" style="height:120px;"></textarea>
-
             <div class="popup-btns">
                 <button type="button" class="popup-confirm" onclick="submitModify()">수정 완료</button>
                 <button type="button" class="popup-cancel" onclick="closeModifyPopup()">취소</button>
@@ -262,7 +254,6 @@ function closeDeletePopup(){ document.getElementById("deletePopup").style.displa
         <form action="/growth_delete.do" method="post">
             <input type="hidden" name="idx" value="${dto.idx}">
             <input type="password" name="pass" class="popup-input" placeholder="비밀번호 입력">
-
             <div class="popup-btns">
                 <button class="popup-confirm">삭제</button>
                 <button type="button" class="popup-cancel" onclick="closeDeletePopup()">취소</button>

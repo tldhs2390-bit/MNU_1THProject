@@ -61,26 +61,15 @@
 <div class="find-box">
     <h2>비밀번호 찾기</h2>
 
-    <%
-    String pass = (String)request.getAttribute("userPass");
 
-    if(pass == null) {
-    %>
-
-        <p class="result-text">입력하신 정보와 일치하는 계정이 없습니다.</p>
-
-    <% } else { %>
-
-        <p class="result-text">
-            회원님의 비밀번호는<br><br>
-            <strong style="font-size:20px;"><%= pass %></strong> 입니다.
-        </p>
-
-    <% } %>
+    <p class="result-text">
+        <%= request.getAttribute("msg") %>
+    </p>
 
     <button class="btn" onclick="location.href='<%=request.getContextPath()%>user_login.do'">
         로그인 하러 가기
     </button>
+
 
 </div>
 

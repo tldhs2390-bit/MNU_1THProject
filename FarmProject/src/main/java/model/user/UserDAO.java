@@ -268,29 +268,42 @@ public class UserDAO {
       return userId;
    }
 
-   // ===========================
-   // find pass
-   // ===========================
-   public String findUserPass(String user_id, String email) {
-      String sql = "select user_pass from tbl_user where user_id=? and email=?";
-      String pass = null;
+ //비밀번호 찾기 시 임시 비밀번호-1
+   public int findPassCheck(String userId, String email) {
+	    int row = 0;
+	    String sql = "SELECT count(*) FROM tbl_user WHERE user_id=? AND email=?";
+	    try {
+	        conn = DBManager.getConn();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, userId);
+	        pstmt.setString(2, email);
+	        rs = pstmt.executeQuery();
+	        if(rs.next()) row = rs.getInt(1);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBManager.close(conn, pstmt, rs);
+	    }
+	    return row;
+	}
+   //비밀번호 찾기 시 임시 비밀번호-2
+   public int updatePass(String userId, String encPw) {
+	    int row = 0;
+	    String sql = "UPDATE tbl_user SET user_pass=? WHERE user_id=?";
+	    try {
+	        conn = DBManager.getConn();
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, encPw);
+	        pstmt.setString(2, userId);
+	        row = pstmt.executeUpdate();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBManager.close(conn, pstmt);
+	    }
+	    return row;
+	}
 
-      try {
-         conn = DBManager.getConn();
-         pstmt = conn.prepareStatement(sql);
-         pstmt.setString(1, user_id);
-         pstmt.setString(2, email);
-         rs = pstmt.executeQuery();
-
-         if (rs.next()) pass = rs.getString("user_pass");
-
-      } catch (Exception e) {
-         e.printStackTrace();
-      } finally {
-         DBManager.close(conn, pstmt, rs);
-      }
-      return pass;
-   }
 
    // ===========================
    // 관리자용 유저 리스트

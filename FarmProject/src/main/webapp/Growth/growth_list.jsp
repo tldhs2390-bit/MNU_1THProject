@@ -240,39 +240,78 @@ body {
 
             <!-- 인기글 카드 -->
             <div class="pop-grid">
-                <c:if test="${not empty topVeg}">
-                    <div class="pop-card pop-veg" onclick="location.href='/growth_read.do?idx=${topVeg.idx}'">
-                        <div class="pop-title"><span class="icon-wiggle">🥬</span> 채소 인기글</div>
-                        <div style="font-size:15px;">
-                            <span class="heart-bounce">💖</span> <span id="vegLike">${topVeg.like_cnt}</span> | <span id="vegTitle">${topVeg.subject}</span>
-                        </div>
-                    </div>
-                </c:if>
-                <c:if test="${not empty topFruit}">
-                    <div class="pop-card pop-fruit" onclick="location.href='/growth_read.do?idx=${topFruit.idx}'">
-                        <div class="pop-title"><span class="icon-wiggle">🍎</span> 과일 인기글</div>
-                        <div style="font-size:15px;">
-                            <span class="heart-bounce">💖</span> <span id="fruitLike">${topFruit.like_cnt}</span> | <span id="fruitTitle">${topFruit.subject}</span>
-                        </div>
-                    </div>
-                </c:if>
-                <c:if test="${not empty topHerb}">
-                    <div class="pop-card pop-herb" onclick="location.href='/growth_read.do?idx=${topHerb.idx}'">
-                        <div class="pop-title"><span class="icon-wiggle">🌿</span> 허브 인기글</div>
-                        <div style="font-size:15px;">
-                            <span class="heart-bounce">💖</span> <span id="herbLike">${topHerb.like_cnt}</span> | <span id="herbTitle">${topHerb.subject}</span>
-                        </div>
-                    </div>
-                </c:if>
-                <c:if test="${not empty top}">
-                    <div class="pop-card pop-all" onclick="location.href='/growth_read.do?idx=${top.idx}'">
-                        <div class="pop-title"><span class="icon-wiggle">⭐</span> 전체 인기글</div>
-                        <div style="font-size:15px;">
-                            <span class="heart-bounce">💖</span> <span id="topLike">${top.like_cnt}</span> | <span id="topTitle">${top.subject}</span>
-                        </div>
-                    </div>
-                </c:if>
+                 <!-- 채소 -->
+    <c:choose>
+        <c:when test="${topVeg.idx != 0}">
+            <div class="pop-card pop-veg" onclick="location.href='/growth_read.do?idx=${topVeg.idx}'">
+                <div class="pop-title"><span class="icon-wiggle">🥬</span> 채소 인기글</div>
+                <div style="font-size:15px;">
+                    <span class="heart-bounce">💖</span> <span id="vegLike">${topVeg.like_cnt}</span> | <span id="vegTitle">${topVeg.subject}</span>
+                </div>
             </div>
+        </c:when>
+        <c:otherwise>
+            <div class="pop-card pop-veg">
+                <div class="pop-title"><span class="icon-wiggle">🥬</span> 채소 인기글</div>
+                <div style="font-size:15px;">💖 0 | 등록된 글이 없습니다.</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- 과일 -->
+    <c:choose>
+        <c:when test="${topFruit.idx != 0}">
+            <div class="pop-card pop-fruit" onclick="location.href='/growth_read.do?idx=${topFruit.idx}'">
+                <div class="pop-title"><span class="icon-wiggle">🍎</span> 과일 인기글</div>
+                <div style="font-size:15px;">
+                    <span class="heart-bounce">💖</span> <span id="fruitLike">${topFruit.like_cnt}</span> | <span id="fruitTitle">${topFruit.subject}</span>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="pop-card pop-fruit">
+                <div class="pop-title"><span class="icon-wiggle">🍎</span> 과일 인기글</div>
+                <div style="font-size:15px;">💖 0 | 등록된 글이 없습니다.</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- 허브 -->
+    <c:choose>
+        <c:when test="${topHerb.idx != 0}">
+            <div class="pop-card pop-herb" onclick="location.href='/growth_read.do?idx=${topHerb.idx}'">
+                <div class="pop-title"><span class="icon-wiggle">🌿</span> 허브 인기글</div>
+                <div style="font-size:15px;">
+                    <span class="heart-bounce">💖</span> <span id="herbLike">${topHerb.like_cnt}</span> | <span id="herbTitle">${topHerb.subject}</span>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="pop-card pop-herb">
+                <div class="pop-title"><span class="icon-wiggle">🌿</span> 허브 인기글</div>
+                <div style="font-size:15px;">💖 0 | 등록된 글이 없습니다.</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- 전체 -->
+    <c:choose>
+        <c:when test="${top.idx != 0}">
+            <div class="pop-card pop-all" onclick="location.href='/growth_read.do?idx=${top.idx}'">
+                <div class="pop-title"><span class="icon-wiggle">⭐</span> 전체 인기글</div>
+                <div style="font-size:15px;">
+                    <span class="heart-bounce">💖</span> <span id="topLike">${top.like_cnt}</span> | <span id="topTitle">${top.subject}</span>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="pop-card pop-all">
+                <div class="pop-title"><span class="icon-wiggle">⭐</span> 전체 인기글</div>
+                <div style="font-size:15px;">💖 0 | 등록된 글이 없습니다.</div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</div>
 
             <!-- 목록 테이블 -->
             <table class="list-table">
