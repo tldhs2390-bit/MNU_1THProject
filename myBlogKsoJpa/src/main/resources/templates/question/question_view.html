@@ -7,7 +7,8 @@
     <h2 class="board-view-title" th:text="${dto.title}">제목</h2>
 
     <div class="board-meta">
-        <div>작성자: <strong th:text="${dto.nickname}">관리자</strong></div>
+        <span class="info-label">작성자: </span>
+    	<strong th:text="${dto.userid == 'admin' ? '관리자' : dto.userid}"></strong>
         <div>조회수: <strong th:text="${dto.readcnt}">0</strong></div>
         <div>작성일:
             <strong th:text="${#temporals.format(dto.regdate,'yyyy-MM-dd')}">2026-01-07</strong>
@@ -32,9 +33,9 @@
 
         <div th:each="cmt : ${commentList}" class="comment-box" style="border-bottom:1px solid #eee; padding:10px 0;">
             <div class="comment-meta">
-                <strong th:text="${cmt.nickname}">닉네임</strong>
-                <span th:text="${#temporals.format(cmt.regdate, 'yyyy-MM-dd HH:mm')}" style="margin-left:10px; color:#888;"></span>
-            </div>
+			    <strong th:text="${cmt.userid == 'admin' ? '관리자' : cmt.userid}"></strong>
+			    <span th:text="${#temporals.format(cmt.regdate, 'yyyy-MM-dd HH:mm')}" style="margin-left:10px; color:#888;"></span>
+			</div>
 
             <div class="comment-content" style="margin-top:5px;" th:text="${cmt.content}">댓글 내용</div>
 

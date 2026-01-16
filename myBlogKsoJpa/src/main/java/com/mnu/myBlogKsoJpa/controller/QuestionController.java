@@ -134,13 +134,13 @@ public class QuestionController {
             return "redirect:/user/user_login";
         }
 
-        // UserEntity의 admin 필드와 필드명(userid, name) 반영
-        if(user.isAdmin()) {
+        // 관리자 여부 체크 (isAdmin() 메서드 또는 아이디 비교)
+        if(user.isAdmin() || "admin".equals(user.getUserid())) {
             dto.setUserid("admin");
-            dto.setNickname("관리자");
+            dto.setNickname("관리자"); // DB에도 관리자로 저장
         } else {
             dto.setUserid(user.getUserid());
-            dto.setNickname(user.getName()); 
+            dto.setNickname(user.getUserid()); // 일반 사용자는 닉네임 필드에도 아이디 저장
         }
 
         questionService.questionWrite(dto, file, uploadDir);
@@ -190,6 +190,7 @@ public class QuestionController {
     }
 
     // =================== 글 삭제 ===================
+ // =================== 게시글 삭제 POST ===================
     @PostMapping("question_delete")
     public String questionDelete(
             @RequestParam(value = "idx") int idx,
@@ -203,7 +204,9 @@ public class QuestionController {
         
         if(user.isAdmin() || dto.getUserid().equals(user.getUserid())) {
             if(user.isAdmin() && !dto.getUserid().equals(user.getUserid())) {
-                questionService.markAsDeletedByAdmin(idx);
+                // [중요] 관리자가 삭제할 때 제목뿐만 아니라 userid도 'admin'으로 변경해야 리스트에서 '관리자'로 뜹니다.
+                questionService.markAsDeletedByAdmin(idx); 
+                // 만약 서비스에서 userid를 안 바꾼다면 여기서 명시적으로 변경하는 로직이 서비스 내부에 포함되어야 합니다.
             } else {
                 questionService.questionDelete(idx);
             }
@@ -223,6 +226,13 @@ public class QuestionController {
 
         UserEntity user = (UserEntity) session.getAttribute("user");
         if(user == null) return "redirect:/user/user_login";
+        if(user.isAdmin() || "admin".equals(user.getUserid())) {
+            dto.setUserid("admin");
+            dto.setNickname("관리자");
+        } else {
+            dto.setUserid(user.getUserid());
+            dto.setNickname(user.getUserid());
+        }
 
         QuestionEntity question = questionService.getQuestionView(qidx);
         dto.setQuestion(question);

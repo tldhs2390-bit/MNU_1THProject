@@ -28,7 +28,22 @@ public class UserEntity {
     @Column(updatable = false)
     private LocalDateTime firstTime;
 
+    @Column(name = "last_time")
     private LocalDateTime lastTime;
+
+    @Column(name = "write_blocked")
+    private boolean writeBlocked;
+
+    private boolean kicked;
+
+    @Column(name = "email_verified")
+    private boolean emailVerified;
+
+    @Column(name = "blocked_at")
+    private LocalDateTime blockedAt;
+
+    @Column(name = "kicked_at")
+    private LocalDateTime kickedAt;
     @Transient
     private int rate;
     @Transient

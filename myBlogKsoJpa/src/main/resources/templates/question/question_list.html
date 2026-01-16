@@ -38,7 +38,12 @@
                           th:text="' [' + ${dto.commentCount} + ']'"></span>
                 </div>
 
-                <div class="col-writer" th:text="${dto.nickname != null ? dto.nickname : '익명'}"></div>
+                <div class="col-writer">
+				    <span th:if="${dto.userid == 'admin' or dto.title == '관리자가 삭제한 글입니다.'}">관리자</span>
+				    
+				    <span th:if="${dto.userid != 'admin' and dto.title != '관리자가 삭제한 글입니다.'}" 
+				          th:text="${dto.userid}"></span>
+				</div>
                 <div class="col-date"
                      th:text="${dto.regdate != null ? #temporals.format(dto.regdate, 'yyyy-MM-dd') : ''}"></div>
                 <div class="col-read" th:text="${dto.readcnt != null ? dto.readcnt : 0}"></div>

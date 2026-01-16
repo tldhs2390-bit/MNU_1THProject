@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})"
+      th:with="cssFile='board.css'">
+
+<section>
+
+    <div class="container" style="margin-top:30px;">
+
+        <h2 style="margin-bottom:20px;">회원 관리</h2>
+
+        <!-- ===== 헤더 ===== -->
+        <div class="board-row board-head">
+            <div class="col-num">아이디</div>
+            <div class="col-title">이름</div>
+            <div class="col-writer">전화번호</div>
+            <div class="col-date">이메일</div>
+            <div class="col-read">게시글</div>
+            <div class="col-read">댓글</div>
+            <div class="col-read">삭제글</div>
+            <div class="col-read">삭제댓글</div>
+            <div class="col-read">상태</div>
+            <div class="col-read">관리</div>
+        </div>
+
+        <!-- ===== 목록 ===== -->
+        <div th:if="${users != null and !#lists.isEmpty(users)}">
+
+            <div class="board-row"
+                 th:each="user : ${users}">
+
+                <div class="col-num" th:text="${user.userid}"></div>
+                <div class="col-title" th:text="${user.name}"></div>
+                <div class="col-writer" th:text="${user.tel}"></div>
+                <div class="col-date" th:text="${user.email}"></div>
+
+                <div class="col-read" th:text="${user.postCount}"></div>
+                <div class="col-read" th:text="${user.commentCount}"></div>
+                <div class="col-read" th:text="${user.adminDeletedPostCount}"></div>
+                <div class="col-read" th:text="${user.adminDeletedCommentCount}"></div>
+
+                <!-- 상태 -->
+                <div class="col-read">
+                    <span th:if="${user.kicked}" style="color:red;">강퇴</span>
+                    <span th:if="${!user.kicked and user.writeBlocked}" style="color:orange;">작성제한</span>
+                    <span th:if="${!user.kicked and !user.writeBlocked}" style="color:green;">정상</span>
+                </div>
+
+                <!-- 관리 버튼 -->
+                <div class="col-read">
+                    <form th:if="${!user.writeBlocked}"
+                          th:action="@{/admin/user_block}"
+                          method="post"
+                          style="display:inline;">
+                        <input type="hidden" name="userid" th:value="${user.userid}">
+                        <button type="submit" class="btn btn-warning btn-sm">
+                            제한
+                        </button>
+                    </form>
+
+                    <form th:if="${!user.kicked}"
+                          th:action="@{/admin/user_kick}"
+                          method="post"
+                          style="display:inline;"
+                          onsubmit="return confirm('정말 강퇴하시겠습니까?');">
+                        <input type="hidden" name="userid" th:value="${user.userid}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            강퇴
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 데이터 없을 때 -->
+        <div th:if="${users == null or #lists.isEmpty(users)}"
+             style="text-align:center; padding:30px;">
+            회원 데이터가 없습니다.
+        </div>
+
+    </div>
+
+</section>
+</html>
