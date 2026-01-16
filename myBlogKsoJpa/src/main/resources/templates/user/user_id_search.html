@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})"
+      th:with="cssFile='board.css'">
+
+<section class="board-list-section">
+
+    <div class="board-header">
+        <h2>공지사항</h2>
+        <a th:href="@{/board/board_write(page=${page})}" class="board-write-btn">글쓰기</a>
+    </div>
+<!-- id_find.html -->
+<div class="id-find-container">
+
+    <!-- 상단 헤더 -->
+    <div class="id-find-header" style="display:flex; justify-content:space-between; align-items:center; background:#7AAAD5; color:white; padding:5px 10px;">
+        <div><img th:src="@{/img/Member/u_b02.gif}" alt=""></div>
+        <div><b>아이디 찾기</b></div>
+        <div><img th:src="@{/img/Member/u_b03.gif}" alt=""></div>
+    </div>
+
+    <!-- ID 검색 결과 / 안내 -->
+    <div class="id-find-content" style="background:#fff; border:1px solid #948DCF; padding:10px; text-align:center;">
+        <!-- ID 찾기 성공 -->
+        <p th:if="${foundId != null}">
+            등록된 번호: <b th:text="${foundTel}">xxx</b><br>
+            <b>당신의 ID는 </b><br>
+            <b th:text="${foundId}" style="color:#483cae;">xxx</b>입니다.
+        </p>
+
+        <!-- ID 찾기 실패 -->
+        <p th:if="${foundId == null}">
+            <b>죄송합니다</b><br>
+            <b th:text="${searchedTel}" style="color:#483cae;">xxxx</b>로 등록된 ID가 없습니다.<br>
+            다른 연락처(전화)를 사용하여 주십시오.
+        </p>
+
+        <!-- 전화번호 입력 폼 -->
+        <form th:action="@{/user/find_id}" method="post" style="margin-top:10px;">
+            <input type="text" name="tel" placeholder="전화번호 입력" maxlength="16" class="board-input">
+            <button type="submit" class="board-list-btn-alt" style="margin-left:5px;">
+                <img th:src="@{/img/Member/u_bt08.gif}" alt="검색">
+            </button>
+        </form>
+    </div>
+
+    <!-- 하단 장식 -->
+    <div class="id-find-footer" style="display:flex; justify-content:space-between; margin-top:5px;">
+        <img th:src="@{/img/Member/u_b04.gif}" alt="">
+        <img th:src="@{/img/Member/u_b05.gif}" alt="">
+    </div>
+
+    <div style="text-align:center; margin-top:5px;">
+        <a th:href="@{/}">
+            <img th:src="@{/img/Member/u_bt13.gif}" alt="메인으로">
+        </a>
+    </div>
+</div>

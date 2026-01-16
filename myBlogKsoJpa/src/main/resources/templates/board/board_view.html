@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})"
+      th:with="cssFile='board.css'">
+
+<section class="board-view-section">
+
+    <!-- 제목 -->
+    <h2 th:text="${board.subject}" class="board-view-title">제목</h2>
+
+    <!-- 메타 정보 -->
+    <div class="board-meta">
+        <div>작성자: <strong th:text="${board.name}">관리자</strong></div>
+        <div>조회수: <strong th:text="${board.readcnt}">0</strong></div>
+        <div>작성일: <strong th:text="${#temporals.format(board.regdate,'yyyy-MM-dd')}">2026-01-07</strong></div>
+    </div>
+
+    <hr class="board-hr">
+
+    <!-- 내용 -->
+    <div class="board-content" 
+	     th:utext="${#strings.replace(board.content, '\n', '<br/>')}">
+	    내용이 여기에 표시됩니다.
+	</div>
+
+    <!-- 목록 및 수정/삭제 버튼 아래쪽 -->
+	<div style="margin-top: 20px; display: flex; gap: 10px;">
+	    <a th:href="@{/board/board_list(page=${page})}" class="board-write-btn">목록</a>
+	    
+	    <!-- 글 수정/삭제 버튼 (관리자만 표시) -->
+	    <a th:if="${session.user != null and session.user.userid == 'admin'}"
+	       th:href="@{/board/board_modify(idx=${board.idx}, page=${page})}" 
+	       class="board-modify-btn">
+	       수정
+	    </a>
+	    
+	    <form th:if="${session.user != null and session.user.userid == 'admin'}"
+	          th:action="@{/board/board_delete}" 
+	          method="post" style="display:inline;">
+	        <input type="hidden" name="idx" th:value="${board.idx}" />
+	        <button type="submit" class="board-delete-btn" 
+	                onclick="return confirm('정말 삭제하시겠습니까?');">
+	            삭제
+	        </button>
+	    </form>
+	</div>
+
+</section>
+</html>

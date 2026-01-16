@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/layout :: layout(~{::section})}"
+      th:with="cssFile='board.css'">
+
+<section class="board-list-section">
+
+    <div class="board-header">
+        <h2>Q/A 게시판</h2>
+        <a th:if="${session.user != null}"
+           th:href="@{/question/question_write(page=${page})}" 
+           class="board-write-btn">
+           글쓰기
+        </a>
+    </div>
+
+    <div class="board-list">
+        <div class="board-row board-head">
+            <div class="col-num">번호</div>
+            <div class="col-title">제목</div>
+            <div class="col-writer">작성자</div>
+            <div class="col-date">등록일</div>
+            <div class="col-read">조회수</div>
+        </div>
+
+        <th:block th:if="${list != null and !#lists.isEmpty(list)}">
+            <div class="board-row" th:each="dto, iterStat : ${list}">
+                <div class="col-num"
+                     th:text="${listcountStart - iterStat.index}"></div>
+
+                <div class="col-title">
+                    <span th:if="${dto.title == '관리자가 삭제한 글입니다.'}"
+                          th:text="${dto.title}"></span>
+                    <a th:if="${dto.title != '관리자가 삭제한 글입니다.'}"
+                       th:href="@{/question/question_view(idx=${dto.idx}, page=${page})}"
+                       th:text="${dto.title}"></a>
+                    <span th:if="${dto.commentCount != null and dto.commentCount > 0}"
+                          th:text="' [' + ${dto.commentCount} + ']'"></span>
+                </div>
+
+                <div class="col-writer" th:text="${dto.nickname != null ? dto.nickname : '익명'}"></div>
+                <div class="col-date"
+                     th:text="${dto.regdate != null ? #temporals.format(dto.regdate, 'yyyy-MM-dd') : ''}"></div>
+                <div class="col-read" th:text="${dto.readcnt != null ? dto.readcnt : 0}"></div>
+            </div>
+        </th:block>
+
+        <div class="board-row empty" th:if="${list == null or #lists.isEmpty(list)}">
+            등록된 글이 없습니다.
+        </div>
+    </div>
+
+    <div class="board-pagination" style="text-align:center; margin-top:20px;">
+        <span th:if="${pagelist != null}" th:utext="${pagelist}"></span>
+    </div>
+
+    <div class="portfolio-search" style="text-align:center; margin-bottom:15px; margin-top: 20px;">
+        <form th:action="@{/question/question_list}" method="get">
+            <input type="text" name="keyword" placeholder="제목/내용/작성자 검색" 
+                   th:value="${keyword != null ? keyword : ''}" />
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+</section>
+</html>

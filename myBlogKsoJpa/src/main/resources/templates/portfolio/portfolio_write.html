@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="board-write-section">
+
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+    <h2 class="board-view-title">포트폴리오 글쓰기</h2>
+
+    <form name="portfolioForm"
+      th:action="@{/portfolio/portfolio_write(page=${page})}"
+      method="post"
+      enctype="multipart/form-data"
+      class="board-write-form">
+
+        <!-- 제목 -->
+        <div class="form-group">
+            <label for="title">제목 <span style="color:red;">*</span></label>
+            <input type="text" id="title" name="title" class="board-input" placeholder="제목을 입력하세요" required>
+        </div>
+
+        <!-- 작성자 -->
+		<div class="form-group">
+		    <label for="author">작성자 <span style="color:red;">*</span></label>
+		    <input type="text" id="name" name="name" class="board-input" value="관리자" readonly>
+		</div>
+
+        <!-- 내용 (Summernote) -->
+        <div class="form-group">
+            <label for="summernote">내용 <span style="color:red;">*</span></label>
+            <textarea id="summernote" name="content"></textarea>
+        </div>
+
+        <!-- 등록 버튼 -->
+        <button type="button" class="board-list-btn-alt" onclick="portfolioSubmit()">등록</button>
+
+    </form>
+
+    <div style="margin-top: 20px;">
+        <a th:href="@{/portfolio/portfolio_list(page=${page})}" class="board-write-btn">목록</a>
+    </div>
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            console.log("Summernote loading...");
+            $('#summernote').summernote({
+                height: 400,
+                lang: 'ko-KR',
+                placeholder: '내용을 입력하세요.'
+            });
+        });
+
+        function portfolioSubmit() {
+            var title = document.getElementById('title').value.trim();
+            var name = document.getElementById('name').value.trim();
+            var content = $('#summernote').summernote('code');
+
+            if(title === '') { alert('제목을 입력하세요.'); portfolioForm.title.focus(); return; }
+            if(name === '') { alert('작성자를 입력하세요.'); portfolioForm.name.focus(); return; }
+            if(!content || content === '<p><br></p>' || content === '') {
+                alert('내용을 입력하세요.');
+                return;
+            }
+
+            document.portfolioForm.submit();
+        }
+    </script>
+
+</section>

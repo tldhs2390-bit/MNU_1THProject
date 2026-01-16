@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="board-write-section">
+
+    <h2 class="board-view-title">공지사항 글쓰기</h2>
+
+    <form th:action="@{/board/board_write}" method="post" class="board-write-form">
+
+        <!-- 제목 -->
+        <input type="text" name="subject" placeholder="제목을 입력하세요" required class="board-input">
+
+        <!-- 내용 -->
+        <textarea name="content" placeholder="내용을 입력하세요" required class="board-textarea"></textarea>
+
+        <!-- 제출 버튼 -->
+        <button type="submit" class="board-list-btn-alt">등록</button>
+    </form>
+
+    <!-- 목록 버튼 -->
+    <div style="margin-top: 20px;">
+        <a th:href="@{/board/board_list(page=${page})}" class="board-write-btn">목록</a>
+    </div>
+
+</section>
+</html>

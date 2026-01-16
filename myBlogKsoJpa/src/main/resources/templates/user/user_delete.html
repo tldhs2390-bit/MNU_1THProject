@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원 탈퇴 - MyBlogKso</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+    <div class="top-wrapper">
+        <header>
+            <div class="header-inner">
+                <a th:href="@{/}" class="logo">MyBlogKso</a>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li th:if="${session.user != null}"><a th:href="@{/user/user_delete}">회원탈퇴</a></li>
+                <li th:if="${session.user == null}"><a th:href="@{/user/user_terms}">회원가입</a></li>
+                <li><a th:href="@{/board/board_list}">공지사항</a></li>
+                <li><a th:href="@{/portfolio/portfolio_list}">포트폴리오</a></li>
+                <li><a th:href="@{/question/question_list}">Q/A 게시판</a></li>
+            </ul>
+        </nav>
+
+        <img src="/img/ksophoto(2).jpeg" alt="프로필 사진" class="profile-img">
+    </div>
+
+    <main>
+        <div class="main-layout">
+
+            <aside class="sidebar">
+                <div class="login-box">
+                    <div th:if="${session.user == null}">
+                        <h3>로그인</h3>
+                        <form th:action="@{/user/user_login}" method="post">
+                            <input type="text" name="userid" placeholder="아이디" class="board-input" required>
+                            <input type="password" name="passwd" placeholder="비밀번호" class="board-input" required>
+                            <button type="submit" class="board-list-btn-alt">로그인</button>
+                        </form>
+                    </div>
+
+                    <div th:if="${session.user != null}">
+                        <h3>MyBlogKso에 오신 것을</h3>
+                        <h3>환영합니다!</h3>
+                        
+                        <p th:if="${session.user.admin}">
+                            사용자 이름: <span th:text="${session.user.name}">관리자</span>
+                        </p>
+                        <p th:unless="${session.user.admin}">
+                            사용자 이름: 
+                            <span th:text="${session.user.name.substring(0,1)} + '*' + ${session.user.name.substring(session.user.name.length() - 1)}">사용자</span>
+                        </p>
+                        
+                        <p>작성자(아이디): <span th:text="${session.user.admin ? '관리자' : session.user.userid}">userid</span></p>
+                        
+                        <form th:action="@{/user/user_logout}" method="post" style="margin-top:15px;">
+                            <button type="submit" class="board-list-btn-alt" style="background-color:#f44336;">로그아웃</button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="page-content">
+                <div class="user-delete-box" style="max-width:400px; margin:50px auto; padding:30px; background:#f7f7f7; border-radius:5px; text-align:center;">
+                    <h3 style="margin-bottom:10px;">회원 탈퇴</h3>
+                    <p style="margin-bottom:20px; color:#666;">탈퇴를 진행하려면 비밀번호를 입력하세요.</p>
+
+                    <form th:action="@{/user/user_delete}" method="post">
+                        <input type="password" name="passwd" placeholder="비밀번호 입력" class="board-input" style="width:100%; margin-bottom:15px;" required>
+                        <button type="submit" class="board-list-btn-alt" id="deleteBtn" style="background-color:#f44336; width:100%;">회원탈퇴</button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 myBlogKso</p>
+    </footer>
+
+</div>
+
+<!-- 탈퇴 결과 알림 -->
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var deleteResult = /*[[${deleteResult}]]*/ 0;
+
+    if(deleteResult === 1){
+        alert("회원탈퇴가 완료되었습니다.");
+        window.location.href = /*[[@{/}]]*/ "/";
+    } else if(deleteResult === 0){
+        alert("비밀번호가 일치하지 않습니다.");
+        // 페이지 유지, alert만 띄움
+    }
+
+    // 실제 탈퇴 버튼 클릭 시
+    var deleteBtn = document.getElementById("deleteBtn");
+    if(deleteBtn){
+        deleteBtn.onclick = function(e){
+            if(!confirm("정말로 회원탈퇴를 진행하시겠습니까?")){
+                e.preventDefault(); // 취소하면 폼 제출 막기
+            }
+        }
+    }
+/*]]>*/
+</script>
+
+</body>
+</html>

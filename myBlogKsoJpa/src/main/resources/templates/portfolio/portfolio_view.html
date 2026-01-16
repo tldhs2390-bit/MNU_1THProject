@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="board-view-section">
+
+    <h2 class="board-view-title" th:text="${portfolio.title}">제목</h2>
+
+    <div class="board-meta">
+        <div>작성자: <strong th:text="${portfolio.name}">관리자</strong></div>
+        <div>조회수: <strong th:text="${portfolio.readcnt}">0</strong></div>
+        <div>작성일: <strong th:text="${#temporals.format(portfolio.regdate,'yyyy-MM-dd')}">2026-01-07</strong></div>
+    </div>
+    <hr class="board-hr">
+
+    <div class="board-content" th:utext="${#strings.replace(portfolio.content, '\n', '<br/>')}"></div>
+
+    <div th:if="${portfolio.filename != null}" style="margin-top:10px;">
+        첨부파일: 
+        <a th:href="@{'/uploads/' + ${portfolio.filename}}" th:text="${portfolio.filename}" target="_blank"></a>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+    <!-- 목록 버튼 -->
+    <a th:href="@{/portfolio/portfolio_list(page=${page})}" class="board-write-btn">목록</a>
+
+    <!-- 관리자만 수정/삭제 버튼 -->
+    <a th:if="${session.user != null and session.user.userid == 'admin'}"
+       th:href="@{/portfolio/portfolio_modify(idx=${portfolio.idx}, page=${page})}"
+       class="board-modify-btn">수정</a>
+
+    <a th:if="${session.user != null and session.user.userid == 'admin'}"
+       href="javascript:void(0);"
+       th:onclick="|portfolio_del('${portfolio.idx}')|"
+       class="board-delete-btn">삭제</a>
+</div>
+	<script th:inline="javascript">
+	function portfolio_del(idx) {
+	    // 삭제 여부 확인
+	    if(confirm('정말 삭제하시겠습니까?')) {
+	        // form을 동적으로 생성해서 POST 전송
+	        var form = document.createElement('form');
+	        form.method = 'post';
+	        form.action = /*[[@{/portfolio/portfolio_delete}]]*/ '/portfolio/portfolio_delete';
+	
+	        var input = document.createElement('input');
+	        input.type = 'hidden';
+	        input.name = 'idx';
+	        input.value = idx;
+	        form.appendChild(input);
+	
+	        document.body.appendChild(form);
+	        form.submit(); // POST 전송 후 컨트롤러에서 redirect 처리
+	    }
+	}
+	</script>
+</section>

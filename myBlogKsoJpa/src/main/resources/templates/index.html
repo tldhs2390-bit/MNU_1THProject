@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="index-section">
+
+    <!-- 블로그 소개 -->
+    <section class="blog-intro">
+        <h2>블로그 소개</h2>
+        <p>Spring Boot, Thymeleaf, MyBatis, MySQL 기반 개인 블로그입니다.</p>
+    </section>
+
+    <!-- 최근 공지사항 -->
+    <section class="recent-notices" style="margin-top:20px;">
+        <h2>
+	    <a th:href="@{/board/board_list}" class="board-more-btn">
+	        최근 공지사항
+	    </a>
+	</h2>
+
+        <div th:if="${#lists.isEmpty(recentNotices)}">
+            <p>아직 등록된 공지사항이 없습니다.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(recentNotices)}">
+            <!-- 목록 헤더 -->
+            <div class="board-row board-head">
+                <div class="col-num">번호</div>
+                <div class="col-title">제목</div>
+                <div class="col-writer">작성자</div>
+                <div class="col-date">작성일</div>
+                <div class="col-read">조회수</div>
+            </div>
+
+            <!-- 목록 본문 -->
+            <div th:each="board, iterStat : ${recentNotices}" class="board-row">
+                <div class="col-num" th:text="${iterStat.count}">1</div>
+                <div class="col-title">
+                    <a th:href="@{/board/board_view(idx=${board.idx})}"
+                       th:text="${board.subject} ?: '제목 없음'">공지 제목</a>
+                </div>
+                <div class="col-writer" th:text="${board.name} ?: '-'">관리자</div>
+                <div class="col-date" th:text="${#temporals.format(board.regdate,'yyyy-MM-dd')}">2026-01-08</div>
+                <div class="col-read" th:text="${board.readcnt}">0</div>
+            </div>
+
+            
+        </div>
+    </section>
+
+    <!-- 최근 Q/A -->
+    <section class="recent-questions" style="margin-top:30px;">
+        <h2>
+		    <a th:href="@{/question/question_list}" class="board-more-btn">
+		        최근 Q/A
+		    </a>
+		</h2>
+
+        <div th:if="${#lists.isEmpty(recentQuestions)}">
+            <p>아직 등록된 질문이 없습니다.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(recentQuestions)}">
+            <!-- 목록 헤더 -->
+            <div class="board-row board-head">
+                <div class="col-num">번호</div>
+                <div class="col-title">제목</div>
+                <div class="col-writer">작성자</div>
+                <div class="col-date">작성일</div>
+                <div class="col-read">조회수</div>
+            </div>
+
+            <!-- 목록 본문 -->
+			<div th:each="q, iterStat : ${recentQuestions}" class="board-row">
+			    <div class="col-num" th:text="${iterStat.count}">1</div>
+			
+			    <div class="col-title">
+			        <a th:href="@{/question/question_view(idx=${q.idx})}"
+			           th:text="${q.title} ?: '제목 없음'">질문 제목</a>
+			
+			        <!-- 댓글 개수 -->
+			        <span th:if="${q.commentCount > 0}"
+			              th:text="' [' + ${q.commentCount} + ']'"></span>
+			    </div>
+			
+			    <div class="col-writer" th:text="${q.nickname} ?: '-'">작성자</div>
+			    <div class="col-date"
+			         th:text="${#temporals.format(q.regdate,'yyyy-MM-dd')}">2026-01-08</div>
+			    <div class="col-read" th:text="${q.readcnt}">0</div>
+			</div>
+
+            
+        </div>
+    </section>
+
+</section>
+
+</html>

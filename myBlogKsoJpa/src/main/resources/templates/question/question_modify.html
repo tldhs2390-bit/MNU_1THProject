@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="board-write-section">
+
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css"
+          rel="stylesheet">
+
+    <h2 class="board-view-title">Q/A 글 수정</h2>
+
+    <form name="questionForm"
+          th:action="@{/question/question_modify(page=${page})}"
+          method="post"
+          class="board-write-form">
+
+        <!-- 필수 hidden -->
+        <input type="hidden" name="idx" th:value="${dto.idx}">
+        <input type="hidden" name="page" th:value="${page}">
+
+        <!-- 제목 -->
+        <div class="form-group">
+            <label for="title">제목 <span style="color:red;">*</span></label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="board-input"
+                   th:value="${dto.title}"
+                   required>
+        </div>
+
+        <!-- 작성자 -->
+        <div class="form-group">
+            <label for="nickname">작성자</label>
+            <input type="text"
+                   id="nickname"
+                   name="nickname"
+                   class="board-input"
+                   th:value="${dto.nickname}"
+                   readonly>
+        </div>
+
+        <!-- 내용 -->
+        <div class="form-group">
+            <label for="summernote">내용 <span style="color:red;">*</span></label>
+            <textarea id="summernote"
+                      name="content"
+                      th:text="${dto.content}"></textarea>
+        </div>
+
+        <!-- 수정 버튼 -->
+        <button type="button"
+                class="board-list-btn-alt"
+                onclick="questionSubmit()">
+            수정
+        </button>
+
+    </form>
+
+    <div style="margin-top:20px;">
+        <a th:href="@{/question/question_view(idx=${dto.idx}, page=${page})}"
+           class="board-write-btn">취소</a>
+    </div>
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#summernote').summernote({
+                height: 400,
+                lang: 'ko-KR',
+                placeholder: '내용을 입력하세요.'
+            });
+        });
+
+        function questionSubmit() {
+            const title = document.getElementById('title').value.trim();
+            const content = $('#summernote').summernote('code');
+
+            if (title === '') {
+                alert('제목을 입력하세요.');
+                return;
+            }
+
+            if (!content || content === '<p><br></p>') {
+                alert('내용을 입력하세요.');
+                return;
+            }
+
+            document.questionForm.submit();
+        }
+    </script>
+
+</section>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/layout :: layout(~{::section})">
+
+<section class="board-view-section">
+
+    <h2 class="board-view-title" th:text="${dto.title}">제목</h2>
+
+    <div class="board-meta">
+        <div>작성자: <strong th:text="${dto.nickname}">관리자</strong></div>
+        <div>조회수: <strong th:text="${dto.readcnt}">0</strong></div>
+        <div>작성일:
+            <strong th:text="${#temporals.format(dto.regdate,'yyyy-MM-dd')}">2026-01-07</strong>
+        </div>
+    </div>
+
+    <hr class="board-hr">
+
+    <div class="board-content" th:utext="${#strings.replace(dto.content, '\n', '<br/>')}"></div>
+
+    <div th:if="${dto.filename != null}" style="margin-top:10px;">
+        첨부파일: <a th:href="@{'/uploads/' + ${dto.filename}}" th:text="${dto.filename}" target="_blank"></a>
+        <div style="margin-top:8px;">
+            <img th:src="@{'/uploads/' + ${dto.filename}}" style="max-width:400px;">
+        </div>
+    </div>
+
+    <hr class="board-hr" style="margin-top:20px;">
+
+    <div class="comment-section">
+        <h3>댓글</h3>
+
+        <div th:each="cmt : ${commentList}" class="comment-box" style="border-bottom:1px solid #eee; padding:10px 0;">
+            <div class="comment-meta">
+                <strong th:text="${cmt.nickname}">닉네임</strong>
+                <span th:text="${#temporals.format(cmt.regdate, 'yyyy-MM-dd HH:mm')}" style="margin-left:10px; color:#888;"></span>
+            </div>
+
+            <div class="comment-content" style="margin-top:5px;" th:text="${cmt.content}">댓글 내용</div>
+
+            <div th:if="${cmt.filename != null}" style="margin-top:5px;">
+                <a th:href="@{/uploads/{file}(file=${cmt.filename})}" th:text="${cmt.filename}" target="_blank" style="font-size:0.9em;"></a>
+                <div style="margin-top:5px;">
+                    <img th:src="@{/uploads/{file}(file=${cmt.filename})}" style="max-width:150px;">
+                </div>
+            </div>
+
+            <div th:if="${session.user != null and (session.user.userid == cmt.userid or session.user.userid == 'admin') and cmt.content != '관리자가 삭제한 댓글입니다.'}"
+                 style="margin-top:5px;">
+                <form th:action="@{/question/comment_delete}" method="post" style="margin:0;">
+                    <input type="hidden" name="cidx" th:value="${cmt.cidx}">
+                    <input type="hidden" name="qidx" th:value="${dto.idx}">
+                    <button type="submit" class="board-delete-btn" style="cursor:pointer; padding:2px 8px;" onclick="return confirm('댓글을 삭제하시겠습니까?');">
+                        삭제
+                    </button>
+                </form>
+            </div>
+        </div> <div class="comment-form-container" style="margin-top:20px; background:#f9f9f9; padding:15px;">
+            <form th:action="@{/question/comment_write}" method="post" enctype="multipart/form-data" onsubmit="return validateComment(this);">
+                <input type="hidden" name="qidx" th:value="${dto.idx}">
+                <textarea name="content" rows="3" placeholder="댓글을 입력하세요" class="board-textarea" style="width:100%; margin-bottom:10px;"></textarea>
+                <div style="display:flex; justify-content: space-between; align-items: center;">
+                    <input type="file" name="file">
+                    <button type="submit" class="board-write-btn">댓글 등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr class="board-hr" style="margin-top:30px;">
+
+    <div style="display: flex; gap: 10px; align-items: center; margin-bottom:50px;">
+        <a th:href="@{/question/question_list(page=${page})}" class="board-write-btn">목록</a>
+        
+        <a th:if="${session.user != null and session.user.userid == dto.userid}"
+           th:href="@{/question/question_modify(idx=${dto.idx}, page=${page})}" class="board-modify-btn">수정</a>
+
+        <form th:if="${session.user != null and (session.user.userid == dto.userid or session.user.userid == 'admin')}"
+              th:action="@{/question/question_delete}" method="post" style="display:inline-block;">
+            <input type="hidden" name="idx" th:value="${dto.idx}">
+            <input type="hidden" name="page" th:value="${page}">
+            <button type="submit" class="board-delete-btn" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+        </form>
+    </div>
+
+    <script th:inline="javascript">
+        function validateComment(form) {
+            var content = form.content.value.trim();
+            var file = form.file.value;
+            if(content === "" && file === "") {
+                alert("내용을 입력하거나 파일을 선택해주세요.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</section>
+</html>
