@@ -1,0 +1,77 @@
+package servlet.guide;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import guide.model.GuideDAO;
+import guide.model.GuideDTO;
+
+/**
+ * Servlet implementation class GuideListServlet
+ */
+@WebServlet("/guide_veg_list.do")
+public class GuideVegListServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public GuideVegListServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//DB 연결
+		GuideDAO dao = new GuideDAO();
+		// 검색값 받기
+        String search = request.getParameter("search");
+        String key = request.getParameter("key");
+
+        // null 방지 처리
+        if (search == null || search.trim().equals("")) {
+            search = "name"; // 기본 검색 기준
+        }
+        if (key == null) {
+            key = "";
+        }
+
+        // 검색 적용
+        List<GuideDTO> vegList;
+
+        if (key.trim().equals("")) {
+            // 검색어 없을 때 전체 목록
+            vegList = dao.vegList();
+        } else {
+            // 검색어 있을 때 조건 검색
+            vegList = dao.vegList(search, key);
+        }
+
+        // JSP로 값 전달
+        request.setAttribute("vegList", vegList);
+        request.setAttribute("search", search);
+        request.setAttribute("key", key);
+		RequestDispatcher rd = request.getRequestDispatcher("/Guide/guide_veg_list.jsp");
+		rd.forward(request, response);
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
