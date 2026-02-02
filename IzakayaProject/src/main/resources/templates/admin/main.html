@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理者メイン | Izakaya SION</title>
+
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/admin/admin.css" />
+
+  <style>
+    /* ❗ 금지 커서만 표시 (색상/투명도 절대 변경 없음) */
+    .admin-menu-card.cursor-blocked {
+      cursor: not-allowed;
+    }
+
+    /* =========================
+       ✅ 요청 반영: 로그인/접속중/로그아웃 전부 "직각"
+       ✅ 로그인(버튼/인풋)은 "액자 제거"
+       - 기능/JS/구조는 그대로
+    ========================= */
+
+    /* 로그인 배너(管理者ログイン / 接続中) 직각 */
+    .admin-login-title{
+      border-radius: 0 !important;
+    }
+
+    /* 로그인 input 직각 */
+    .admin-login input{
+      border-radius: 0 !important;
+    }
+
+    /* 로그인 버튼: 직각 + 액자 제거(프레임 테두리 제거) */
+    .admin-login button{
+      border-radius: 0 !important;
+      border: none !important;     /* ✅ 액자 제거 */
+      box-shadow: none !important; /* ✅ 액자 느낌 제거 */
+      background: #111 !important; /* 기존 유지 */
+      color: #fff !important;
+    }
+    .admin-login button:hover{
+      opacity: 0.92;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* 접속중 박스(세션 영역) 직각 */
+    .admin-session-box{
+      border-radius: 0 !important;
+    }
+
+    /* ✅✅✅ 타이머 UI 숨김 (기능은 JS로 유지) */
+    .admin-session-timer{
+      display:none !important;
+    }
+
+    /* 로그아웃 버튼: 직각 + 액자 제거 */
+    .admin-session-box form button {
+      width: 100%;
+      padding: 10px;
+      background: #111 !important;
+      color: #fff !important;
+      border: none !important;      /* ✅ 액자 제거 */
+      border-radius: 0 !important;  /* ✅ 직각 */
+      box-shadow: none !important;  /* ✅ 액자 느낌 제거 */
+      cursor: pointer;
+      transform: none !important;
+    }
+    .admin-session-box form button:hover {
+      opacity: 0.92;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body class="admin">
+
+<header class="admin-topbar">
+  <div class="admin-topbar__inner admin-topbar__inner--center">
+    <a href="/admin/main" class="admin-topbar__brand">
+      居酒屋シオン(管理者)
+    </a>
+  </div>
+</header>
+
+<main class="admin-dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+
+    <div class="admin-sidebar__logo">
+      <a href="/" aria-label="トップページへ">
+        <img src="/images/logo-brand.png" alt="SION" class="admin-logo">
+      </a>
+    </div>
+
+    <!-- 🔐 로그인 전 -->
+    <form class="admin-login"
+          sec:authorize="!isAuthenticated()"
+          method="post"
+          action="/admin/login">
+
+      <div class="admin-login-title">管理者ログイン</div>
+
+      <input type="text" name="username" placeholder="管理者ID" required />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <button type="submit">ログイン</button>
+    </form>
+
+    <!-- 🔐 로그인 후 -->
+    <div class="admin-login admin-session-box"
+         sec:authorize="isAuthenticated()">
+
+      <div class="admin-login-title">管理者ログインで接続中</div>
+
+      <!-- ✅ 타이머 UI는 숨김 처리됨(.admin-session-timer display:none) -->
+      <div class="admin-session-timer" aria-hidden="true">
+        残り時間
+        <strong>
+          <span id="timerMin">10</span>分
+          <span id="timerSec">00</span>秒
+        </strong>
+      </div>
+
+      <form method="post" action="/admin/logout">
+        <button type="submit">ログアウト</button>
+      </form>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <section class="admin-main">
+
+    <div class="admin-card-grid">
+
+      <a href="/admin/menu/list" class="admin-menu-card admin-only">
+        <h3>メニュー管理</h3>
+        <p>料理・価格・画像管理</p>
+      </a>
+
+      <a href="/admin/store" class="admin-menu-card admin-only">
+        <h3>店舗登録</h3>
+        <p>店舗情報・URL管理</p>
+      </a>
+
+      <a href="/admin/campaign" class="admin-menu-card admin-only">
+        <h3>キャンペーン登録</h3>
+        <p>イベント・告知管理</p>
+      </a>
+
+      <a href="/admin/dashboard" class="admin-menu-card admin-only">
+        <h3>店舗状況</h3>
+        <p>予約・テイクアウト集計</p>
+      </a>
+
+      <a href="/admin/sales" class="admin-menu-card admin-only">
+        <h3>売上統計</h3>
+        <p>期間別・店舗別の売上分析</p>
+      </a>
+
+      <a href="https://www.instagram.com/izakaya_sion/"
+         class="admin-menu-card admin-only"
+         data-instagram>
+        <h3>公式Instagram管理</h3>
+        <p>投稿・連携設定</p>
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="admin-footer">
+  <small>© 居酒屋シオン Admin</small>
+</footer>
+
+<!-- 🔑 인증 상태 -->
+<script th:inline="javascript">
+  const IS_AUTHENTICATED = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+</script>
+
+<!-- 🔒 메뉴 카드 제어 (색상 유지 + 금지 커서만) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  document.querySelectorAll('.admin-only').forEach(card => {
+
+    if (!IS_AUTHENTICATED) {
+      // ✅ 커서만 금지
+      card.classList.add('cursor-blocked');
+    }
+
+    card.addEventListener('click', e => {
+      if (!IS_AUTHENTICATED) {
+        e.preventDefault();
+        alert('管理者ログイン後に利用できます。');
+      }
+    });
+
+  });
+
+});
+</script>
+
+<!-- 📸 Instagram popup (로그인 시만) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const insta = document.querySelector('[data-instagram]');
+  if (!insta) return;
+
+  insta.addEventListener('click', e => {
+    if (!IS_AUTHENTICATED) {
+      e.preventDefault();
+      return;
+    }
+
+    e.preventDefault();
+    window.open(
+      insta.href,
+      "instagramPopup",
+      "width=1200,height=700,resizable=yes,scrollbars=yes"
+    );
+  });
+});
+</script>
+
+<!-- ⏱ 로그인 후: 10분 지나면 자동 로그아웃 (UI 없이 기능만) -->
+<script sec:authorize="isAuthenticated()">
+document.addEventListener('DOMContentLoaded', () => {
+
+  const AUTO_LOGOUT_MS = 10 * 60 * 1000; // 10분
+
+  const doLogout = async () => {
+    try {
+      await fetch('/admin/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+    } catch (e) {
+      // 무시
+    } finally {
+      location.href = '/admin/main?logout';
+    }
+  };
+
+  // ✅ 10분 후 자동 로그아웃
+  setTimeout(doLogout, AUTO_LOGOUT_MS);
+
+  // 🔄 서버 세션 체크 (5초마다) - 기존 유지
+  setInterval(async () => {
+    try {
+      const res = await fetch('/admin/session-check', { cache: 'no-store' });
+      const alive = await res.json();
+
+      if (!alive) {
+        location.reload(); // ✅ 세션 만료 → 새로고침
+      }
+    } catch (e) {
+      location.reload();
+    }
+  }, 5000);
+
+});
+</script>
+
+<!-- keepalive (기존 유지) -->
+<script>
+(() => {
+  let lastPing = 0;
+  const INTERVAL = 60 * 1000; // 1분에 1번만 서버 호출
+
+  const pingServer = () => {
+    const now = Date.now();
+    if (now - lastPing < INTERVAL) return;
+
+    lastPing = now;
+
+    fetch('/admin/session-keepalive', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).catch(() => {
+      // 실패해도 무시
+    });
+  };
+
+  // 사용자 활동 감지 → 세션 연장
+  ['mousemove', 'click', 'keydown', 'scroll'].forEach(event => {
+    document.addEventListener(event, pingServer, { passive: true });
+  });
+})();
+</script>
+
+<!-- 알림 -->
+<script th:if="${param.error}">
+  alert("ID及びパスワードが一致しません。");
+</script>
+<script th:if="${param.logout}">
+  alert("ログアウトしました。");
+</script>
+
+</body>
+</html>

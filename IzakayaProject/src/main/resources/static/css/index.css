@@ -1,0 +1,596 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: 'Shippori Mincho', serif;
+    background: #f5f1e7;
+    color: #2b1f14;
+}
+
+/* ===============================
+   HEADER — 木造庇 + 梁 + 日本瓦
+================================ */
+.wood-header {
+    position: relative;
+    background: linear-gradient(#4b3a28, #3a2b1e);
+    z-index: 10;
+}
+
+/* 🪵 얇은 목재 보(梁) — 기와 바로 위 */
+.wood-header::after {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-2px;
+    height:6px;
+    z-index:11;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #5a3f2b 0%,
+            #3f2b1d 50%,
+            #2b1c12 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.15),
+        inset 0 -1px 2px rgba(0,0,0,.45),
+        0 2px 3px rgba(0,0,0,.35);
+}
+
+/* ===============================
+   KAWARA (日本瓦) STRIP
+================================ */
+.wood-header::before {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-22px;
+    height:22px;
+    z-index:9;
+
+    background:
+        /* 기와 굴곡 */
+        repeating-linear-gradient(
+            90deg,
+            #3a3a3a 0px,
+            #3a3a3a 28px,
+            #2f2f2f 28px,
+            #2f2f2f 56px
+        ),
+        /* 상단 하이라이트 */
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,.18),
+            rgba(0,0,0,.45)
+        );
+
+    box-shadow:
+        inset 0 3px 3px rgba(255,255,255,.15),
+        inset 0 -6px 8px rgba(0,0,0,.55),
+        0 6px 10px rgba(0,0,0,.35);
+}
+
+/* 🔥 기와 아래 자연스러운 그림자 */
+.wood-header-shadow {
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-28px;
+    height:28px;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.35),
+        rgba(0,0,0,0)
+    );
+    pointer-events:none;
+    z-index:8;
+}
+
+/* ===============================
+   TOP BAR
+================================ */
+.top-bar {
+    height:72px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    color:#fff;
+}
+
+.logo span {
+    font-family:'Yuji Syuku', serif;
+    font-size:26px;
+    letter-spacing:4px;
+    color:#fff;
+}
+
+.logo img {
+    height:48px;
+    display:block;
+}
+
+.top-bar nav a {
+    margin-left:28px;
+    font-family:'Yuji Syuku', serif;
+    font-size:18px;
+    letter-spacing:3px;
+    color:#fff;
+    text-decoration:none;
+}
+
+/* ===============================
+   NEON BRAND LOGO
+================================ */
+
+/* 로고 문양 (PNG) */
+.neon-logo {
+    height:52px;
+
+    filter:
+        drop-shadow(0 0 4px #ff4fa3)
+        drop-shadow(0 0 10px #ff4fa3)
+        drop-shadow(0 0 18px rgba(255,79,163,0.9));
+
+    animation: neonFlickerLogo 3.2s infinite;
+}
+
+/* 네온 텍스트 SVG (조금 더 강하게) */
+.brand-text {
+    height:60px;
+    animation: neonFlickerText 3.2s infinite;
+}
+
+/* 로고 + 텍스트 정렬 */
+.brand-area {
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
+@keyframes neonFlickerLogo {
+    0%, 100% { opacity:1; }
+    40% { opacity:.85; }
+    55% { opacity:.6; }
+    70% { opacity:.95; }
+}
+
+@keyframes neonFlickerText {
+    0%, 100% { opacity:1; }
+    45% { opacity:.9; }
+    60% { opacity:.7; }
+    75% { opacity:.95; }
+}
+
+/* ===============================
+   WOOD BACKGROUND – IZAKAYA STYLE
+   (Japanese Wooden Interior)
+================================ */
+.wood-bg {
+    position: relative;
+
+    /* 🌅 실내 조명 + 밝은 일본 목재 톤 */
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,248,232,0.98) 0%,     /* 천장 쪽 밝은 와시 */
+            rgba(240,222,195,0.96) 30%,   /* 벽 중앙 */
+            rgba(195,165,125,0.92) 60%,   /* 하단 목재 */
+            rgba(120,90,60,0.95) 100%     /* 바닥 */
+        ),
+        url("/images/washi_texture.png");
+
+    overflow: hidden;
+}
+
+/* 🪵 세로 목조 기둥 (柱) – 간격 촘촘 + 부드럽게 */
+.wood-bg::before {
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(110,85,55,0.22) 0px,
+            rgba(110,85,55,0.22) 32px,
+            rgba(85,60,38,0.28) 32px,
+            rgba(85,60,38,0.28) 64px
+        );
+
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 🌑 천장·바닥 깊이감 + 실내 음영 */
+.wood-bg::after {
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,0.12) 0%,          /* 천장 그림자 */
+            transparent 28%,
+            transparent 68%,
+            rgba(0,0,0,0.28) 82%,         /* 바닥 음영 */
+            rgba(0,0,0,0.45) 100%
+        );
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ===============================
+   HERO
+================================ */
+.hero {
+    height:420px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 80px;
+}
+
+/* ===============================
+   CHOCHIN (Lantern)
+================================ */
+.lantern {
+    width: 90px;
+    height: 190px;
+
+    background:
+        repeating-linear-gradient(
+            180deg,
+            #c4161c 0px,
+            #c4161c 12px,
+            #b11418 12px,
+            #b11418 24px
+        );
+
+    border-radius: 50px;
+    position: relative;
+
+    /* 💡 입체감 + 깊이 */
+    box-shadow:
+        inset 0 -18px 28px rgba(0,0,0,.35),
+        inset 0 6px 14px rgba(255,255,255,.35),
+        0 0 65px rgba(255,150,95,.85),
+        0 20px 40px rgba(0,0,0,.35);
+
+    /* 🌬 흔들림 기준점 */
+    transform-origin: top center;
+
+    animation:
+        lanternSwing 6.5s ease-in-out infinite,
+        lanternFlicker 3.8s infinite alternate,
+        lanternWind 14s infinite linear,
+        lanternRedPulse 5.5s ease-in-out infinite;
+
+    transition:
+        box-shadow .4s ease,
+        filter .4s ease;
+}
+
+/* 🪢 초친 줄 (rope) */
+.lantern::before {
+    content:"";
+    position:absolute;
+    top:-48px;
+    left:50%;
+
+    width:4px;
+    height:48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #3b2a18,
+            #1f160c
+        );
+
+    transform:translateX(-50%);
+    border-radius:2px;
+
+    box-shadow:
+        0 0 4px rgba(0,0,0,.6);
+}
+
+/* ⚫ 상단 캡 */
+.lantern .cap-top {
+    position:absolute;
+    top:-10px;
+    left:50%;
+
+    width:78px;
+    height:8px;
+
+    background:#111;
+    transform:translateX(-50%);
+    border-radius:2px;
+
+    box-shadow:
+        0 2px 3px rgba(0,0,0,.6);
+}
+
+/* ⚫ 하단 캡 */
+.lantern::after {
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-10px;
+
+    width:78px;
+    height:8px;
+
+    background:#111;
+    transform:translateX(-50%);
+    border-radius:2px;
+
+    box-shadow:
+        0 -2px 3px rgba(0,0,0,.6);
+}
+
+/* ✒ 초친 글씨 */
+.lantern span {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    font-family: 'Yuji Syuku', serif;
+    color:#120000;
+
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:6px;
+
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.35),
+        0 -1px 2px rgba(0,0,0,.35);
+}
+
+/* 🔴 자동으로 더 빨개졌다 돌아오는 효과 */
+@keyframes lanternRedPulse {
+    0% {
+        filter: brightness(1) saturate(1);
+    }
+    50% {
+        filter: brightness(1.12) saturate(1.35);
+    }
+    100% {
+        filter: brightness(1) saturate(1);
+    }
+}
+
+/* ===============================
+   ANIMATIONS
+================================ */
+
+/* 🌬 자연스러운 흔들림 */
+@keyframes lanternSwing {
+    0%   { transform: rotate(0deg); }
+    20%  { transform: rotate(1.4deg); }
+    50%  { transform: rotate(0deg); }
+    80%  { transform: rotate(-1.4deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* 💡 불빛 미세 깜빡임 */
+@keyframes lanternFlicker {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.04); }
+}
+
+/* 🌫 아주 느린 공기 흐름 */
+@keyframes lanternWind {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(0.6deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* ===============================
+   MENU
+================================ */
+.menu-section {
+    padding:120px 60px;
+    text-align:center;
+}
+
+.menu-section h2 {
+    margin-bottom:38px;
+}
+
+.sign-row {
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+/* ===============================
+   SIGNBOARD
+================================ */
+.sign { width:120px; }
+
+.rope {
+    width:2px;
+    height:50px;
+    background:#8b6b3f;
+    margin:0 auto;
+}
+
+.board {
+    position:relative;
+    background:#fdf7eb;
+    border:6px solid #5a3f2b;
+    box-shadow:0 14px 18px rgba(0,0,0,.25);
+}
+
+/* 🔑 글씨는 항상 최상단 */
+.board-inner {
+    position:relative;
+    z-index:2;
+    padding:26px 10px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.board-inner p {
+    writing-mode: vertical-rl;
+    text-align:center;
+    font-size:18px;
+    font-weight:600;              /* 🔸 글씨 살짝 굵게 */
+    letter-spacing:0.08em;
+}
+
+.board-inner small {
+    margin-top:12px;
+    font-size:12px;
+    font-weight:500;              /* 🔸 가독성 업 */
+}
+
+.board-inner strong {
+    margin-top:14px;
+    color:#b22222;
+    font-weight:700;              /* 🔸 가격 강조 */
+}
+
+/* 💡 하단 조명 */
+.light {
+    position:absolute;
+    bottom:-18px;
+    left:50%;
+    width:64px;                   /* 🔸 살짝 확장 */
+    height:22px;
+    transform:translateX(-50%);
+    background:radial-gradient(
+        ellipse at center,
+        rgba(255,205,135,.9) 0%,
+        rgba(255,190,110,.55) 45%,
+        rgba(255,170,80,.25) 70%,
+        rgba(255,170,80,0) 85%
+    );
+    animation: lightFlicker 3s infinite alternate;
+}
+
+/* ===============================
+   SIGN CONTENT RANDOM GLOW (글씨 보호)
+================================ */
+.board::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 235, 170, 1) 0%,
+        rgba(255, 220, 145, .75) 38%,
+        rgba(255, 200, 120, .45) 60%,
+        rgba(255, 200, 120, 0) 82%
+    );
+    opacity: 0;
+    pointer-events:none;
+    mix-blend-mode: multiply;     /* 🔥 글씨 안 가리게 */
+    z-index:1;
+    animation: izakayaRandomGlow 7.5s infinite ease-in-out;
+}
+
+/* 랜덤처럼 보이게 타이밍 분산 */
+.sign:nth-child(1) .board::after { animation-delay: 0s; }
+.sign:nth-child(2) .board::after { animation-delay: 1.6s; }
+.sign:nth-child(3) .board::after { animation-delay: 3.2s; }
+.sign:nth-child(4) .board::after { animation-delay: 0.9s; }
+.sign:nth-child(5) .board::after { animation-delay: 2.4s; }
+.sign:nth-child(6) .board::after { animation-delay: 4.1s; }
+
+@keyframes izakayaRandomGlow {
+    0%   { opacity: 0; }
+    55%  { opacity: 0; }
+    64%  { opacity: .4; }
+    70%  { opacity: .85; }        /* 🔸 노란 빛 피크 강화 */
+    76%  { opacity: .55; }
+    82%  { opacity: .25; }
+    100% { opacity: 0; }
+}
+
+/* ===============================
+   ANIMATION
+================================ */
+.swing {
+    animation: signSwing 5s ease-in-out infinite;
+    transform-origin: top center;
+}
+
+@keyframes signSwing {
+    0% { transform:rotate(-1.2deg); }
+    50% { transform:rotate(1.2deg); }
+    100% { transform:rotate(-1.2deg); }
+}
+
+@keyframes lanternSwing {
+    0% { transform:rotate(-2deg); }
+    50% { transform:rotate(2deg); }
+    100% { transform:rotate(-2deg); }
+}
+
+@keyframes lanternFlicker {
+    0%   { box-shadow:0 0 22px rgba(255,130,90,.55); }
+    30%  { box-shadow:0 0 38px rgba(255,160,110,.75); }
+    60%  { box-shadow:0 0 28px rgba(255,140,100,.65); }
+    100% { box-shadow:0 0 46px rgba(255,180,130,.95); }
+}
+
+@keyframes lanternWind {
+    0% { transform:rotate(-1deg); }
+    25% { transform:rotate(0.6deg); }
+    50% { transform:rotate(-0.4deg); }
+    75% { transform:rotate(1deg); }
+    100% { transform:rotate(-1deg); }
+}
+
+@keyframes lightFlicker {
+    0% { opacity:.6; }
+    100% { opacity:1; }
+}
+
+/* ===============================
+   TIME
+================================ */
+body.evening { filter: sepia(.1) brightness(1.02); }
+body.night   { filter: sepia(.25) brightness(.92); }
+
+/* ===============================
+   FOOTER
+================================ */
+footer {
+    text-align:center;
+    padding:40px 0;
+    font-size:12px;
+    opacity:.6;
+}
+/* ===============================
+   MAIN PAGE ONLY – NEON SIZE TUNE
+================================ */
+
+/* 메인(index) 화면에서만 네온 텍스트 크게 */
+.home .brand-text {
+    height: 60px;   /* 66~70px 중 취향 */
+}
+
+/* (선택) 문양 로고도 함께 키우면 밸런스 좋아짐 */
+.home .neon-logo {
+    height: 52px;
+}

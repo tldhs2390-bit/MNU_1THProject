@@ -1,0 +1,384 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
+
+:root{
+  --paper:  #f6f1e6;
+  --paper2: #efe5d2;
+  --ink:    #1f1a12;
+  --ink2:   #3b2f22;
+  --line:   #c9b89b;
+  --accent: #7a2b2b;
+  --shadow: rgba(0,0,0,.18);
+
+  /* ✅ 액자 톤(인덱스와 맞춤) */
+  --frame: #5a3f2b;
+  --frame2: rgba(90,63,43,.22);
+  --paper3: #fdf7eb;
+}
+
+/* =====================================================
+   ✅ MENU PAGE ONLY (index.css 유지)
+===================================================== */
+.menu-page-wrap{ width:100%; }
+
+.menu-page-wrap .menu-page{
+  font-family: 'Shippori Mincho', serif;
+  color: var(--ink);
+}
+
+.menu-page-wrap .menu-page,
+.menu-page-wrap .menu-page *{
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   PAGE LAYOUT (스샷처럼 가운데 정돈)
+===================================================== */
+.menu-page-wrap .menu-page{
+  padding: 46px 22px 110px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ 스샷 느낌: 중앙에 메뉴판(종이)처럼 보이게 */
+
+
+.menu-page-wrap .menu-page-head{
+  text-align:center;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.menu-page-wrap .menu-page-head h1{
+  margin:0;
+  font-size:2.15rem;
+  letter-spacing:.08em;
+  color:var(--ink);
+  font-family:'Yuji Syuku', serif; /* ✅ 이자카야 타이틀 느낌 */
+}
+
+.menu-page-wrap .menu-page-head p{
+  margin:10px 0 0;
+  color:var(--ink2);
+  font-size:1.02rem;
+  opacity:.92;
+}
+
+/* =====================================================
+   TABS (목록) — 액자 테두리 + 직각 + 정갈한 크기
+===================================================== */
+body#time-theme .menu-page-wrap .menu-tabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin:18px auto 34px;
+  padding:8px 0;
+  position:relative;
+  z-index:2;
+}
+
+/* ✅ 탭을 “간판/메뉴 목록 버튼”처럼: 불/조명/애니메이션 없음 */
+body#time-theme .menu-page-wrap .menu-tabs button.tab{
+  position: relative;
+  border-radius: 0 !important;
+
+  background: var(--paper3) !important;
+  border: 3px solid var(--frame) !important;
+  box-shadow: 0 6px 10px rgba(0,0,0,.14) !important;
+
+  padding: 7px 12px !important;
+  cursor:pointer !important;
+
+  font-size: .92rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .02em;
+
+  transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+
+
+
+/* hover */
+body#time-theme .menu-page-wrap .menu-tabs button.tab:hover{
+  background: var(--paper2) !important;
+  border-color: #7a5a36 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 14px rgba(0,0,0,.16) !important;
+}
+
+/* active */
+body#time-theme .menu-page-wrap .menu-tabs button.tab.active{
+  background: var(--accent) !important;
+  color:#fff !important;
+  border-color: #3f1a1a !important;
+  box-shadow: 0 10px 18px rgba(0,0,0,.20) !important;
+}
+
+/* active일 때 안쪽판도 진하게 */
+
+
+body#time-theme .menu-page-wrap .menu-tabs button.tab:focus{
+  outline:3px solid #fff !important;
+  outline-offset:2px !important;
+}
+
+/* =====================================================
+   GRID — 스샷처럼 넓고 정갈하게
+===================================================== */
+.menu-page-wrap .menu-grid{
+  max-width: 1240px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(12, 1fr);
+  gap:24px;
+  position:relative;
+  z-index:2;
+  padding: 0 6px;
+}
+
+/* =====================================================
+   CARD — “이자카야 액자 메뉴판” (불/반짝/조명 없음)
+===================================================== */
+.menu-page-wrap .menu-card{
+  grid-column: span 12;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+
+  /* ✅ 직각 */
+  border-radius: 0 !important;
+
+  /* ✅ 액자 프레임 */
+  position: relative;
+  background: var(--paper3) !important;
+  border: 6px solid var(--frame) !important;
+  box-shadow: 0 14px 18px rgba(0,0,0,.22) !important;
+
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+
+
+
+/* ❌ 불/글로우/조명 전부 사용 안 함 (혹시 남아도 무효화) */
+.menu-page-wrap .menu-card::after{ content:none !important; }
+@keyframes menuCardRandomGlow{}
+@keyframes menuCardLightFlicker{}
+
+/* hover는 “살짝 떠보이게”만 */
+.menu-page-wrap .menu-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 24px rgba(0,0,0,.26) !important;
+}
+
+/* 반응형 */
+@media (min-width: 760px){
+  .menu-page-wrap .menu-card{ grid-column: span 6; }
+}
+@media (min-width: 1120px){
+  .menu-page-wrap .menu-card{ grid-column: span 4; }
+}
+
+/* =====================================================
+   LINK — 밑줄 제거(기존 유지)
+===================================================== */
+.menu-page-wrap .menu-card-link,
+.menu-page-wrap .menu-card-link:link,
+.menu-page-wrap .menu-card-link:visited,
+.menu-page-wrap .menu-card-link:hover,
+.menu-page-wrap .menu-card-link:active,
+.menu-page-wrap .menu-card-link:focus{
+  display:block !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  outline: none !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  position: relative;
+  z-index: 2; /* ✅ 매트(::before) 위 */
+}
+
+/* =====================================================
+   IMAGE — 스샷처럼 사진이 커 보이게(4:3 비율)
+===================================================== */
+.menu-page-wrap .menu-thumb{
+  width:100%;
+  aspect-ratio: 4 / 3;            /* ✅ 이자카야 메뉴판 느낌 */
+  background:#fff;
+  border-bottom: 3px solid rgba(90,63,43,.22);
+  border-radius: 0 !important;
+  overflow:hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.menu-page-wrap .menu-thumb img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  
+}
+
+/* DRINK 카드 이미지는 기존 16:9 유지 */
+.menu-page-wrap .menu-thumb.menu-thumb--drink{
+  aspect-ratio: 16 / 9;
+}
+
+/* =====================================================
+   INFO — 스샷처럼 “하단 라벨 영역” 느낌
+===================================================== */
+.menu-page-wrap .menu-info{
+  padding: 14px 14px 16px;
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  background: rgba(255,255,255,.55); /* ✅ 하단 라벨 영역 */
+  border-top: 1px solid rgba(0,0,0,.06);
+  position: relative;
+  z-index: 2;
+}
+
+/* 제목 + 태그 */
+.menu-page-wrap .menu-title-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  overflow: visible;
+}
+
+.menu-page-wrap .menu-title{
+  margin:0;
+  font-size:1.18rem;         /* ✅ 스샷처럼 조금 정갈하게 */
+  line-height:1.25;
+  font-weight:900;
+  color:var(--ink);
+  flex:1;
+  min-width:0;
+  word-break:break-word;
+}
+
+/* 태그 — 직각 라벨 */
+
+
+/* 가격 — 스샷처럼 하단에 강조 */
+.menu-page-wrap .menu-price{
+  font-size:1.05rem;
+  font-weight:900;
+  color: var(--accent) !important;
+  text-align:left;
+  line-height: 1.2;
+  letter-spacing: .02em;
+}
+
+/* =====================================================
+   FILTER
+===================================================== */
+.menu-page-wrap .menu-card.is-hidden{ display:none; }
+
+/* =====================================================
+   DRINK CARD — 항상 한 줄 전체 유지
+===================================================== */
+/* ✅ DRINK 카드 표시 보장 (필수) */
+.menu-page-wrap .menu-card.menu-card--drink{
+  display:flex;            /* ← 이게 핵심 */
+  grid-column: span 12 !important;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+.menu-page-wrap footer{
+  text-align:center;
+  padding:44px 0 50px;
+  font-size:12px;
+  opacity:.75;
+}
+
+/* =====================================================
+   ✅ Menu Detail - Origin / Allergy readability
+   (기존 톤 유지 + 가독성만 강화)
+===================================================== */
+
+/* =====================================================
+   ✅ Menu Detail - Origin / Allergy (Slim)
+===================================================== */
+
+.menu-detail-info{
+  display:flex;
+  flex-direction:column;
+  gap:8px; /* ✅ 간격 축소 */
+}
+
+/* ✅ 박스 → 얇은 인포 라인 느낌 */
+.detail-row{
+  padding:8px 10px;                /* 🔽 크기 축소 */
+  background:rgba(255,255,255,.45);
+  border:1.5px solid rgba(90,63,43,.22);
+}
+
+/* 헤더 라인도 작게 */
+.detail-head{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  margin-bottom:4px;               /* 🔽 */
+}
+
+.detail-label{
+  font-size:0.88rem;               /* 🔽 */
+  color:var(--accent);
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.detail-sub{
+  font-size:11px;
+  color:rgba(0,0,0,.5);
+  font-weight:600;
+}
+
+/* 원산지 텍스트 */
+.detail-body--text{
+  font-size:0.9rem;                /* 🔽 */
+  line-height:1.6;                 /* 🔽 */
+  color:var(--ink2);
+  word-break:break-word;
+}
+
+/* 알레르기 칩도 작게 */
+.chip-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;                         /* 🔽 */
+}
+
+.chip{
+  padding:2px 8px;                 /* 🔽 */
+  font-size:0.78rem;               /* 🔽 */
+  border-radius:6px;
+  border:1px solid rgba(140,0,0,.45);
+  background:rgba(180,0,0,.06);
+  color:#8b0000;
+  font-weight:800;
+  line-height:1.2;
+}
+
+/* 알레르기 강조도 살짝만 */
+.detail-row--allergy{
+  background:rgba(255,240,240,.45);
+  border-color:rgba(140,0,0,.3);
+}
+
+/* 모바일에서 칩이 너무 작아 보이면 살짝 확대 */
+@media (max-width:480px){
+  .chip{ font-size:0.95rem; padding:5px 11px; }
+}
+

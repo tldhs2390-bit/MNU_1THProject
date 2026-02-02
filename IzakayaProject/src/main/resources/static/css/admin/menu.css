@@ -1,0 +1,500 @@
+@charset "UTF-8";
+
+/* =========================
+   ADMIN MENU LIST (Add-on)
+   - admin.css 위에 얹는 전용 스타일 (menu_list 전용)
+========================= */
+
+/* ✅ menu_list 페이지에서만 메인 컨텐츠를 위로 붙임(중앙정렬 제거) */
+body.admin .admin-main{
+  align-items: flex-start;
+  padding: 46px 40px;
+}
+
+/* 페이지 카드 */
+/* 페이지 카드 (조금만 작게) */
+.admin-page{
+  width: min(1080px, 92%);   /* ✅ 1180→1080, 94%→92% */
+  margin: 0 auto;
+
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(107,74,45,.16);
+  border-radius: 16px;       /* ✅ 18→16 */
+
+  padding: 18px 18px 14px;   /* ✅ 22/22/18 → 18/18/14 */
+
+  box-shadow:
+    0 14px 24px rgba(0,0,0,.10),    /* ✅ 살짝만 줄임 */
+    inset 0 1px 0 rgba(255,255,255,.65);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* 상단 타이틀/버튼 */
+.admin-page-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.admin-page-title{
+  margin:0;
+  font-size: 22px;
+  color:#2b1f14;
+  letter-spacing: .02em;
+}
+
+/* 메인 버튼(우드 톤에 맞게 살짝 고급) */
+.admin-primary-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 14px;
+  border-radius:12px;
+
+  background: linear-gradient(180deg, rgba(30,24,18,.98), rgba(10,10,10,.98));
+  border: 1px solid rgba(255,255,255,.14);
+
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+
+  box-shadow:
+    0 10px 18px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.12);
+
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+}
+.admin-primary-btn:hover{
+  opacity: .94;
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 24px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+/* 테이블 래퍼 */
+.admin-table-wrap{
+  overflow:auto;
+
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+
+  box-shadow:
+    0 16px 26px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+/* 테이블 */
+.admin-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing: 0;
+  min-width: 980px;
+}
+
+.admin-table thead tr{
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,248,248,.88));
+}
+
+.admin-table th,
+.admin-table td{
+  padding: 13px 12px;
+  text-align:left;
+  vertical-align:middle;
+
+  border-bottom:1px solid rgba(0,0,0,.06);
+  color:#222;
+  font-size:14px;
+  white-space:nowrap;
+}
+
+.admin-table th{
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(43,31,20,.88);
+  letter-spacing: .02em;
+}
+
+/* 둥근 모서리 */
+.admin-table thead tr th:first-child{ border-top-left-radius: 16px; }
+.admin-table thead tr th:last-child{ border-top-right-radius: 16px; }
+.admin-table tbody tr:last-child td:first-child{ border-bottom-left-radius: 16px; }
+.admin-table tbody tr:last-child td:last-child{ border-bottom-right-radius: 16px; }
+.admin-table tbody tr:last-child td{ border-bottom: 0; }
+
+/* 행 hover */
+.admin-table tbody tr{
+  transition: background .12s ease;
+}
+.admin-table tbody tr:hover{
+  background: rgba(122,43,43,.03);
+}
+
+/* 빈 데이터 */
+.admin-empty{
+  padding: 18px 14px;
+  color:#666;
+  font-weight: 700;
+}
+
+/* 이름 강조 + 서브 */
+.admin-td-title{
+  white-space: normal;
+}
+.admin-td-title .admin-title{
+  font-weight: 900;
+  color:#2b1f14;
+  line-height:1.2;
+}
+.admin-td-title .admin-sub{
+  margin-top:6px;
+  font-size:12px;
+  color: rgba(43,31,20,.72);
+}
+
+/* 카테고리 배지 */
+.admin-badge{
+  display:inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,.80);
+  border: 1px solid rgba(107,74,45,.18);
+
+  font-weight: 900;
+  font-size: 12px;
+  color:#2b1f14;
+}
+
+/* 공개/비공개 pill */
+.admin-pill{
+  display:inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  font-weight:900;
+  font-size:12px;
+
+  border:1px solid rgba(0,0,0,.10);
+}
+.admin-pill.is-on{
+  background: rgba(0, 160, 90, .10);
+  color: #0b6b40;
+  border-color: rgba(0, 160, 90, .18);
+}
+.admin-pill.is-off{
+  background: rgba(220, 0, 40, .08);
+  color: #b2002a;
+  border-color: rgba(220, 0, 40, .16);
+}
+
+/* 액션 버튼 */
+.admin-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.admin-action-form{ display:inline; margin:0; }
+
+.admin-action-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding: 8px 12px;
+  border-radius: 12px;
+
+  border:1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.92);
+
+  color:#111;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:900;
+
+  transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.admin-action-btn:hover{
+  background: rgba(255,255,255,1);
+  transform: translateY(-1px);
+}
+
+.admin-action-btn.danger{
+  border-color: rgba(220,0,40,.20);
+  color:#b2002a;
+}
+.admin-action-btn.danger:hover{
+  background: rgba(220,0,40,.06);
+}
+
+/* 사이드 링크(만약 기존에 없다면 대비용) */
+.admin-side-links{
+  display:grid;
+  gap:10px;
+  margin-top: 10px;
+}
+.admin-side-link{
+  display:block;
+  padding:10px 12px;
+  border-radius:12px;
+
+  text-decoration:none;
+  font-weight:900;
+
+  color:#2b1f14;
+  background: rgba(255,255,255,.70);
+  border: 1px solid rgba(107,74,45,.16);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.admin-side-link:hover{ background: rgba(255,255,255,.85); }
+.admin-side-link.active{
+  background: rgba(17,17,17,.92);
+  color:#fff;
+  border-color: rgba(0,0,0,.25);
+}
+
+/* 반응형: 좁아질 때 패딩 줄이기 */
+@media (max-width: 860px){
+  body.admin .admin-main{ padding: 26px 16px; }
+  .admin-page{ width: 100%; padding: 18px 14px 14px; }
+}
+
+/* =========================
+   ✅ FIX: menu_list에서 SIDEBAR(로그인/타이머/버튼) 스타일 원복
+   - 적용 범위: body.admin.admin-menu-list 에서만
+========================= */
+
+body.admin.admin-menu-list .admin-sidebar .admin-login-title{
+  font-family: 'Yuji Syuku', serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+body.admin.admin-menu-list .admin-sidebar .admin-session-timer{
+  margin: 14px 0;
+  padding: 14px 0;
+  text-align: center;
+  background: rgba(0,0,0,0.08);
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+body.admin.admin-menu-list .admin-sidebar .admin-session-timer strong{
+  display: block;
+  margin-top: 6px;
+  font-size: 28px;
+  color: #8b2c1f;
+  letter-spacing: 1px;
+}
+
+body.admin.admin-menu-list .admin-sidebar .admin-session-box form button,
+body.admin.admin-menu-list .admin-sidebar .admin-login button{
+  width: 100%;
+  padding: 10px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+body.admin.admin-menu-list .admin-sidebar .admin-session-box form button:hover,
+body.admin.admin-menu-list .admin-sidebar .admin-login button:hover{
+  opacity: 0.92;
+}
+
+/* 페이지 전체 스크롤 보장 */
+body.admin.admin-menu-list{
+  min-height: 100vh;
+  overflow-y: auto;
+}
+body.admin.admin-menu-list .admin-dashboard{
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* =========================
+   ✅✅✅ 최종 FIX (요청 반영)
+   - 사이드바 배경은 아래로 쭉 이어지게(빈 흰색 X)
+   - "接続中 + 타이머 + 로그아웃"은 로그인 화면처럼 '아래쪽 위치'에 유지
+   - sticky(상단 고정) 제거: 위치가 위로 튀는 현상 방지
+========================= */
+
+/* 사이드바를 컬럼 flex로 만들어 아래쪽 배치 가능하게 */
+body.admin.admin-menu-list .admin-sidebar{
+  position: relative;
+  height: auto;
+  overflow: visible;
+  align-self: stretch;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ 로그아웃(세션 박스) / 로그인 폼을 아래로 밀어 "로그인 화면 위치"처럼 */
+body.admin.admin-menu-list .admin-sidebar .admin-session-box,
+body.admin.admin-menu-list .admin-sidebar .admin-login{
+  position: static !important;   /* ✅ sticky 제거 */
+  top: auto !important;
+  z-index: auto !important;
+
+  margin-top: auto !important;   /* ✅ 아래로 밀기(핵심) */
+  margin-bottom: 24px !important;/* ✅ 바닥과 여백 */
+}
+
+/* 혹시 내부 요소가 자동 여백으로 벌어지는 경우 방지 */
+body.admin.admin-menu-list .admin-sidebar .admin-session-box *{
+  margin-bottom: 0;
+}
+
+/* =========================
+   ✅✅✅ [추가] 가격/공개/조작 컬럼 "가운데 정렬" 전용
+   - 다른 컬럼은 영향 없음
+========================= */
+.admin-table .admin-td-center{
+  text-align: center !important;
+}
+
+/* 操作(버튼들)도 셀 중앙에 모이게 */
+.admin-actions--center{
+  justify-content: center;
+}
+
+/* =========================
+   ✅ menu_list 전용: "메뉴 목록 카드만" 액자 테두리
+   - 적용 범위: body.admin.admin-menu-list
+   - 수정/삭제 버튼은 액자 제거
+========================= */
+
+/* (1) 메뉴 목록 카드(대시보드의 .admin-menu-card)만 액자 */
+body.admin.admin-menu-list .admin-menu-card{
+  border-radius: 0 !important;                 /* 직각 */
+  border: 6px solid #5a3f2b !important;        /* 액자 */
+  background: #fdf7eb !important;              /* 종이톤 */
+  box-shadow: 0 14px 18px rgba(0,0,0,.22) !important;
+
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+body.admin.admin-menu-list .admin-menu-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 24px rgba(0,0,0,.26) !important;
+}
+
+/* (2) ✅ 이 페이지의 "수정/삭제 버튼"은 액자 테두리 제거 */
+body.admin.admin-menu-list .admin-action-btn{
+  border: 1px solid rgba(0,0,0,.12) !important;  /* 원래 느낌 */
+  border-radius: 0 !important;                   /* 직각 */
+  background: rgba(255,255,255,.92) !important;  /* 원래 느낌 */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6) !important; /* 원래 느낌 */
+  transform: none !important;
+}
+
+body.admin.admin-menu-list .admin-action-btn:hover{
+  background: rgba(255,255,255,1) !important;
+  transform: translateY(-1px); /* 원래 동작 */
+}
+
+/* danger 버튼도 액자 제거 + 기존 붉은톤 유지 */
+body.admin.admin-menu-list .admin-action-btn.danger{
+  border-color: rgba(220,0,40,.20) !important;
+  color:#b2002a !important;
+}
+body.admin.admin-menu-list .admin-action-btn.danger:hover{
+  background: rgba(220,0,40,.06) !important;
+}
+
+/* =========================
+   ✅ menu_list: 목록 "폼(페이지 박스 + 테이블 박스)"도 액자 테두리 추가
+   - 적용 범위: body.admin.admin-menu-list
+   - 버튼(編集/削除)은 액자 제거 유지
+========================= */
+
+/* (A) 목록 폼(큰 흰 박스) = .admin-page 에 액자 */
+body.admin.admin-menu-list .admin-page{
+  border-radius: 0 !important;                 /* 직각 */
+  border: 6px solid var(--frame) !important;   /* 액자 */
+  /* 기존 배경 톤 유지(투명 카드 느낌) */
+  background: rgba(255,255,255,.72) !important;
+  box-shadow: 0 14px 18px rgba(0,0,0,.18) !important;
+}
+
+/* (B) 테이블 박스도 액자 (안쪽 폼 느낌) */
+body.admin.admin-menu-list .admin-table-wrap{
+  border-radius: 0 !important;                 /* 직각 */
+  border: 4px solid var(--frame) !important;   /* 액자 */
+  background: rgba(255,255,255,.90) !important;
+  box-shadow: 0 12px 18px rgba(0,0,0,.12) !important;
+}
+
+/* 테이블 자체 모서리 라운드(기존 16px) 제거 */
+body.admin.admin-menu-list .admin-table thead tr th:first-child,
+body.admin.admin-menu-list .admin-table thead tr th:last-child,
+body.admin.admin-menu-list .admin-table tbody tr:last-child td:first-child,
+body.admin.admin-menu-list .admin-table tbody tr:last-child td:last-child{
+  border-radius: 0 !important;
+}
+
+/* (C) ✅ 이 페이지의 수정/삭제 버튼은 액자 제거 유지(최종 고정) */
+body.admin.admin-menu-list .admin-action-btn{
+  border: 1px solid rgba(0,0,0,.12) !important;
+  border-radius: 0 !important;
+  background: rgba(255,255,255,.92) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6) !important;
+}
+
+body.admin.admin-menu-list .admin-action-btn.danger{
+  border-color: rgba(220,0,40,.20) !important;
+}
+
+/* ✅ 카테고리/공개: 직각 처리 (menu_list 페이지 기준) */
+body.admin.admin-menu-list .admin-badge,
+body.admin.admin-menu-list .admin-pill{
+  border-radius: 0 !important;
+}
+
+/* =========================
+   🔴 투명 원인 차단 (핵심)
+   admin-session-box / admin-login 에 걸린 opacity 분리
+========================= */
+
+/* 부모 투명도 강제 제거 */
+.admin-login,
+.admin-session-box{
+  opacity: 1 !important;
+}
+
+/* 버튼은 별도 레이어로 분리 */
+.admin-session-box form,
+.admin-session-box form button{
+  opacity: 1 !important;
+  background: #111 !important;
+  background-image: none !important;
+  color: #fff !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* 혹시 disabled 스타일이 섞였을 경우 대비 */
+.admin-session-box form button:disabled{
+  opacity: 1 !important;
+  background: #111 !important;
+  color: #fff !important;
+}
+

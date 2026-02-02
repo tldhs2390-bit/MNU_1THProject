@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理者ページ | Izakaya SION</title>
+
+  <!-- 브랜드 기본 톤 (선택) -->
+  <link rel="stylesheet" href="/css/index.css" />
+
+  <!-- 관리자 전용 -->
+  <link rel="stylesheet" href="/css/admin/admin.css" />
+</head>
+
+<body class="admin">
+
+<header class="admin-topbar">
+  <div class="admin-topbar__inner">
+
+    <!-- 왼쪽 -->
+    <nav class="admin-topbar__left">
+      <a href="/admin/menu/new" class="admin-link">メニュー登録</a>
+      <a href="/admin/franchise/new" class="admin-link">フランチャイズ登録</a>
+    </nav>
+
+    <!-- 가운데 -->
+    <h1 class="admin-topbar__title">居酒屋シオン</h1>
+
+    <!-- 오른쪽 -->
+    <nav class="admin-topbar__right">
+      <a href="/admin/main" class="admin-link">管理HOME</a>
+      <a href="/admin/menu" class="admin-link">メニュー</a>
+      <a href="/admin/franchise" class="admin-link">フランチャイズ</a>
+      <a href="/" class="admin-link">サイトへ戻る</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="admin-container">
+
+  <section class="admin-card">
+    <div class="admin-card__head">
+      <h2 class="admin-card__title">店舗一覧（8店舗）</h2>
+      <p class="admin-card__desc">
+        予約・テイクアウト状況と売上を確認できます。
+      </p>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>店舗名</th>
+          <th class="num">予約件数</th>
+          <th class="num">テイクアウト件数</th>
+          <th class="num">テイクアウト売上</th>
+          <th>サイト</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>サンプル店舗</td>
+          <td class="num">0</td>
+          <td class="num">0</td>
+          <td class="num">¥0</td>
+          <td><a href="#" class="admin-link">OPEN</a></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="admin-footer">
+  <small>© 酒屋 シオン Admin</small>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>メニュー | 酒屋 紫 - Izakaya SION</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/menu.css" />
+
+  <!-- ✅✅✅ DRINK 탭이 "아무것도 안 뜨는" 문제 방지용 최소 수정 (복붙 OK)
+       - menu.css를 건드리지 않고도 동작하게 inline으로 보강
+       - 기존 기능/JS 로직/HTML 구조는 그대로 -->
+  <style>
+    /* ✅ 필터 토글 이후 DRINK 카드가 다시 안 보이는 케이스 방지 */
+    .menu-page-wrap .menu-card.menu-card--drink{
+      display:flex;                 /* 핵심 */
+      flex-direction:column;
+      grid-column: span 12 !important;
+    }
+    /* 혹시 상위에서 drink를 숨기는 스타일이 있으면 무효화 */
+    .menu-page-wrap .menu-card.menu-card--drink.is-hidden{
+      display:none !important;
+    }
+    /* ✅ DRINK 카드: 사진만 보이게 (하단 회색선 제거) */
+  .menu-card--drink .menu-thumb{
+    border-bottom: none !important;
+  }
+  /* ✅ DRINK 카드: 이미지 위/아래 안 잘리게 */
+  .menu-card--drink .menu-thumb img{
+    object-fit: contain !important;
+    background: #fff; /* 여백 생길 때 깔끔하게 */
+  }
+
+  /* ✅ DRINK 카드 하단 구분선 제거 (이전 요청 유지) */
+  .menu-card--drink .menu-thumb{
+    border-bottom: none !important;
+  }
+  /* ✅ DRINK 카드: 좌우는 유지, 위·아래 덜 잘리게 */
+  .menu-card--drink .menu-thumb img{
+    object-fit: cover !important;      /* 좌우 유지 */
+    object-position: center top;       /* 🔑 핵심 */
+  }
+
+  /* ✅ DRINK 카드 하단 회색 줄 제거 (유지) */
+  .menu-card--drink .menu-thumb{
+    border-bottom: none !important;
+  }
+  
+  </style>
+</head>
+
+<body id="time-theme">
+<div class="menu-page-wrap">
+
+<header class="top-bar wood-header">
+  <a href="/" class="logo brand-area" aria-label="トップページへ">
+    <img src="/images/logo-brand.png"
+         alt="酒屋 シオン ロゴ"
+         class="brand-logo neon-logo">
+    <img src="/images/logo-sion-neon.svg"
+         alt="酒屋 シオン"
+         class="brand-text">
+  </a>
+
+  <nav>
+    <a href="/menu">メニュー</a>
+    <a href="/#service">サービス</a>
+    <a href="/#campaign">キャンペーン</a>
+  </nav>
+
+  <div class="wood-header-shadow"></div>
+</header>
+
+<section class="menu-page wood-bg">
+  <div class="menu-page-head">
+    <h1>メニュー</h1>
+  </div>
+
+  <!-- ✅✅ 탭을 DB 카테고리(enum)와 1:1 매칭되게 정리 -->
+  <div class="menu-tabs" role="tablist" aria-label="menu categories">
+    <button type="button" class="tab active" data-filter="all" role="tab" aria-selected="true">すべて</button>
+    <button type="button" class="tab" data-filter="single" role="tab" aria-selected="false">単品メニュー</button>
+    <button type="button" class="tab" data-filter="main" role="tab" aria-selected="false">麺・ご飯類</button>
+    <button type="button" class="tab" data-filter="fried_pan" role="tab" aria-selected="false">揚げ物・チヂミ</button>
+    <button type="button" class="tab" data-filter="snack" role="tab" aria-selected="false">簡単おつまみ</button>
+    <button type="button" class="tab" data-filter="drink" role="tab" aria-selected="false">飲み物</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+
+    <!-- ✅✅ DB 메뉴 출력 -->
+    <th:block th:if="${menus != null and !#lists.isEmpty(menus)}">
+      <th:block th:each="m : ${menus}">
+
+        <!-- ✅ DRINK 전용 카드 -->
+        <article th:if="${m.category != null and m.category.name() == 'DRINK'}"
+                 class="menu-card menu-card--drink"
+                 th:attr="data-cat=${#strings.toLowerCase(m.category.name())}">
+
+          <a class="menu-card-link" th:href="@{/menu/{id}(id=${m.id})}" aria-label="メニュー詳細へ">
+            <div class="menu-thumb menu-thumb--drink">
+              <img th:src="${(m.imageUrl != null and m.imageUrl != '') ? m.imageUrl : '/images/menu/drink menu.png'}"
+                   alt="ドリンクメニュー">
+            </div>
+
+            <div class="menu-info">
+              <div class="menu-title-row">
+                <h3 class="menu-title" th:text="${m.name}">ドリンクメニュー</h3>
+                <span class="menu-title-tag"
+                      th:if="${m.tagText != null and m.tagText != ''}"
+                      th:text="${m.tagText}">タグ</span>
+              </div>
+
+              <!-- ✅✅ 리스트에서는 （税込） 표기 제거 (DB 값은 그대로) -->
+              <div class="menu-price"
+                   th:if="${m.priceText != null and m.priceText != ''}"
+                   th:text="${
+                     #strings.replace(
+                       #strings.replace(m.priceText, '（税込）', ''),
+                       '(税込)', ''
+                     )
+                   }">¥0</div>
+            </div>
+          </a>
+        </article>
+
+        <!-- ✅ 일반 카드 -->
+        <article th:if="${m.category == null or m.category.name() != 'DRINK'}"
+                 class="menu-card"
+                 th:attr="data-cat=${m.category != null ? #strings.toLowerCase(m.category.name()) : 'single'}">
+
+          <a class="menu-card-link" th:href="@{/menu/{id}(id=${m.id})}" aria-label="メニュー詳細へ">
+            <div class="menu-thumb">
+              <img th:src="${(m.imageUrl != null and m.imageUrl != '') ? m.imageUrl : '/images/menu/no-image.png'}"
+                   th:alt="${m.name}">
+            </div>
+
+            <div class="menu-info">
+              <div class="menu-title-row">
+                <h3 class="menu-title" th:text="${m.name}">メニュー名</h3>
+              </div>
+
+              <!-- ✅✅ 리스트에서는 （税込） 표기 제거 (DB 값은 그대로) -->
+              <div class="menu-price"
+                   th:if="${m.priceText != null and m.priceText != ''}"
+                   th:text="${
+                     #strings.replace(
+                       #strings.replace(m.priceText, '（税込）', ''),
+                       '(税込)', ''
+                     )
+                   }">¥0</div>
+            </div>
+          </a>
+        </article>
+
+      </th:block>
+    </th:block>
+<!-- ✅ DRINK 샘플 -->
+      <!-- ✅ DRINK 샘플 -->
+<article class="menu-card menu-card--drink" data-cat="drink">
+  <a class="menu-card-link" href="#" aria-label="メニュー詳細へ">
+    <div class="menu-thumb menu-thumb--drink">
+      <img src="/images/menu/drink menu.png" alt="ドリンクメニュー">
+    </div>
+  </a>
+</article>
+    <!-- ✅ DB 비었을 때만 샘플 -->
+    <th:block th:if="${menus == null or #lists.isEmpty(menus)}">
+
+      <!-- ✅ 일반 샘플 -->
+      <article class="menu-card" data-cat="main">
+        <a class="menu-card-link" href="#" aria-label="メニュー詳細へ">
+          <div class="menu-thumb">
+            <img src="/images/menu/buldak.png" alt="ブルダック炒め麺（辛口）">
+          </div>
+          <div class="menu-info">
+            <div class="menu-title-row">
+              <h3 class="menu-title">ブルダック炒め麺（辛口）</h3>
+              <span class="menu-title-tag">辛口</span>
+            </div>
+            <!-- ✅ 샘플도 리스트에서는 税込 제거 -->
+            <div class="menu-price">¥980</div>
+          </div>
+        </a>
+      </article>
+
+      
+
+    </th:block>
+
+  </div>
+</section>
+
+<footer>
+  © 酒屋 シオン
+</footer>
+
+<script>
+(function () {
+  const hour = new Date().getHours();
+  const body = document.getElementById("time-theme");
+
+  if (hour >= 18 && hour < 21) {
+    body.classList.add("evening");
+  } else if (hour >= 21 || hour < 5) {
+    body.classList.add("night");
+  }
+})();
+</script>
+
+<script>
+(function () {
+  const tabs = document.querySelectorAll(".menu-tabs .tab");
+  if (!tabs.length) return;
+
+  function applyFilter(filter){
+    const f = (filter || "").trim();
+    const liveCards = document.querySelectorAll(".menu-grid .menu-card");
+
+    liveCards.forEach(card => {
+      const cat = (card.getAttribute("data-cat") || "").trim();
+
+      // ✅ 전체(all)에서는 drink 제외 (기존 유지)
+      const show = (f === "all")
+        ? (cat !== "drink")
+        : (cat === f);
+
+      card.classList.toggle("is-hidden", !show);
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+      });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+
+      applyFilter(tab.dataset.filter);
+    });
+  });
+
+  const activeTab = document.querySelector(".menu-tabs .tab.active");
+  applyFilter(activeTab ? activeTab.dataset.filter : "all");
+})();
+</script>
+
+</div>
+</body>
+</html>

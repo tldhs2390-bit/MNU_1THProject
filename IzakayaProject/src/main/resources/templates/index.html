@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>酒屋 紫 | Izakaya SION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body id="time-theme">
+
+<!-- ===============================
+     HEADER
+================================ -->
+<header class="top-bar wood-header">
+    <div class="logo brand-area">
+        <!-- 로고 문양 -->
+        <img src="/images/logo-brand.png"
+             alt="酒屋 シオン ロゴ"
+             class="brand-logo neon-logo">
+
+        <!-- 네온 텍스트 -->
+        <img src="/images/logo-sion-neon.svg"
+             alt="酒屋 シオン"
+             class="brand-text">
+    </div>
+
+    <nav>
+	  <a href="/menu">メニュー</a>
+	  <a href="/service/map">サービス</a>
+	  <a href="#campaign">キャンペーン</a>
+	</nav>
+
+    <!-- 🔥 처마 아래 골목 그림자 -->
+    <div class="wood-header-shadow"></div>
+</header>
+
+<!-- ===============================
+     HERO
+================================ -->
+<section class="hero wood-bg">
+
+    <!-- 左 ちょうちん -->
+    <div class="lantern">
+        <div class="cap-top"></div>
+        <span>刺身</span>
+    </div>
+
+    <div class="hero-text">
+        <h1>
+            今夜も一杯、<br>
+            静かな灯りの下で
+        </h1>
+    </div>
+
+    <!-- 右 ちょうちん -->
+    <div class="lantern">
+        <div class="cap-top"></div>
+        <span>酒</span>
+    </div>
+
+</section>
+
+<!-- ===============================
+     MENU
+================================ -->
+<section class="menu-section wood-bg">
+    <h2>本日のおすすめ</h2>
+
+    <div class="sign-row">
+
+        <div class="sign swing popular">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>刺身盛り合わせ（当店名物）</p>
+                    <small>2人前 ¥2,980 / 3〜4人前 ¥4,980</small>
+                    <strong>¥2,980〜</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign swing delay1">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>ミルフィーユ鍋</p>
+                    <small>名物</small>
+                    <strong>¥1,680</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign swing delay2">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>もつ鍋（モツナベ）</p>
+                    <small>定番</small>
+                    <strong>¥1,680</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign swing delay3">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>牛たたき（ぎゅうたたき）</p>
+                    <small>人気</small>
+                    <strong>¥2,280</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign swing delay4">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>チキン南蛮</p>
+                    <small>人気</small>
+                    <strong>¥980</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign swing delay5">
+            <div class="rope"></div>
+            <div class="board">
+                <div class="board-inner">
+                    <p>明太子クリームうどん</p>
+                    <small>〆</small>
+                    <strong>¥980</strong>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===============================
+     FOOTER
+================================ -->
+<footer>
+    © 酒屋 シオン
+</footer>
+
+<!-- ===============================
+     TIME THEME SCRIPT
+================================ -->
+<script>
+(function () {
+    const hour = new Date().getHours();
+    const body = document.getElementById("time-theme");
+
+    if (hour >= 18 && hour < 21) {
+        body.classList.add("evening");
+    } else if (hour >= 21 || hour < 5) {
+        body.classList.add("night");
+    }
+})();
+</script>
+
+</body>
+</html>

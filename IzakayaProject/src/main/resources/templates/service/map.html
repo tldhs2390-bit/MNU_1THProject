@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>サービス | 店舗地図</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- index.css 그대로 사용 -->
+  <link rel="stylesheet" href="/css/index.css">
+
+  <!-- map 전용 스타일 -->
+  <style>
+    /* ===============================
+       MAP PAGE LAYOUT
+    ================================ */
+    .map-section {
+        min-height: calc(100vh - 72px);
+        padding: 90px 60px 40px;
+    }
+
+    .map-section h2 {
+        margin-bottom: 28px;
+        letter-spacing: .15em;
+    }
+
+    .map-layout {
+        display: flex;
+        gap: 36px;
+        align-items: flex-start;
+    }
+
+    /* ===============================
+       LEFT : STORE PANEL (서비스 카드 톤)
+    ================================ */
+    .store-panel {
+        width: 320px;
+    }
+
+    .store-board {
+        background: #fdf7eb;
+        border: 6px solid #4a3524;
+        box-shadow: 0 18px 26px rgba(0,0,0,.35);
+    }
+
+    .store-board .board-inner {
+        padding: 22px 18px 26px;
+    }
+
+    .store-title {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: .15em;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    /* 검색창 (완전 흰색) */
+    #storeSearch {
+        width: 100%;
+        height: 38px;
+        margin-bottom: 14px;
+        padding: 6px 10px;
+        font-size: 15px;
+        font-family: inherit;
+        background: #ffffff;
+        border: 1px solid #bbb;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.15);
+    }
+
+    #storeSearch::placeholder {
+        color: #777;
+    }
+
+    .store-board ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .store-board li {
+        margin: 10px 0;
+        font-size: 18px;
+    }
+
+    .store-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+        color: #2b1f14;
+    }
+
+    .store-btn:hover {
+        text-decoration: underline;
+    }
+
+    /* ===============================
+       RIGHT : MAP
+    ================================ */
+    .map-box {
+        flex: 1;
+    }
+
+    #map {
+        width: 100%;
+        height: 620px;
+        border: 6px solid #4a3524;
+        box-shadow: 0 18px 26px rgba(0,0,0,.35);
+    }
+  </style>
+</head>
+
+<body id="time-theme">
+
+<!-- ===============================
+     HEADER
+================================ -->
+<header class="top-bar wood-header">
+  <div class="logo brand-area">
+    <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
+    <img src="/images/logo-sion-neon.svg" class="brand-text" alt="">
+  </div>
+
+  <nav>
+    <a href="/">ホーム</a>
+    <a href="/service">サービス</a>
+    <a href="#">キャンペーン</a>
+  </nav>
+
+  <div class="wood-header-shadow"></div>
+</header>
+
+<!-- ===============================
+     MAP CONTENT
+================================ -->
+<section class="wood-bg map-section">
+
+  <h2>店舗一覧 / 地図</h2>
+
+  <div class="map-layout">
+
+    <!-- LEFT : STORE LIST -->
+    <div class="store-panel">
+      <div class="board store-board">
+        <div class="board-inner">
+
+          <div class="store-title">店舗</div>
+
+          <input type="text"
+                 id="storeSearch"
+                 placeholder="店舗・都市で検索">
+
+          <div th:if="${#lists.isEmpty(stores)}">
+            データがありません。
+          </div>
+
+          <ul th:if="${!#lists.isEmpty(stores)}">
+            <li th:each="s : ${stores}">
+              <span th:text="${s.city}">東京</span>&nbsp;
+              <button type="button"
+                      class="store-btn"
+                      th:attr="data-id=${s.id},
+                               data-city=${s.city},
+                               data-name=${s.name},
+                               data-lat=${s.lat},
+                               data-lng=${s.lng}">
+                <span th:text="${s.name}">銀座店</span>
+              </button>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT : MAP -->
+    <div class="map-box">
+      <div id="map"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===============================
+     FOOTER
+================================ -->
+<footer>
+  © 酒屋 シオン
+</footer>
+
+<!-- ===============================
+     MAP SCRIPT
+================================ -->
+<script th:inline="javascript">
+  const center = {
+    lat: /*[[${centerLat}]]*/ 35.6723723,
+    lng: /*[[${centerLng}]]*/ 139.7654357
+  };
+
+  let map;
+  let infoWindow;
+  const markersById = new Map();
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: center,
+      zoom: 11
+    });
+
+    infoWindow = new google.maps.InfoWindow();
+
+    document.querySelectorAll(".store-btn").forEach(btn => {
+      const id = btn.dataset.id;
+      const city = btn.dataset.city || "";
+      const name = btn.dataset.name || "";
+      const lat = Number(btn.dataset.lat);
+      const lng = Number(btn.dataset.lng);
+
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map,
+        title: city + " " + name
+      });
+
+      markersById.set(String(id), marker);
+
+      btn.addEventListener("click", () => {
+        map.panTo({ lat, lng });
+        map.setZoom(16);
+        infoWindow.setContent(
+          "<b>" + name + "</b><br>" + city
+        );
+        infoWindow.open(map, marker);
+      });
+    });
+  }
+</script>
+
+<script th:src="'https://maps.googleapis.com/maps/api/js?key='
+  + ${@environment.getProperty('google.maps.key')}
+  + '&callback=initMap'"
+  async defer></script>
+
+<!-- ===============================
+     TIME THEME
+================================ -->
+<script>
+(function () {
+    const hour = new Date().getHours();
+    const body = document.getElementById("time-theme");
+    if (hour >= 18 && hour < 21) body.classList.add("evening");
+    else if (hour >= 21 || hour < 5) body.classList.add("night");
+})();
+</script>
+
+</body>
+</html>

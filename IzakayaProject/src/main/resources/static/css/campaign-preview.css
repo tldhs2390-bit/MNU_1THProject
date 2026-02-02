@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+    font-family: 'Shippori Mincho', serif;
+    color: #2b1f14;
+}
+
+/* ===== HEADER 그대로 ===== */
+.wood-header {
+    background: linear-gradient(#4b3a28, #3a2b1e);
+}
+
+.top-bar {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    color: #fff;
+}
+
+.logo span {
+    font-family: 'Yuji Syuku', serif;
+    font-size: 24px;
+    letter-spacing: 4px;
+}
+
+/* ===== 배경 ===== */
+.wood-bg {
+    min-height: calc(100vh - 72px);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,248,232,0.95) 0%,
+            rgba(220,190,150,0.92) 55%,
+            rgba(120,90,60,0.95) 100%
+        );
+    display: flex;
+    justify-content: center;
+    padding-top: 160px;
+}
+
+/* ===== 이자카야 벽 ===== */
+.page-frame {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.page-surface {
+    width: 420px;
+    background:
+        linear-gradient(
+            180deg,
+            #f7edd6 0%,
+            #e2c79a 100%
+        );
+    border: 8px solid #4a321f;
+    box-shadow: 0 20px 40px rgba(0,0,0,.55);
+    padding: 48px 32px 56px;
+    text-align: center;
+    position: relative;
+}
+
+/* 걸려있는 느낌 */
+.page-surface::before,
+.page-surface::after {
+    content:"";
+    position:absolute;
+    top:-18px;
+    width:12px;
+    height:12px;
+    background:#2b1c12;
+    border-radius:50%;
+}
+
+.page-surface::before { left:90px; }
+.page-surface::after  { right:90px; }
+
+/* ===== 콘텐츠 ===== */
+.page-title {
+    font-family: 'Yuji Syuku', serif;
+    font-size: 18px;
+    letter-spacing: .3em;
+    margin-bottom: 28px;
+}
+
+.poster-box {
+    height: 260px;
+    background: rgba(0,0,0,.08);
+    border: 3px solid #3a2a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    font-size: 14px;
+    letter-spacing: .2em;
+}
+
+.page-text {
+    font-size: 14px;
+    line-height: 2;
+    margin-bottom: 32px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #f2c94c;
+    color: #3a2a1a;
+    text-decoration: none;
+    letter-spacing: .15em;
+    font-weight: bold;
+}
