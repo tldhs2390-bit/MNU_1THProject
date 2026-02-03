@@ -1,0 +1,250 @@
+@charset "UTF-8";
+
+/* ===============================
+   BASE
+================================ */
+body {
+    margin: 0;
+    font-family: 'Shippori Mincho', serif;
+    background: #120c08;
+    color: #f5efe6;
+}
+
+/* ===============================
+   CAMPAIGN SPACE
+================================ */
+.campaign-space {
+    position: relative;
+    min-height: calc(100vh - 72px);
+    overflow: hidden;
+}
+
+.campaign-space::after {
+    content: none;
+}
+
+/* ===============================
+   LIGHT (실내 조명)
+================================ */
+@keyframes warmGlow {
+    0%   { opacity: 0.18; }
+    50%  { opacity: 0.34; }
+    100% { opacity: 0.18; }
+}
+
+.light-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse at 45% 0%,
+            rgba(255,210,140,0.65) 0%,
+            rgba(255,175,90,0.35) 35%,
+            rgba(20,12,8,0.96) 100%
+        );
+    animation: warmGlow 18s ease-in-out infinite;
+}
+
+/* ===============================
+   WALL (실내 공간)
+================================ */
+.campaign-wall {
+    position: relative;
+    z-index: 2;
+    padding: 0;                /* 🔥 하단 여백 제거 */
+    background: transparent;   /* 🔥 옛 배경 제거 */
+}
+
+/* ===============================
+   CEILING GRID (🔥 진짜 천장 11칸)
+================================ */
+.ceiling-grid {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    height: 240px;
+    overflow: visible; /* 🔥 줄 잘림 방지 */
+}
+
+/* ===============================
+   CEILING SLOT = 나무 칸
+================================ */
+.ceiling-slot {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #2b1a10 0%,
+            #1e120a 70%,
+            #160d07 100%
+        );
+
+    box-shadow:
+        inset 0 -16px 22px rgba(0,0,0,0.55),
+        inset 0 6px 10px rgba(255,220,180,0.06);
+
+    border-left: 1px solid rgba(255,255,255,0.03);
+}
+
+/* ===============================
+   연한 나무 칸 (초친 칸)
+================================ */
+.ceiling-slot:nth-child(2),
+.ceiling-slot:nth-child(4),
+.ceiling-slot:nth-child(6),
+.ceiling-slot:nth-child(8),
+.ceiling-slot:nth-child(10) {
+    background:
+        linear-gradient(
+            to bottom,
+            #4a3320 0%,
+            #362316 70%,
+            #2a1a10 100%
+        );
+
+    box-shadow:
+        inset 0 -14px 22px rgba(0,0,0,0.45),
+        inset 0 6px 12px rgba(255,220,170,0.12);
+}
+
+/* ===============================
+   천장 봉 (전선/봉)
+================================ */
+.ceiling-grid::before {
+    content: "";
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(
+        to bottom,
+        #1a120c,
+        #0e0a06
+    );
+    box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    z-index: 5;
+}
+
+/* ===============================
+   초친 칸 은은한 조명
+================================ */
+.ceiling-slot::after {
+    content: "";
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    width: 180px;
+    height: 300px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255,190,120,0.38),
+        rgba(255,170,90,0.14),
+        transparent 72%
+    );
+    pointer-events: none;
+}
+
+/* ===============================
+   LANTERN HANGER
+================================ */
+.lantern-hanger {
+    margin-top: 34px; /* 🔥 위로 올림 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: top center;
+}
+
+/* 고리 */
+.lantern-hanger .metal-hook {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #777, #222);
+    box-shadow: 0 2px 4px rgba(0,0,0,.85);
+    margin-bottom: 4px;
+}
+
+/* ===============================
+   LANTERN
+================================ */
+@keyframes lanternSwing {
+    0%   { transform: rotate(0deg); }
+    25%  { transform: rotate(1.2deg); }
+    50%  { transform: rotate(0deg); }
+    75%  { transform: rotate(-1.2deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.lantern {
+    width: 110px;
+    transform-origin: top center;
+    animation: lanternSwing 9.5s ease-in-out infinite;
+    filter:
+        drop-shadow(0 0 18px rgba(255,185,110,0.55))
+        drop-shadow(0 28px 36px rgba(0,0,0,.8));
+}
+
+/* ===============================
+   POSTER WALL (유지)
+================================ */
+.poster-wall {
+    position: relative;
+    max-width: 1100px;
+    margin: 80px auto 0;
+    padding: 40px 20px;
+    height: 720px;
+}
+
+/* ===============================
+   POSTER BASE
+================================ */
+.poster {
+    position: absolute;
+    width: 320px;
+    background: #f6f1e6;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 0 14px 28px rgba(0,0,0,.55);
+
+    -webkit-mask-image:
+        radial-gradient(ellipse at center, #000 58%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0) 100%),
+        repeating-radial-gradient(circle, rgba(0,0,0,1) 0 3px, rgba(0,0,0,0.85) 5px);
+    mask-image:
+        radial-gradient(ellipse at center, #000 58%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0) 100%),
+        repeating-radial-gradient(circle, rgba(0,0,0,1) 0 3px, rgba(0,0,0,0.85) 5px);
+}
+
+.poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ===============================
+   BRUSH TEXT
+================================ */
+.brush-text {
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #2b1a10;
+    text-shadow:
+        1px 1px 0 rgba(255,240,220,0.6),
+        -1px -1px 0 rgba(80,40,20,0.4);
+    transform: rotate(-0.6deg);
+}
+
+.poster .brush-text {
+    background: linear-gradient(to bottom, #3a1f12, #1e0f08);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

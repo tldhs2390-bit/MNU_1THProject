@@ -35,8 +35,7 @@ dependencies {
 
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
-    // ✅ Mac DNS warning 제거 (버전 고정 X 권장)
-    runtimeOnly "io.netty:netty-resolver-dns-native-macos:osx-aarch_64"
+   
 
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 

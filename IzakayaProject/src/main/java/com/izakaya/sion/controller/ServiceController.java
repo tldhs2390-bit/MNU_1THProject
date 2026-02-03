@@ -1,16 +1,14 @@
 package com.izakaya.sion.controller;
 
-import java.util.List;
-
+import com.izakaya.sion.entity.StoreEntity;
+import com.izakaya.sion.repository.StoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.izakaya.sion.entity.StoreEntity;
-import com.izakaya.sion.repository.StoreRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,7 +18,7 @@ public class ServiceController {
 
     @GetMapping("/service")
     public String service() {
-        return "Service/service"; // templates/service.html
+        return "service/service"; // templates/service.html
     }
 
      //전체: /service/map
@@ -54,6 +52,10 @@ public class ServiceController {
         model.addAttribute("centerLat", centerLat);
         model.addAttribute("centerLng", centerLng);
 
-        return "Service/map"; // templates/service/map.html
+        return "service/map"; // templates/service/map.html
+    }
+    @GetMapping("/service/delivery")
+    public String delivery() {
+        return "service/delivery";
     }
 }

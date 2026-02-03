@@ -1,10 +1,9 @@
 package com.izakaya.sion.repository;
 
-import java.util.List;
-
+import com.izakaya.sion.entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.izakaya.sion.entity.StoreEntity;
+import java.util.List;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 

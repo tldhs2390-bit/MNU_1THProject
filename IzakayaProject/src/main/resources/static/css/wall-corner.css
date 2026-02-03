@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+/* ===============================
+   CORNER WALL (L-SHAPE)
+   술장 아래 코너 벽 전용
+================================ */
+
+/* 전체 벽 컨테이너 */
+.corner-wall {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+
+    /* 🔧 하단 내려오는 느낌 최소화 */
+    padding: 130px 0 40px;
+
+    background: #2a1c12;
+    overflow: hidden;
+}
+
+/* 공통 벽 */
+.corner-wall .wall {
+    position: relative;
+    width: 46%;
+
+    /* 🔧 벽 높이 축소 */
+    min-height: 620px;
+
+    background:
+        /* 상단 조명 */
+        linear-gradient(
+            180deg,
+            rgba(255,220,160,0.22) 0%,
+            rgba(0,0,0,0.32) 100%
+        ),
+        /* 목조 판자 */
+        repeating-linear-gradient(
+            90deg,
+            #3b2718 0px,
+            #3b2718 44px,
+            #2f1e12 44px,
+            #2f1e12 88px
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.04),
+        /* 🔧 하단 음영 강도/범위 축소 */
+        inset 0 -20px 30px rgba(0,0,0,0.28);
+}
+
+/* 좌측 벽 */
+.corner-wall .wall.left {
+    transform: perspective(1200px) rotateY(10deg);
+    transform-origin: right center;
+}
+
+/* 우측 벽 */
+.corner-wall .wall.right {
+    transform: perspective(1200px) rotateY(-10deg);
+    transform-origin: left center;
+}
+
+/* 🟤 코너 공기감 (벽 가장자리 음영) */
+.corner-wall .wall.left::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(
+        to left,
+        rgba(0,0,0,0.42),
+        rgba(0,0,0,0)
+    );
+    pointer-events: none;
+}
+
+.corner-wall .wall.right::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.42),
+        rgba(0,0,0,0)
+    );
+    pointer-events: none;
+}
+
+/* 🌕 상단 조명만 강조 (하단 제거) */
+.corner-wall::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    /* 🔧 상단까지만 조명 */
+    height: 240px;
+
+    background:
+        radial-gradient(
+            ellipse at center top,
+            rgba(255,210,150,0.22) 0%,
+            rgba(0,0,0,0.55) 100%
+        );
+
+    pointer-events: none;
+    z-index: 2;
+}

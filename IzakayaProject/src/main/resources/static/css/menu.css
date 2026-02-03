@@ -381,4 +381,12 @@ body#time-theme .menu-page-wrap .menu-tabs button.tab:focus{
 @media (max-width:480px){
   .chip{ font-size:0.95rem; padding:5px 11px; }
 }
+/* 메인(index) 화면에서만 네온 텍스트 크게 */
+.home .brand-text {
+    height: 60px;   /* 66~70px 중 취향 */
+}
 
+/* (선택) 문양 로고도 함께 키우면 밸런스 좋아짐 */
+.home .neon-logo {
+    height: 52px;
+}

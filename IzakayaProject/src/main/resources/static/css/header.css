@@ -1,0 +1,170 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: 'Shippori Mincho', serif;
+    background: #f5f1e7;
+    color: #2b1f14;
+}
+
+/* ===============================
+   HEADER — 木造庇 + 梁 + 日本瓦
+================================ */
+.wood-header {
+    position: relative;
+    background: linear-gradient(#4b3a28, #3a2b1e);
+    z-index: 10;
+}
+
+/* 🪵 얇은 목재 보(梁) — 기와 바로 위 */
+.wood-header::after {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-2px;
+    height:6px;
+    z-index:11;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #5a3f2b 0%,
+            #3f2b1d 50%,
+            #2b1c12 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.15),
+        inset 0 -1px 2px rgba(0,0,0,.45),
+        0 2px 3px rgba(0,0,0,.35);
+}
+
+/* ===============================
+   KAWARA (日本瓦) STRIP
+================================ */
+.wood-header::before {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-22px;
+    height:22px;
+    z-index:9;
+
+    background:
+        /* 기와 굴곡 */
+        repeating-linear-gradient(
+            90deg,
+            #3a3a3a 0px,
+            #3a3a3a 28px,
+            #2f2f2f 28px,
+            #2f2f2f 56px
+        ),
+        /* 상단 하이라이트 */
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,.18),
+            rgba(0,0,0,.45)
+        );
+
+    box-shadow:
+        inset 0 3px 3px rgba(255,255,255,.15),
+        inset 0 -6px 8px rgba(0,0,0,.55),
+        0 6px 10px rgba(0,0,0,.35);
+}
+
+/* 🔥 기와 아래 자연스러운 그림자 */
+.wood-header-shadow {
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-28px;
+    height:28px;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.35),
+        rgba(0,0,0,0)
+    );
+    pointer-events:none;
+    z-index:8;
+}
+
+/* ===============================
+   TOP BAR
+================================ */
+.top-bar {
+    height:72px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    color:#fff;
+}
+
+.logo span {
+    font-family:'Yuji Syuku', serif;
+    font-size:26px;
+    letter-spacing:4px;
+    color:#fff;
+}
+
+.logo img {
+    height:48px;
+    display:block;
+}
+
+.top-bar nav a {
+    margin-left:28px;
+    font-family:'Yuji Syuku', serif;
+    font-size:18px;
+    letter-spacing:3px;
+    color:#fff;
+    text-decoration:none;
+}
+
+/* ===============================
+   NEON BRAND LOGO
+================================ */
+
+/* 로고 문양 (PNG) */
+.neon-logo {
+    height:52px;
+
+    filter:
+        drop-shadow(0 0 4px #ff4fa3)
+        drop-shadow(0 0 10px #ff4fa3)
+        drop-shadow(0 0 18px rgba(255,79,163,0.9));
+
+    animation: neonFlickerLogo 3.2s infinite;
+}
+
+/* 네온 텍스트 SVG (조금 더 강하게) */
+.brand-text {
+    height:60px;
+    animation: neonFlickerText 3.2s infinite;
+}
+
+/* 로고 + 텍스트 정렬 */
+.brand-area {
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
+@keyframes neonFlickerLogo {
+    0%, 100% { opacity:1; }
+    40% { opacity:.85; }
+    55% { opacity:.6; }
+    70% { opacity:.95; }
+}
+
+@keyframes neonFlickerText {
+    0%, 100% { opacity:1; }
+    45% { opacity:.9; }
+    60% { opacity:.7; }
+    75% { opacity:.95; }
+}

@@ -5,17 +5,46 @@
   <title>サービス | 店舗地図</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- index.css 그대로 사용 -->
   <link rel="stylesheet" href="/css/index.css">
 
-  <!-- map 전용 스타일 -->
   <style>
+    /* ===== BREADCRUMB (DELIVERY STYLE) ===== */
+    .breadcrumb {
+        position: absolute;
+        top: 92px;            /* header + shadow 기준 */
+        left: 0;
+        width: 100%;
+        padding: 12px 60px;
+		margin: 4px auto 0;
+        background: transparent;
+        z-index: 60;
+
+        font-size: 17px;
+        color: #111;
+    }
+
+    .breadcrumb a {
+        color: #111;
+        text-decoration: none;
+        opacity: 0.6;
+    }
+
+    .breadcrumb a:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+    .breadcrumb .current {
+        color: #111;
+        font-weight: 600;
+    }
+
     /* ===============================
        MAP PAGE LAYOUT
     ================================ */
     .map-section {
         min-height: calc(100vh - 72px);
-        padding: 90px 60px 40px;
+        padding: 120px 60px 40px; /* breadcrumb 겹침 방지 */
     }
 
     .map-section h2 {
@@ -29,9 +58,7 @@
         align-items: flex-start;
     }
 
-    /* ===============================
-       LEFT : STORE PANEL (서비스 카드 톤)
-    ================================ */
+    /* LEFT */
     .store-panel {
         width: 320px;
     }
@@ -47,28 +74,22 @@
     }
 
     .store-title {
-        font-size: 18px;
+        font-size: 25px;
         font-weight: 700;
         letter-spacing: .15em;
         margin-bottom: 12px;
         text-align: center;
     }
 
-    /* 검색창 (완전 흰색) */
     #storeSearch {
         width: 100%;
         height: 38px;
         margin-bottom: 14px;
         padding: 6px 10px;
         font-size: 15px;
-        font-family: inherit;
-        background: #ffffff;
+        background: #fff;
         border: 1px solid #bbb;
         box-shadow: inset 0 1px 2px rgba(0,0,0,.15);
-    }
-
-    #storeSearch::placeholder {
-        color: #777;
     }
 
     .store-board ul {
@@ -84,7 +105,6 @@
     .store-btn {
         background: none;
         border: none;
-        padding: 0;
         cursor: pointer;
         font-family: inherit;
         font-size: 14px;
@@ -95,9 +115,7 @@
         text-decoration: underline;
     }
 
-    /* ===============================
-       RIGHT : MAP
-    ================================ */
+    /* RIGHT */
     .map-box {
         flex: 1;
     }
@@ -113,9 +131,7 @@
 
 <body id="time-theme">
 
-<!-- ===============================
-     HEADER
-================================ -->
+<!-- HEADER -->
 <header class="top-bar wood-header">
   <div class="logo brand-area">
     <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
@@ -131,25 +147,30 @@
   <div class="wood-header-shadow"></div>
 </header>
 
-<!-- ===============================
-     MAP CONTENT
-================================ -->
+<!-- BREADCRUMB (DELIVERY STYLE) -->
+<div class="breadcrumb">
+  <a href="/">ホーム</a>
+  <span>/</span>
+  <a href="/service">サービス</a>
+  <span>/</span>
+  <span class="current">店舗地図</span>
+</div>
+
+<!-- MAP CONTENT -->
 <section class="wood-bg map-section">
 
   <h2>店舗一覧 / 地図</h2>
 
   <div class="map-layout">
 
-    <!-- LEFT : STORE LIST -->
+    <!-- LEFT -->
     <div class="store-panel">
       <div class="board store-board">
         <div class="board-inner">
 
           <div class="store-title">店舗</div>
 
-          <input type="text"
-                 id="storeSearch"
-                 placeholder="店舗・都市で検索">
+          <input type="text" id="storeSearch" placeholder="店舗・都市で検索">
 
           <div th:if="${#lists.isEmpty(stores)}">
             データがありません。
@@ -174,7 +195,7 @@
       </div>
     </div>
 
-    <!-- RIGHT : MAP -->
+    <!-- RIGHT -->
     <div class="map-box">
       <div id="map"></div>
     </div>
@@ -182,40 +203,29 @@
   </div>
 </section>
 
-<!-- ===============================
-     FOOTER
-================================ -->
-<footer>
-  © 酒屋 シオン
-</footer>
+<!-- FOOTER -->
+<footer>© 酒屋 シオン</footer>
 
-<!-- ===============================
-     MAP SCRIPT
-================================ -->
+<!-- MAP SCRIPT -->
 <script th:inline="javascript">
   const center = {
     lat: /*[[${centerLat}]]*/ 35.6723723,
     lng: /*[[${centerLng}]]*/ 139.7654357
   };
 
-  let map;
-  let infoWindow;
-  const markersById = new Map();
-
   function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: center,
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center,
       zoom: 11
     });
 
-    infoWindow = new google.maps.InfoWindow();
+    const infoWindow = new google.maps.InfoWindow();
 
     document.querySelectorAll(".store-btn").forEach(btn => {
-      const id = btn.dataset.id;
-      const city = btn.dataset.city || "";
-      const name = btn.dataset.name || "";
       const lat = Number(btn.dataset.lat);
       const lng = Number(btn.dataset.lng);
+      const city = btn.dataset.city || "";
+      const name = btn.dataset.name || "";
 
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
@@ -225,14 +235,10 @@
         title: city + " " + name
       });
 
-      markersById.set(String(id), marker);
-
       btn.addEventListener("click", () => {
         map.panTo({ lat, lng });
         map.setZoom(16);
-        infoWindow.setContent(
-          "<b>" + name + "</b><br>" + city
-        );
+        infoWindow.setContent("<b>" + name + "</b><br>" + city);
         infoWindow.open(map, marker);
       });
     });
@@ -244,17 +250,41 @@
   + '&callback=initMap'"
   async defer></script>
 
-<!-- ===============================
-     TIME THEME
-================================ -->
 <script>
 (function () {
-    const hour = new Date().getHours();
-    const body = document.getElementById("time-theme");
-    if (hour >= 18 && hour < 21) body.classList.add("evening");
-    else if (hour >= 21 || hour < 5) body.classList.add("night");
+  const h = new Date().getHours();
+  if (h >= 18 && h < 21) document.body.classList.add("evening");
+  else if (h >= 21 || h < 5) document.body.classList.add("night");
 })();
+//test
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('storeSearch');
+  if (!input) return;
 
+  const listItems = Array.from(document.querySelectorAll('.store-board ul li'));
+
+  const normalize = (s) => (s || '')
+    .toString()
+    .trim()
+    .toLowerCase();
+
+  const applyFilter = () => {
+    const q = normalize(input.value);
+
+    listItems.forEach(li => {
+      const btn = li.querySelector('.store-btn');
+      const city = normalize(btn?.dataset.city);
+      const name = normalize(btn?.dataset.name);
+
+      const hit = !q || city.includes(q) || name.includes(q);
+      li.style.display = hit ? '' : 'none';
+    });
+  };
+
+  input.addEventListener('input', applyFilter);
+});
+</script>
 </body>
 </html>

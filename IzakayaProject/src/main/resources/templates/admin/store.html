@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>店舗登録 | Admin</title>
+
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/admin/admin.css" />
+  <link rel="stylesheet" href="/css/admin/admin-store.css" />
+
+  <!-- ✅ CSRF(자동 로그아웃 POST에 필요) -->
+  <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}"/>
+  <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}"/>
+</head>
+
+<body class="admin admin-store">
+
+<header class="admin-topbar">
+  <div class="admin-topbar__inner admin-topbar__inner--center">
+    <a href="/admin/main" class="admin-topbar__brand">
+      居酒屋シオン(管理者)
+    </a>
+  </div>
+</header>
+
+<main class="admin-dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__logo">
+      <a href="/" aria-label="トップページへ">
+        <img src="/images/logo-brand.png" alt="SION" class="admin-logo">
+      </a>
+    </div>
+
+    <div class="admin-login-title">管理メニュー</div>
+
+    <div class="admin-side-links">
+      <a href="/admin/main" class="admin-side-link">ダッシュボード</a>
+      <a href="/admin/store" class="admin-side-link active">店舗登録</a>
+      <a href="/admin/store/list" class="admin-side-link">店舗管理</a>
+    </div>
+
+    <form class="admin-login"
+          sec:authorize="!isAuthenticated()"
+          method="post"
+          action="/admin/login">
+      <div class="admin-login-title">管理者ログイン</div>
+      <input type="text" name="username" placeholder="管理者ID" required />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <button type="submit">ログイン</button>
+    </form>
+
+    <div class="admin-login admin-session-box"
+         sec:authorize="isAuthenticated()">
+      <div class="admin-login-title">管理者ログインで接続中</div>
+
+      <!-- ✅ 타이머 UI는 숨겨져 있어도 OK (JS로 10분 후 자동 로그아웃만 수행) -->
+      <div class="admin-session-timer" aria-hidden="true">
+        残り時間
+        <strong>
+          <span id="timerMin">10</span>分
+          <span id="timerSec">00</span>秒
+        </strong>
+      </div>
+
+      <form method="post" action="/admin/logout">
+        <button type="submit">ログアウト</button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <section class="admin-main" sec:authorize="isAuthenticated()">
+
+    <div class="admin-page admin-store-page">
+
+      <div class="store-page-head">
+        <h2>店舗登録</h2>
+        <a href="/admin/main" class="admin-back-btn">ダッシュボード</a>
+      </div>
+
+      <div class="store-wrap">
+
+        <!-- LEFT: 등록/수정 -->
+        <div class="box">
+          <h3 class="box-title">新規店舗 / 更新</h3>
+
+          <form id="storeForm" method="post" action="/admin/store/save" th:object="${form}">
+
+            <!-- ✅ 수정용 id (수정 모드일 때만 값이 들어감) -->
+            <input type="hidden" name="id" id="storeId">
+
+            <!-- ✅ 최종 전송용 city: 기존 city 필드 유지 -->
+            <input type="hidden" th:field="*{city}" id="cityHidden">
+
+            <div class="form-row">
+              <label>都市</label>
+
+              <select id="citySelect" required>
+                <option value="" disabled selected>選択してください</option>
+                <option value="TOKYO">TOKYO</option>
+                <option value="OSAKA">OSAKA</option>
+                <option value="FUKUOKA">FUKUOKA</option>
+                <option value="__CUSTOM__">直接入力</option>
+              </select>
+
+              <div id="cityCustomWrap" class="city-custom-wrap">
+                <input type="text"
+                       id="cityCustomInput"
+                       placeholder="例) NAGOYA"
+                       autocomplete="off"
+                       inputmode="text">
+                <div class="subhelp">※ 英字は自動で大文字になります（記号は除外）</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label>店舗名 (例: 銀座店 / 新宿店)</label>
+              <input type="text" th:field="*{name}" id="nameInput" placeholder="銀座店" required>
+            </div>
+
+            <div class="form-row">
+              <label>緯度 (lat)</label>
+              <input type="text" th:field="*{lat}" id="latInput" placeholder="35.6723723" required inputmode="decimal">
+              <div id="latError" class="error-text"></div>
+            </div>
+
+            <div class="form-row">
+              <label>経度 (lng)</label>
+              <input type="text" th:field="*{lng}" id="lngInput" placeholder="139.7654357" required inputmode="decimal">
+              <div id="lngError" class="error-text"></div>
+            </div>
+
+            <div class="hint">
+              ・Google Mapsで座標を確認して入力してください。<br>
+              ・登録/更新後、ユーザーページの「店舗一覧/地図」に反映されます。
+            </div>
+
+            <div class="form-actions">
+              <span id="editBadge" class="edit-mode-badge" aria-live="polite">
+                編集モード：<span id="editBadgeName"></span>
+              </span>
+
+              <button type="submit" id="submitBtn" class="btn btn-primary">登録</button>
+              <button type="button" id="cancelEditBtn" class="btn btn-ghost" style="display:none;">編集解除</button>
+              <button type="reset" class="btn btn-ghost" id="resetBtn">クリア</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- RIGHT: 목록 -->
+        <div class="box">
+          <h3 class="box-title">登録済み店舗</h3>
+
+          <div th:if="${stores == null or #lists.isEmpty(stores)}" style="color:#666; padding:10px 0;">
+            データがありません。
+          </div>
+
+          <div class="table-toolbar" th:if="${stores != null and !#lists.isEmpty(stores)}">
+            <div class="filter-group">
+              <div class="filter-item">
+                <label for="cityFilter">都市フィルター</label>
+                <select id="cityFilter">
+                  <option value="ALL" selected>ALL</option>
+                </select>
+              </div>
+
+              <div class="filter-item">
+                <label for="nameFilter">店舗名検索</label>
+                <input type="text" id="nameFilter" placeholder="例) 銀座 / 新宿 / 天神" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="filter-meta">
+              ※ 都市 + 店舗名で同時に絞り込みます
+            </div>
+          </div>
+
+          <div class="table-wrap" th:if="${stores != null and !#lists.isEmpty(stores)}">
+            <table>
+              <thead>
+              <tr>
+                <th style="width:70px;">NO</th>
+                <th style="width:140px;">都市</th>
+                <th>店舗名</th>
+                <th style="width:160px;">緯度</th>
+                <th style="width:160px;">経度</th>
+                <th style="width:160px;">操作</th>
+              </tr>
+              </thead>
+              <tbody id="storeTbody">
+              <tr th:each="s, st : ${stores}"
+                  th:attr="data-id=${s.id},
+                           data-city=${s.city},
+                           data-name=${s.name},
+                           data-lat=${s.lat},
+                           data-lng=${s.lng}">
+                <!-- ✅ 표시용 순번 -->
+                <td th:text="${st.count}">1</td>
+
+                <td th:text="${s.city}">TOKYO</td>
+                <td th:text="${s.name}">銀座店</td>
+                <td th:text="${s.lat}">35.67</td>
+                <td th:text="${s.lng}">139.76</td>
+
+                <td class="td-actions">
+                  <div class="action-row">
+                    <button type="button" class="btn-edit js-edit-store">編集</button>
+
+                    <form th:action="@{/admin/store/delete/{id}(id=${s.id})}" method="post"
+                          onsubmit="return confirm('削除しますか？');">
+                      <button type="submit" class="btn-danger">削除</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <section class="admin-main" sec:authorize="!isAuthenticated()">
+    <div class="admin-page admin-store-page">
+      管理者ログイン後に利用できます。
+    </div>
+  </section>
+
+</main>
+
+<footer class="admin-footer">
+  <small>© 居酒屋シオン Admin</small>
+</footer>
+
+<!-- ✅✅✅ 테이블 중앙정렬(목록 데이터) + 헤더도 같이 -->
+<style>
+  /* 테이블 헤더/데이터 중앙 정렬 */
+  body.admin.admin-store table thead th,
+  body.admin.admin-store table tbody td{
+    text-align:center !important;
+  }
+
+  /* 버튼 영역도 가운데 정렬(필요 없으면 지우셔도 됩니다) */
+  body.admin.admin-store .td-actions .action-row{
+    justify-content:center !important;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  const normalize = (s) => (s || '').toString().trim();
+  const normUpper = (s) => normalize(s).toUpperCase();
+  const normLower = (s) => normalize(s).toLowerCase();
+
+  // =========================
+  // A) 도시 입력: select + 직접입력
+  // =========================
+  const citySelect = document.getElementById('citySelect');
+  const cityCustomWrap = document.getElementById('cityCustomWrap');
+  const cityCustomInput = document.getElementById('cityCustomInput');
+  const cityHidden = document.getElementById('cityHidden');
+
+  const sanitizeCityCustom = (value) => {
+    let v = (value || '').toString();
+    v = v.replace(/[^a-zA-Z0-9 _-]/g, '');
+    v = v.replace(/\s+/g, ' ');
+    v = v.trim().toUpperCase();
+    return v;
+  };
+
+  const applyCityValue = () => {
+    if (!cityHidden) return;
+
+    const sel = citySelect ? citySelect.value : '';
+    if (sel === '__CUSTOM__') {
+      const v = sanitizeCityCustom(cityCustomInput ? cityCustomInput.value : '');
+      cityHidden.value = v;
+      return;
+    }
+    cityHidden.value = normUpper(sel);
+  };
+
+  const toggleCustom = () => {
+    const sel = citySelect ? citySelect.value : '';
+    const isCustom = sel === '__CUSTOM__';
+
+    if (cityCustomWrap) cityCustomWrap.style.display = isCustom ? 'block' : 'none';
+
+    if (isCustom) {
+      if (cityCustomInput) {
+        const current = sanitizeCityCustom(cityHidden ? cityHidden.value : '');
+        cityCustomInput.value = current || cityCustomInput.value || '';
+        cityCustomInput.focus();
+      }
+    } else {
+      if (cityCustomInput) cityCustomInput.value = '';
+    }
+
+    applyCityValue();
+  };
+
+  if (citySelect) citySelect.addEventListener('change', toggleCustom);
+
+  // =========================
+  // ✅ (추가) "등록 폼 셀렉트"에 도시 옵션을 보장해주는 유틸
+  // =========================
+  const ensureOption = (selectEl, value) => {
+    if (!selectEl || !value) return false;
+    const v = normUpper(value);
+    if (!v || v === '__CUSTOM__') return false;
+
+    const exists = Array.from(selectEl.querySelectorAll('option'))
+      .some(o => normUpper(o.value) === v);
+
+    if (exists) return true;
+
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+
+    const customOpt = Array.from(selectEl.querySelectorAll('option'))
+      .find(o => o.value === '__CUSTOM__');
+
+    if (customOpt) selectEl.insertBefore(opt, customOpt);
+    else selectEl.appendChild(opt);
+
+    return true;
+  };
+
+  if (cityCustomInput) {
+    cityCustomInput.addEventListener('input', () => {
+      const before = cityCustomInput.value;
+      const after = sanitizeCityCustom(before);
+      if (before !== after) cityCustomInput.value = after;
+
+      // ✅ hidden만 갱신 (옵션 추가는 "등록 후"에만)
+      applyCityValue();
+      updateSubmitState();
+    });
+
+    cityCustomInput.addEventListener('blur', () => {
+      // ✅✅✅ [수정] blur에서는 옵션 추가/자동선택 금지 (등록 버튼 눌렀을 때만 목록 반영)
+      cityCustomInput.value = sanitizeCityCustom(cityCustomInput.value);
+      applyCityValue();   // hidden에만 반영
+      updateSubmitState();
+    });
+  }
+
+  // =========================
+  // B) 테이블 도시 수집 → 필터 옵션 자동 추가
+  // =========================
+  const tbody = document.getElementById('storeTbody');
+  const cityFilter = document.getElementById('cityFilter');
+  const rows = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];
+
+  const uniqueCities = new Set(['TOKYO','OSAKA','FUKUOKA']);
+  rows.forEach(tr => {
+    const c = normUpper(tr.getAttribute('data-city'));
+    if (c) uniqueCities.add(c);
+  });
+
+  if (cityFilter) {
+    const existing = new Set(Array.from(cityFilter.querySelectorAll('option')).map(o => normUpper(o.value)));
+    Array.from(uniqueCities).sort().forEach(c => {
+      if (!existing.has(c)) {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        cityFilter.appendChild(opt);
+      }
+    });
+  }
+
+  // ✅✅✅ (유지) 목록(=DB 저장 후) 기준 도시를 등록폼 셀렉트에 반영
+  //  - 저장되기 전(blur 등)에는 uniqueCities에 들어오지 않음
+  if (citySelect) {
+    Array.from(uniqueCities).sort().forEach(c => ensureOption(citySelect, c));
+  }
+
+  // =========================
+  // C) 도시 + 店舗名 동시 필터
+  // =========================
+  const nameFilter = document.getElementById('nameFilter');
+
+  const applyTableFilter = () => {
+    if (!tbody) return;
+
+    const cityVal = cityFilter ? normUpper(cityFilter.value) : 'ALL';
+    const nameVal = nameFilter ? normLower(nameFilter.value) : '';
+
+    rows.forEach(tr => {
+      const c = normUpper(tr.getAttribute('data-city'));
+      const n = normLower(tr.getAttribute('data-name'));
+
+      const hitCity = (cityVal === 'ALL') || (c === cityVal);
+      const hitName = !nameVal || n.includes(nameVal);
+
+      tr.style.display = (hitCity && hitName) ? '' : 'none';
+    });
+  };
+
+  if (cityFilter) cityFilter.addEventListener('change', applyTableFilter);
+  if (nameFilter) nameFilter.addEventListener('input', applyTableFilter);
+  applyTableFilter();
+
+  // =========================
+  // D) lat/lng 실시간 숫자 검증 + 입력 제한 + submit disable
+  // =========================
+  const latInput = document.getElementById('latInput');
+  const lngInput = document.getElementById('lngInput');
+  const latError = document.getElementById('latError');
+  const lngError = document.getElementById('lngError');
+  const submitBtn = document.getElementById('submitBtn');
+  const form = document.getElementById('storeForm');
+
+  // ✅ 수정 모드 UI
+  const storeId = document.getElementById('storeId');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+  const editBadge = document.getElementById('editBadge');
+  const editBadgeName = document.getElementById('editBadgeName');
+
+  const DEFAULT_ACTION = '/admin/store/save';
+  const UPDATE_ACTION  = '/admin/store/update';
+
+  const sanitizeNumeric = (value) => {
+    let v = (value || '').toString().replace(/[^\d\.\-]/g, '');
+    v = v.replace(/(?!^)-/g, '');
+    const parts = v.split('.');
+    if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+    return v;
+  };
+
+  const validateLat = () => {
+    if (!latInput) return true;
+    const raw = latInput.value.trim();
+    if (!raw) return false;
+
+    const num = Number(raw);
+    const ok = Number.isFinite(num) && num >= -90 && num <= 90;
+
+    latInput.classList.toggle('invalid', !ok);
+    if (latError) latError.textContent = ok ? '' : '緯度は -90〜90 の数値で入力してください';
+    return ok;
+  };
+
+  const validateLng = () => {
+    if (!lngInput) return true;
+    const raw = lngInput.value.trim();
+    if (!raw) return false;
+
+    const num = Number(raw);
+    const ok = Number.isFinite(num) && num >= -180 && num <= 180;
+
+    lngInput.classList.toggle('invalid', !ok);
+    if (lngError) lngError.textContent = ok ? '' : '経度は -180〜180 の数値で入力してください';
+    return ok;
+  };
+
+  const validateCity = () => {
+    if (!cityHidden) return true;
+    const v = normUpper(cityHidden.value);
+    return !!v;
+  };
+
+  window.updateSubmitState = () => {
+    applyCityValue();
+    const okCity = validateCity();
+    const okLat = validateLat();
+    const okLng = validateLng();
+    if (submitBtn) submitBtn.disabled = !(okCity && okLat && okLng);
+  };
+
+  const onNumericInput = (el) => {
+    if (!el) return;
+    el.addEventListener('input', () => {
+      const before = el.value;
+      const after = sanitizeNumeric(before);
+      if (before !== after) el.value = after;
+      updateSubmitState();
+    });
+    el.addEventListener('blur', updateSubmitState);
+  };
+
+  onNumericInput(latInput);
+  onNumericInput(lngInput);
+
+  if (citySelect) citySelect.addEventListener('change', updateSubmitState);
+
+  // =========================
+  // E) 수정 모드: 테이블에서 값 읽어서 왼쪽 폼에 채우기
+  // =========================
+  const setEditMode = (on, info) => {
+    if (!form) return;
+
+    if (on) {
+      form.action = UPDATE_ACTION;
+
+      if (storeId) storeId.value = info.id || '';
+
+      const cityVal = normUpper(info.city || '');
+      const preset = ['TOKYO','OSAKA','FUKUOKA'];
+
+      if (citySelect) {
+        if (preset.includes(cityVal)) {
+          citySelect.value = cityVal;
+          if (cityHidden) cityHidden.value = cityVal;
+          toggleCustom();
+        } else {
+          // ✅ 수정 모드에서 커스텀 도시도 셀렉트에 옵션 추가 + 선택
+          ensureOption(citySelect, cityVal);
+
+          citySelect.value = cityVal;
+          if (cityHidden) cityHidden.value = cityVal;
+          toggleCustom(); // custom 입력창은 닫힘
+          applyCityValue();
+        }
+      }
+
+      const nameInput = document.getElementById('nameInput');
+      if (nameInput) nameInput.value = info.name || '';
+      if (latInput) latInput.value = (info.lat ?? '').toString();
+      if (lngInput) lngInput.value = (info.lng ?? '').toString();
+
+      if (submitBtn) submitBtn.textContent = '更新';
+      if (cancelEditBtn) cancelEditBtn.style.display = 'inline-flex';
+
+      if (editBadge && editBadgeName) {
+        editBadgeName.textContent = (info.name || '') + ' (ID: ' + (info.id || '') + ')';
+        editBadge.classList.add('is-on');
+      }
+
+      const box = form.closest('.box');
+      if (box) box.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+      updateSubmitState();
+      return;
+    }
+
+    form.action = DEFAULT_ACTION;
+    if (storeId) storeId.value = '';
+    if (submitBtn) submitBtn.textContent = '登録';
+    if (cancelEditBtn) cancelEditBtn.style.display = 'none';
+    if (editBadge) editBadge.classList.remove('is-on');
+
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.click();
+
+    updateSubmitState();
+  };
+
+  document.querySelectorAll('.js-edit-store').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const tr = e.target.closest('tr');
+      if (!tr) return;
+
+      const info = {
+        id: tr.getAttribute('data-id'),
+        city: tr.getAttribute('data-city'),
+        name: tr.getAttribute('data-name'),
+        lat: tr.getAttribute('data-lat'),
+        lng: tr.getAttribute('data-lng'),
+      };
+
+      setEditMode(true, info);
+    });
+  });
+
+  if (cancelEditBtn) {
+    cancelEditBtn.addEventListener('click', () => setEditMode(false));
+  }
+
+  // =========================
+  // F) 초기/리셋 처리
+  // =========================
+  updateSubmitState();
+
+  if (form) {
+    form.addEventListener('reset', () => {
+      setTimeout(() => {
+        if (citySelect) citySelect.selectedIndex = 0;
+        if (cityCustomInput) cityCustomInput.value = '';
+        if (cityHidden) cityHidden.value = '';
+        toggleCustom();
+        updateSubmitState();
+      }, 0);
+    });
+
+    form.addEventListener('submit', (e) => {
+      updateSubmitState();
+      const ok = validateCity() && validateLat() && validateLng();
+      if (!ok) {
+        e.preventDefault();
+        alert('入力を確認してください（都市/緯度/経度）。');
+        return;
+      }
+
+      const isUpdate = form.action.includes('/admin/store/update');
+      if (isUpdate && (!storeId || !storeId.value)) {
+        e.preventDefault();
+        alert('編集対象がありません。テーブルの「編集」を押してください。');
+      }
+    });
+  }
+
+});
+</script>
+
+<!-- ✅✅✅ 추가: 타이머 UI 없이도 10분 후 자동 로그아웃 -->
+<script sec:authorize="isAuthenticated()">
+document.addEventListener('DOMContentLoaded', () => {
+  const TEN_MIN = 10 * 60 * 1000;
+
+  const getCsrf = () => {
+    const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '';
+    const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') || '';
+    return { token, header };
+  };
+
+  const doLogout = async () => {
+    const { token, header } = getCsrf();
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    if (token && header) headers[header] = token;
+
+    try {
+      await fetch('/admin/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers
+      });
+    } catch (e) {
+      // ignore
+    } finally {
+      location.href = '/admin/main?logout';
+    }
+  };
+
+  setTimeout(doLogout, TEN_MIN);
+
+  setInterval(async () => {
+    try {
+      const res = await fetch('/admin/session-check', { cache: 'no-store', credentials: 'same-origin' });
+      const alive = await res.json();
+      if (!alive) location.reload();
+    } catch (e) {
+      location.reload();
+    }
+  }, 5000);
+});
+</script>
+
+</body>
+</html>

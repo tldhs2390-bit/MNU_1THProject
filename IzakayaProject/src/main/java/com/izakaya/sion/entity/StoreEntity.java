@@ -15,7 +15,7 @@ public class StoreEntity {
     private Long id;
 
     private String city; // TOKYO / OSAKA / FUKUOKA
-    private String name; // 銀座, 新宿 …
+    private String name; // 銀座, 新宿 ...
 
     private Double lat;
     private Double lng;

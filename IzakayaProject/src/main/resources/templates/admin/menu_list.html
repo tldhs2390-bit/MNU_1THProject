@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8" />
-  <title>メニュー一覧 | Admin</title>
+  <title>メニュー | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="/css/index.css" />
@@ -13,9 +13,6 @@
 
   <style>
     .admin-menu-card.cursor-blocked { cursor: not-allowed; }
-
-    /* ✅ 타이머 UI 숨김(기능은 JS로 유지) */
-    .admin-session-timer{ display:none !important; }
 
     /* ✅ 사이드바 전체 가운데 */
     .admin-sidebar{ text-align:center; }
@@ -40,49 +37,31 @@
       text-align:center;
     }
 
-    /* =========================
-       🔥 투명/합성 문제 차단 (menu_list 전용)
-       - 접속중만 투명해지는 케이스 방지
-    ========================= */
-    body.admin.admin-menu-list .admin-login,
-    body.admin.admin-menu-list .admin-session-box{
+    /* =========================================================
+       ✅✅✅ [핵심] 접속중 "회색 카드(바깥 프레임)"만 제거
+       - 배너(.admin-login-title)는 그대로 살아있음 → 2번 이미지처럼 됨
+       - 구조/배치/기능 그대로
+    ========================================================= */
+    body.admin.admin-menu-list .admin-login.admin-session-box{
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+
+      /* admin.css의 .admin-login 여백감 유지 */
+      padding-top: 14px !important;
+      padding-bottom: 50px !important;
+
       opacity: 1 !important;
       filter: none !important;
       mix-blend-mode: normal !important;
       isolation: isolate;
     }
 
-    /* =========================
-       ✅ 버튼 스타일 = "관리자 메인"과 동일하게
-       - 직각 + 액자 제거 + background #111
-       - hover: opacity 0.92
-    ========================= */
-
-    /* 로그인 버튼(로그인 전) */
-    body.admin.admin-menu-list .admin-login button{
-      border-radius: 0 !important;
-      border: none !important;
-      box-shadow: none !important;
-
-      background: #111 !important;
-      background-image: none !important;
-      color: #fff !important;
-
-      opacity: 1 !important;
-      filter: none !important;
-      mix-blend-mode: normal !important;
-
-      transform: none !important;
-      text-align: center !important;
-      cursor: pointer;
-    }
-    body.admin.admin-menu-list .admin-login button:hover{
-      opacity: 0.92 !important;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    /* 로그아웃 버튼(접속중) - 관리자 메인과 동일 */
+    /* ✅ 로그아웃 버튼(접속중) - 관리자 메인과 동일 */
     body.admin.admin-menu-list .admin-session-box form button{
       width: 100%;
       padding: 10px;
@@ -108,67 +87,79 @@
       transform: none !important;
       box-shadow: none !important;
     }
+
+    /* 로그인 버튼(로그인 전) */
+    body.admin.admin-menu-list .admin-login button{
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+
+      background: #111 !important;
+      background-image: none !important;
+      color: #fff !important;
+
+      opacity: 1 !important;
+      filter: none !important;
+      mix-blend-mode: normal !important;
+
+      transform: none !important;
+      text-align: center !important;
+      cursor: pointer;
+    }
+    body.admin.admin-menu-list .admin-login button:hover{
+      opacity: 0.92 !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
     /* =========================
-   카테고리 접기/펼치기
-========================= */
+       카테고리 접기/펼치기
+    ========================= */
+    .admin-category-body {
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+    .admin-category-body.is-collapsed {
+      max-height: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .admin-category-head::after {
+      content: "▲";
+      margin-left: auto;
+      font-size: 12px;
+      opacity: 0.6;
+      transition: transform 0.2s ease;
+    }
+    .admin-category-head.is-collapsed::after {
+      transform: rotate(180deg);
+    }
 
-/* 기본은 펼쳐진 상태 */
-.admin-category-body {
-  overflow: hidden;
-  transition: max-height 0.25s ease, opacity 0.2s ease;
-}
+    /* 헤더 배지 크게 */
+    .admin-category-head .admin-badge{
+      padding: 10px 18px;
+      font-size: 17px;
+      font-weight: 900;
+      border-radius: 0;
+    }
 
-/* 접힌 상태 */
-.admin-category-body.is-collapsed {
-  max-height: 0 !important;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* 헤더 화살표 */
-.admin-category-head::after {
-  content: "▲";
-  margin-left: auto;
-  font-size: 12px;
-  opacity: 0.6;
-  transition: transform 0.2s ease;
-}
-
-/* 접혔을 때 화살표 */
-.admin-category-head.is-collapsed::after {
-  transform: rotate(180deg);
-}
-/* =========================
-   카테고리 헤더 배지만 크기 업
-   (리스트 안은 그대로 유지)
-========================= */
-.admin-category-head .admin-badge{
-  padding: 10px 18px;   /* 박스만 키움 */
-  font-size: 17px;     /* 글씨만 키움 */
-  font-weight: 900;
-  border-radius: 0;
-}
-.admin-table th,
-.admin-table td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-/* 이름 컬럼만 왼쪽 정렬하고 싶으면 이건 유지 */
-.admin-table .admin-td-title {
-  text-align: center;
-}
-/* 카테고리(2열) → 오른쪽 여백 줄이기 */
-.admin-table th:nth-child(2),
-.admin-table td:nth-child(2) {
-  padding-right: 6px;
-}
-
-/* 표시순서(3열) → 왼쪽 여백 줄이기 */
-.admin-table th:nth-child(3),
-.admin-table td:nth-child(3) {
-  padding-left: 6px;
-}
+    .admin-table th,
+    .admin-table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .admin-table .admin-td-title {
+      text-align: center;
+    }
+    .admin-table th:nth-child(2),
+    .admin-table td:nth-child(2) {
+      padding-right: 6px;
+    }
+    .admin-table th:nth-child(3),
+    .admin-table td:nth-child(3) {
+      padding-left: 6px;
+    }
+    
   </style>
 </head>
 
@@ -200,20 +191,16 @@
       <a href="/admin/store/list" class="admin-side-link">店舗管理</a>
     </div>
 
-    <!-- 🔐 로그인 전 -->
     <form class="admin-login"
           sec:authorize="!isAuthenticated()"
           method="post"
           action="/admin/login">
-
       <div class="admin-login-title">管理者ログイン</div>
-
       <input type="text" name="username" placeholder="管理者ID" required />
       <input type="password" name="password" placeholder="パスワード" required />
       <button type="submit">ログイン</button>
     </form>
 
-    <!-- 🔐 로그인 후 -->
     <div class="admin-login admin-session-box"
          sec:authorize="isAuthenticated()">
       <div class="admin-login-title">管理者ログインで接続中</div>
@@ -224,7 +211,6 @@
         <button type="submit">ログアウト</button>
       </form>
     </div>
-
   </aside>
 
   <section class="admin-main">
@@ -245,6 +231,7 @@
       <th:block th:if="${groupedItems != null && !#maps.isEmpty(groupedItems)}">
         <th:block th:each="entry : ${groupedItems}">
           <div class="admin-category-head js-category-toggle"
+     th:attr="data-key=${entry.key != null ? entry.key.name() : 'UNKNOWN'}"
      style="margin:18px 0 10px; display:flex; align-items:center; gap:10px; cursor:pointer;">
             <span class="admin-badge"
                   th:text="${
@@ -259,20 +246,19 @@
                   th:text="${#lists.size(entry.value)} + '個'">0個</span>
           </div>
 
-<div class="admin-table-wrap admin-category-body">            
-<table class="admin-table">
-             
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th style="width:200px;" class="admin-td-center">カテゴリ</th>
-      <th style="width:180px;" class="admin-td-center">表示順</th>
-      <th style="width:160px;" class="admin-td-center">名前</th>
-      <th style="width:160px;" class="admin-td-center">価格</th>
-      <th style="width:110px;" class="admin-td-center">公開</th>
-      <th style="width:140px;" class="admin-td-center">操作</th>
-    </tr>
-  </thead>
+          <div class="admin-table-wrap admin-category-body">
+            <table class="admin-table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th style="width:200px;" class="admin-td-center">カテゴリ</th>
+                <th style="width:180px;" class="admin-td-center">表示順</th>
+                <th style="width:160px;" class="admin-td-center">名前</th>
+                <th style="width:160px;" class="admin-td-center">価格</th>
+                <th style="width:110px;" class="admin-td-center">公開</th>
+                <th style="width:140px;" class="admin-td-center">操作</th>
+              </tr>
+              </thead>
 
               <tbody>
               <tr th:each="m : ${entry.value}">
@@ -396,15 +382,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+
+  const STORAGE_KEY = 'admin_menu_list_category_collapsed_v1';
+
+  const loadState = () => {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {};
+    } catch (e) {
+      return {};
+    }
+  };
+
+  const saveState = (state) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state || {}));
+    } catch (e) {}
+  };
+
+  const state = loadState();
 
   document.querySelectorAll('.js-category-toggle').forEach(head => {
     const body = head.nextElementSibling;
     if (!body || !body.classList.contains('admin-category-body')) return;
 
-    // 처음 로드 시: 펼친 상태
-    body.style.maxHeight = body.scrollHeight + 'px';
+    const key = head.getAttribute('data-key') || head.textContent.trim() || 'UNKNOWN';
+
+    // ✅ 저장된 상태 반영 (true면 접힘)
+    const shouldCollapse = state[key] === true;
+
+    if (shouldCollapse) {
+      body.classList.add('is-collapsed');
+      head.classList.add('is-collapsed');
+      body.style.maxHeight = '0px';
+    } else {
+      body.classList.remove('is-collapsed');
+      head.classList.remove('is-collapsed');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
 
     head.addEventListener('click', () => {
       const collapsed = body.classList.toggle('is-collapsed');
@@ -415,6 +432,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         body.style.maxHeight = body.scrollHeight + 'px';
       }
+
+      // ✅ 상태 저장
+      state[key] = collapsed;
+      saveState(state);
     });
   });
 

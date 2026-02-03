@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>デリバリー | 酒屋 シオン</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="/css/index.css">
+
+<style>
+/* ===============================
+   FORCE HORIZONTAL TEXT
+=============================== */
+html, body,
+.sign, .sign *,
+.board, .board *,
+.delivery-section, .delivery-section * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+    position: absolute;
+    top: 96px;
+    left: 0;
+    width: 100%;
+    padding: 12px 60px;
+    z-index: 50;
+    font-size: 17px;
+    color: #111;
+}
+.breadcrumb a {
+    color: #111;
+    text-decoration: none;
+    opacity: 0.6;
+}
+.breadcrumb a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+.breadcrumb .current {
+    font-weight: 600;
+}
+
+/* ===== DELIVERY ===== */
+.delivery-section {
+    min-height: calc(100vh - 72px - 40px);
+    padding: 120px 60px 40px;
+    text-align: center;
+}
+.delivery-section h2 {
+    margin-bottom: 60px;
+    letter-spacing: .15em;
+}
+.delivery-row {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+}
+
+/* ===== CARD ===== */
+.delivery-card {
+    width: 320px;
+    min-height: 220px;
+    cursor: pointer;
+}
+.delivery-card .board-inner {
+    padding: 40px 28px 56px;
+}
+.delivery-card p {
+    font-size: 22px;
+    letter-spacing: .1em;
+    margin-bottom: 18px;
+}
+.delivery-card small {
+    font-size: 15px;
+    line-height: 1.8;
+    opacity: .9;
+}
+
+/* ===== MODAL ===== */
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal {
+    background: #fff;
+    width: 90%;
+    max-width: 720px;
+    padding: 28px 40px 40px;
+    animation: modalFade .25s ease;
+}
+
+@keyframes modalFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.modal-header h3 {
+    margin: 0;
+    font-size: 22px;
+}
+.modal-close {
+    font-size: 26px;
+    cursor: pointer;
+    color: #666;
+}
+.modal-close:hover {
+    color: #000;
+}
+
+.modal ol {
+    padding-left: 20px;
+    line-height: 1.9;
+    margin-bottom: 28px;
+}
+
+.modal .btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1px solid #333;
+    color: #333;
+    text-decoration: none;
+}
+.modal .btn:hover {
+    background: #333;
+    color: #fff;
+}
+</style>
+</head>
+
+<body id="time-theme">
+
+<!-- HEADER -->
+<header class="top-bar wood-header">
+    <div class="logo brand-area">
+        <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
+        <img src="/images/logo-sion-neon.svg" class="brand-text" alt="">
+    </div>
+    <nav>
+        <a href="/">ホーム</a>
+        <a href="/service">サービス</a>
+        <a href="#">キャンペーン</a>
+    </nav>
+    <div class="wood-header-shadow"></div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+    <a href="/">ホーム</a> /
+    <a href="/service">サービス</a> /
+    <span class="current">デリバリー</span>
+</div>
+
+<!-- DELIVERY -->
+<section class="delivery-section wood-bg">
+<h2>デリバリー</h2>
+
+<div class="delivery-row">
+    <div class="sign delivery-card" onclick="openModal('uber')">
+        <div class="board">
+            <div class="board-inner">
+                <p>Uber Eats</p>
+                <small>Uber Eatsで<br>オーダーする</small>
+            </div>
+            <span class="light"></span>
+        </div>
+    </div>
+
+    <div class="sign delivery-card" onclick="openModal('demae')">
+        <div class="board">
+            <div class="board-inner">
+                <p>出前館</p>
+                <small>出前館で<br>オーダーする</small>
+            </div>
+            <span class="light"></span>
+        </div>
+    </div>
+
+    <div class="sign delivery-card" onclick="openModal('wolt')">
+        <div class="board">
+            <div class="board-inner">
+                <p>Wolt</p>
+                <small>Woltで<br>オーダーする</small>
+            </div>
+            <span class="light"></span>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modal-title"></h3>
+            <span class="modal-close" onclick="closeModal()">×</span>
+        </div>
+
+        <ol id="modal-steps"></ol>
+
+        <div style="text-align:center">
+            <a id="modal-link" target="_blank" class="btn">公式サイトへ</a>
+        </div>
+    </div>
+</div>
+
+<footer>© 酒屋 シオン</footer>
+
+<script>
+/* ===== MODAL ELEMENTS ===== */
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modal-title");
+const modalSteps = document.getElementById("modal-steps");
+const modalLink = document.getElementById("modal-link");
+
+/* ===== DATA ===== */
+const modalData = {
+    uber: {
+        title: "Uber Eatsでオーダーする",
+        link: "https://www.ubereats.com/jp",
+        steps: [
+            "Uber Eats アプリ、またはWEBサイトにアクセスします。",
+            "アカウント登録し、お届け先情報を設定してください。",
+            "「酒屋 シオン」を検索",
+            "メニューを選択してください。",
+            "注文後、できたてのお料理をお届けします。"
+        ]
+    },
+    demae: {
+        title: "出前館でオーダーする",
+        link: "https://demae-can.com/",
+        steps: [
+            "出前館にアクセスします。",
+            "アカウント登録を行います。",
+            "「酒屋 シオン」を検索",
+            "メニューを選択してください。",
+            "注文後、お料理をお届けします。"
+        ]
+    },
+    wolt: {
+        title: "Woltでオーダーする",
+        link: "https://wolt.com/ja",
+        steps: [
+            "Woltにアクセスします。",
+            "アカウント登録を行います。",
+            "「酒屋 シオン」を検索",
+            "メニューを選択してください。",
+            "注文後、お料理をお届けします。"
+        ]
+    }
+};
+
+/* ===== FUNCTIONS ===== */
+function openModal(type) {
+    const d = modalData[type];
+
+    modalTitle.textContent = d.title;
+    modalLink.href = d.link;
+
+    modalSteps.innerHTML = "";
+    d.steps.forEach(s => {
+        const li = document.createElement("li");
+        li.textContent = s;
+        modalSteps.appendChild(li);
+    });
+
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    modal.style.display = "none";
+}
+</script>
+
+</body>
+</html>
