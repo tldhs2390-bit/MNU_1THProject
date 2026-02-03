@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>サービス | 酒屋 シオン</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/index.css">
+
+    <style>
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            position: absolute;
+            top: 96px;
+            left: 0;
+            width: 100%;
+            padding: 12px 60px;
+            background: transparent;
+            z-index: 60;
+
+            font-size: 17px;
+            color: #111;
+            text-align: left;
+        }
+
+        .breadcrumb a {
+            color: #111;
+            text-decoration: none;
+            opacity: 0.6;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .breadcrumb .current {
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* ===== SERVICE ===== */
+        .service-section {
+            min-height: calc(100vh - 72px - 40px);
+            padding: 120px 60px 40px; /* breadcrumb 공간 확보 */
+            text-align: center;
+        }
+
+        .service-section h2 {
+            margin-bottom: 60px;
+            letter-spacing: 0.15em;
+        }
+
+        .service-row {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .service-card {
+            width: 320px;
+            cursor: pointer;
+        }
+
+        .service-card .board-inner {
+            padding: 40px 28px 56px;
+        }
+
+        .service-card p {
+            writing-mode: horizontal-tb;
+            font-size: 22px;
+            letter-spacing: 0.1em;
+            margin-bottom: 18px;
+        }
+
+        .service-card small {
+            font-size: 15px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            padding: 32px 36px;
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal img {
+            width: 200px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 26px;
+            border: 1px solid #333;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body id="time-theme">
+
+<!-- HEADER -->
+<header class="top-bar wood-header">
+    <div class="logo brand-area">
+        <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
+        <img src="/images/logo-sion-neon.svg" class="brand-text" alt="">
+    </div>
+
+    <nav>
+        <a href="/">ホーム</a>
+        <a href="/service">サービス</a>
+        <a href="#">キャンペーン</a>
+    </nav>
+
+    <div class="wood-header-shadow"></div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+    <a href="/">ホーム</a>
+    <span>/</span>
+    <span class="current">サービス</span>
+</div>
+
+<!-- SERVICE -->
+<section class="service-section wood-bg">
+    <h2>サービス</h2>
+
+    <div class="service-row">
+
+        <div class="sign service-card" onclick="location.href='/service/map'">
+            <div class="board">
+                <div class="board-inner">
+                    <p>店舗を探す</p>
+                    <small>地域や店舗名で検索し、<br>地図から場所を確認できます。</small>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign service-card" onclick="openLineModal()">
+            <div class="board">
+                <div class="board-inner">
+                    <p>予約する</p>
+                    <small>LINE友だち追加し、<br>予約を進めます。</small>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+        <div class="sign service-card" onclick="location.href='/service/delivery'">
+            <div class="board">
+                <div class="board-inner">
+                    <p>デリバリー</p>
+                    <small>提携サービスから<br>ご注文いただけます。</small>
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- LINE MODAL -->
+<div class="modal-bg" id="lineModal">
+    <div class="modal">
+        <div class="modal-close" onclick="closeLineModal()">✕</div>
+        <h3>LINE友だち追加</h3>
+        <p>友だち追加し、<br>予約を進めてください。</p>
+        <img src="/images/line-qr.png" alt="LINE QR">
+        <button class="btn" onclick="goReserve()">友だち追加しました</button>
+    </div>
+</div>
+
+<footer>© 酒屋 シオン</footer>
+
+<script>
+(function () {
+    const h = new Date().getHours();
+    if (h >= 18 && h < 21) document.body.classList.add("evening");
+    else if (h >= 21 || h < 5) document.body.classList.add("night");
+})();
+
+function openLineModal() {
+    document.getElementById("lineModal").style.display = "flex";
+}
+function closeLineModal() {
+    document.getElementById("lineModal").style.display = "none";
+}
+function goReserve() {
+    location.href = "/reserve";
+}
+</script>
+</body>
+
+<!-- test -->
+</html>

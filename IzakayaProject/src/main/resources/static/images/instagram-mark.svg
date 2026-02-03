@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+    width="64"
+    height="64"
+    viewBox="0 0 64 64"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+>
+    <!-- 전체 아이콘 -->
+    <g
+        fill="none"
+        stroke="#3a2616"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <!-- 바깥 사각 프레임 -->
+        <rect
+            x="10"
+            y="10"
+            width="44"
+            height="44"
+            rx="10"
+            ry="10"
+        />
+
+        <!-- 렌즈 원 -->
+        <circle
+            cx="32"
+            cy="32"
+            r="10"
+        />
+
+        <!-- 우측 상단 점 -->
+        <circle
+            cx="44"
+            cy="20"
+            r="2"
+            fill="#3a2616"
+            stroke="none"
+        />
+    </g>
+</svg>

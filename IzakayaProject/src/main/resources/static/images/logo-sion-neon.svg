@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="600"
+     height="160"
+     viewBox="0 0 600 160">
+
+  <defs>
+    <!-- 네온 글로우 -->
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 외곽 네온 (깜빡임) -->
+  <text x="300" y="105"
+        text-anchor="middle"
+        font-size="72"
+        font-family="Hiragino Sans, Yu Gothic, Meiryo, sans-serif"
+        fill="none"
+        stroke="#ff4fa3"
+        stroke-width="6"
+        filter="url(#neonGlow)">
+    酒屋 シオン
+
+    <!-- 🔥 네온 깜빡임 -->
+    <animate
+      attributeName="opacity"
+      values="1;0.6;1;0.85;1"
+      dur="3.2s"
+      repeatCount="indefinite"/>
+  </text>
+
+  <!-- 내부 밝은 네온 -->
+  <text x="300" y="105"
+        text-anchor="middle"
+        font-size="72"
+        font-family="Hiragino Sans, Yu Gothic, Meiryo, sans-serif"
+        fill="#ffd6ea">
+    酒屋 シオン
+
+    <!-- 미세한 내부 깜빡임 -->
+    <animate
+      attributeName="opacity"
+      values="1;0.9;1;0.95;1"
+      dur="2.6s"
+      repeatCount="indefinite"/>
+  </text>
+
+</svg>

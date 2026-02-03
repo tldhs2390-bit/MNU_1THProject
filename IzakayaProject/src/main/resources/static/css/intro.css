@@ -1,0 +1,537 @@
+@charset "UTF-8";
+
+/* ===============================
+   FONT
+=============================== */
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
+
+/* ===============================
+   RESET
+=============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0c0b09;
+}
+
+/* ===============================
+   INTRO WRAPPER
+=============================== */
+.intro-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: 'Shippori Mincho', serif;
+}
+
+/* ===============================
+   BACKGROUND – IZAKAYA WALL
+=============================== */
+.alley-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    /* 🪵 이자카야 외벽 목재 판자 (따뜻한 갈색 톤) */
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #5a4634 0px,    /* 밝은 목재 */
+            #5a4634 40px,
+            #443527 40px,
+            #443527 80px
+        );
+}
+
+/* 🌅 실내 불빛이 벽으로 스며드는 느낌 */
+.alley-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 220, 170, 0.22) 0%,  /* 상단: 실내 조명 */
+            rgba(150, 105, 55, 0.35) 45%,
+            rgba(30, 22, 16, 0.9) 100%    /* 하단: 바닥 쪽 어둠 */
+        );
+
+    pointer-events: none;
+}
+
+/* 🌫 세월감 + 주변부 어둠 */
+.alley-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0) 38%,
+            rgba(0,0,0,0.55) 100%
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.025) 0px,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+}
+
+/* ===============================
+   SHOJI WINDOWS (統一・확대)
+=============================== */
+
+/* 공통 쇼지 창 스타일 */
+.alley-bg .shoji-window {
+    position: absolute;
+    top: 22%;              /* 좌/우 동일 높이 */
+
+    width: 260px;          /* ⬆ 기존보다 확실히 크게 */
+    height: 260px;
+    border-radius: 50%;
+
+    background:
+        /* 쇼지 격자 */
+        repeating-linear-gradient(
+            90deg,
+            rgba(0,0,0,0.35) 0px,
+            rgba(0,0,0,0.35) 2px,
+            transparent 2px,
+            transparent 24px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,0.35) 0px,
+            rgba(0,0,0,0.35) 2px,
+            transparent 2px,
+            transparent 24px
+        ),
+        /* 내부 불빛 */
+        radial-gradient(
+            circle,
+            rgba(255,245,220,0.9),
+            rgba(255,215,160,0.6)
+        );
+
+    box-shadow:
+        0 0 48px rgba(255,215,160,0.45),
+        inset 0 0 32px rgba(0,0,0,0.45);
+
+    opacity: 0.32;         /* 배경 소품으로 은은하게 */
+    pointer-events: none;
+}
+
+/* 왼쪽 쇼지 창 */
+.alley-bg .shoji-window.left {
+    left: 12%;
+}
+
+/* 오른쪽 쇼지 창 */
+.alley-bg .shoji-window.right {
+    right: 12%;
+}
+
+/* ===============================
+   CHOCHIN
+=============================== */
+.chochin {
+    position: absolute;
+    top: 6vh;
+    left: 6vw;
+    width: 88px;
+    height: 182px;
+    border-radius: 46px;
+
+    /* 🪵 천장에 매달린 느낌 핵심 */
+    transform-origin: top center;
+
+    /* 🍶 종이 + 불빛이 섞인 일본 초친 */
+    background:
+        repeating-linear-gradient(
+            180deg,
+            #fff2cf 0px,
+            #ffe3a8 9px,
+            #f3c776 18px
+        );
+
+    /* 💡 불빛 깊이 */
+    box-shadow:
+        0 0 90px rgba(255,185,90,0.85),
+        inset 0 -20px 30px rgba(0,0,0,0.38);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    /* ✒ 글씨: 굵고 장인 느낌 */
+    font-family: 'Shippori Mincho', serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #2a1a00;
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 1px 0 rgba(255,255,255,0.35),
+        0 -1px 1px rgba(0,0,0,0.25);
+
+    z-index: 3;
+    animation: chochin-sway 5s ease-in-out infinite;
+}
+
+/* 🔗 초친 줄 (끈) */
+.chochin::before {
+    content: "";
+    position: absolute;
+    top: -44px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 4px;
+    height: 44px;
+
+    background: linear-gradient(
+        to bottom,
+        #3b2b1c,
+        #5a3f2a
+    );
+
+    box-shadow:
+        inset 0 0 2px rgba(0,0,0,0.6);
+
+    border-radius: 2px;
+}
+
+/* 🌕 초친 아래 벽에 번지는 불빛 */
+.chochin::after {
+    content: "";
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 130px;
+    height: 46px;
+
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 205, 125, 0.35) 0%,
+        rgba(255, 185, 95, 0.2) 38%,
+        rgba(255, 160, 70, 0.08) 60%,
+        transparent 75%
+    );
+
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+/* 🔕 불 꺼졌을 때 */
+.chochin.dim {
+    box-shadow:
+        0 0 28px rgba(255,165,70,0.3),
+        inset 0 -20px 30px rgba(0,0,0,0.55);
+    filter: brightness(0.72);
+}
+
+/* 🌬 줄에 매달린 자연스러운 흔들림 */
+@keyframes chochin-sway {
+    0%   { transform: rotate(0deg); }
+    20%  { transform: rotate(1.6deg); }
+    50%  { transform: rotate(0deg); }
+    80%  { transform: rotate(-1.6deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* ===============================
+   SLOGAN (⬆ 글자 강조)
+=============================== */
+.slogan {
+    position: absolute;
+    top: 5.5vh;
+    right: 6vw;
+
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    font-family: 'Yuji Syuku', serif;
+    font-size: 28px;          /* ⬆ 확대 */
+    letter-spacing: 7px;
+    line-height: 2.1;
+
+    color: #f6e3bb;
+    text-shadow: 0 0 24px rgba(255,210,120,0.5);
+
+    z-index: 3;
+}
+
+.slogan-line {
+    margin-bottom: 30px;      /* ⬆ 문단 여백 */
+}
+
+/* ===============================
+   SIGNBOARD
+=============================== */
+.signboard {
+    position: absolute;
+    bottom: 4.5vh;
+    left: 50%;
+    transform: translateX(-50%) perspective(1200px) rotateX(4deg);
+
+    width: 620px;
+    height: 900px;
+
+    background:
+        repeating-linear-gradient(
+            180deg,
+            #d8b98a 0px,
+            #d2b07d 18px,
+            #c9a66f 36px
+        );
+
+    border: 16px solid #3b2b1c;
+
+    box-shadow:
+        0 80px 140px rgba(0,0,0,0.95),
+        inset 0 12px 0 rgba(255,255,255,0.35),
+        inset 0 -26px 40px rgba(0,0,0,0.45);
+
+    cursor: pointer;
+    z-index: 2;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.signboard:hover {
+    transform: translateX(-50%) perspective(1200px) rotateX(0deg) translateY(-10px);
+}
+
+/* 제목 */
+.menu-header {
+    text-align: center;
+    font-size: 28px; /* ⬆ */
+    padding: 26px 0;
+    border-bottom: 2px solid rgba(0,0,0,0.35);
+    font-family: 'Yuji Syuku', serif;
+}
+
+/* 내용 */
+.menu-slides {
+    padding: 30px;
+}
+
+.menu-photo {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+
+    border: 4px solid rgba(0,0,0,0.45);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.4);
+}
+
+.menu-name {
+    margin-top: 26px;
+    text-align: center;
+
+    font-size: 28px; /* 26 → 28 : 제목 존재감만 살짝 */
+    font-family: 'Yuji Syuku', serif;
+}
+
+.menu-desc {
+    margin-top: 14px;
+    text-align: center;
+
+    font-size: 18px;   /* 17 → 18 : 체감 확실 */
+    line-height: 1.85; /* 숨 쉬는 여백 */
+    letter-spacing: 0.045em;
+
+    color: #3a2a1a;
+    opacity: 0.95;
+
+    font-family: 'Shippori Mincho', serif;
+    font-weight: 500;
+}
+
+/* ===============================
+   IZAKAYA SHOJI SLIDING DOOR
+   (障子 + 내부 조명 / BROWN TONE)
+=============================== */
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 1000;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(190,140,80,0.85) 0%,
+            rgba(160,110,60,0.65) 42%,
+            rgba(120,80,45,0.35) 68%,
+            rgba(25,15,10,0.9) 100%
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(90,60,35,0.95) 0px,
+            rgba(90,60,35,0.95) 2px,
+            transparent 2px,
+            transparent 22px
+        ),
+        repeating-linear-gradient(
+            180deg,
+            rgba(90,60,35,0.85) 0px,
+            rgba(90,60,35,0.85) 2px,
+            transparent 2px,
+            transparent 26px
+        );
+
+    background-blend-mode: multiply;
+
+    box-shadow:
+        inset -18px 0 36px rgba(15,10,5,0.85),
+        inset  18px 0 36px rgba(15,10,5,0.85);
+
+    opacity: 0;
+    transform: translateX(0);
+    transition:
+        opacity 0.25s ease,
+        transform 1.6s cubic-bezier(.65,0,.2,1);
+}
+
+body::before { left: 0; }
+body::after  { right: 0; }
+
+/* ===============================
+   중앙 이음새 빛
+=============================== */
+body::before::after,
+body::after::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+        180deg,
+        rgba(160,120,80,0.0),
+        rgba(160,120,80,0.6),
+        rgba(160,120,80,0.0)
+    );
+    filter: blur(4px);
+    opacity: 0;
+}
+
+body::before::after { right: -2px; }
+body::after::after  { left:  -2px; }
+
+/* ===============================
+   🚪 문 등장
+=============================== */
+body.door-active::before,
+body.door-active::after {
+    opacity: 1;
+}
+
+/* ===============================
+   문 열림
+=============================== */
+body.open-door::before {
+    transform: translateX(-100%);
+}
+
+body.open-door::after {
+    transform: translateX(100%);
+}
+
+/* =================================================
+   🏮 DOOR LOGO LAYER (문보다 위에 있는 전용 레이어)
+================================================= */
+.door-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 1002; /* 🔑 쇼지 문보다 반드시 위 */
+    pointer-events: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===============================
+   🏮 문 중앙 가문 로고 (家紋)
+=============================== */
+.door-mon-logo {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+/* 문 닫혔을 때 표시 */
+body.door-active .door-mon-logo {
+    opacity: 1;
+}
+
+/* 문 열리면 사라짐 */
+body.open-door .door-mon-logo {
+    opacity: 0;
+    transition-delay: 0.4s;
+}
+
+.door-mon-logo img {
+    height: 65vh;        /* 🔥 문 높이와 거의 동일 */
+    max-height: 80vh;    /* 안전장치 */
+    width: auto;
+
+    filter:
+        drop-shadow(0 10px 18px rgba(0,0,0,0.6))
+        drop-shadow(0 -4px 6px rgba(255,220,180,0.45));
+
+    opacity: 0.95;
+}
+
+
+.intro-wrapper::before,
+.intro-wrapper::after {
+    z-index: 1;
+}
+
+/* 왼쪽 바닥 불빛 */
+.intro-wrapper::before {
+    left: -90px;
+}
+
+/* 오른쪽 바닥 불빛 */
+.intro-wrapper::after {
+    right: -90px;
+}
+
+/* ===============================
+   DOOR OPEN – SHOJI WINDOW REACTION
+=============================== */
+body.door-open .shoji-window {
+    opacity: 0.5;
+
+    box-shadow:
+        0 0 70px rgba(255,220,170,0.7),
+        inset 0 0 36px rgba(0,0,0,0.35);
+
+    transition: opacity 0.6s ease, box-shadow 0.6s ease;
+}

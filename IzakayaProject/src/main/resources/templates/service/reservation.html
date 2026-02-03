@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>予約 | 酒屋 シオン</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/index.css">
+
+    <style>
+        /* ===== BREADCRUMB (DELIVERY / MAP / SERVICE 통일) ===== */
+        .breadcrumb {
+            position: absolute;
+            top: 96px;
+            left: 0;
+            width: 100%;
+            padding: 12px 60px;
+            background: transparent;
+            z-index: 60;
+
+            font-size: 17px;
+            color: #111;
+            text-align: left;
+        }
+
+        .breadcrumb a {
+            color: #111;
+            text-decoration: none;
+            opacity: 0.6;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .breadcrumb .current {
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* ===== PAGE LAYOUT ===== */
+        .reserve-section {
+            min-height: calc(100vh - 72px - 40px);
+            padding: 120px 60px 40px; /* breadcrumb 공간 확보 */
+            text-align: center;
+        }
+
+        .reserve-section h2 {
+            margin-bottom: 60px;
+            letter-spacing: 0.15em;
+        }
+
+        /* ===== BOARD ===== */
+        .reserve-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .reserve-card {
+            width: 420px;
+        }
+
+        .reserve-card .board-inner {
+            padding: 42px 36px 56px;
+            writing-mode: horizontal-tb;
+        }
+
+        /* ===== FORM ===== */
+        .reserve-form {
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .reserve-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .reserve-form select,
+        .reserve-form input {
+            width: 100%;
+            height: 36px;
+            margin-bottom: 18px;
+            padding: 4px 8px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .reserve-form button {
+            width: 100%;
+            height: 42px;
+            margin-top: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* ===== MESSAGE MODAL ===== */
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            padding: 36px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal p {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .msg-success { color: #1b7f4a; }
+        .msg-error { color: #b00020; }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body id="time-theme">
+
+<!-- HEADER -->
+<header class="top-bar wood-header">
+    <div class="logo brand-area">
+        <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
+        <img src="/images/logo-sion-neon.svg" class="brand-text" alt="">
+    </div>
+
+    <nav>
+        <a href="/">ホーム</a>
+        <a href="/service">サービス</a>
+        <a href="#">キャンペーン</a>
+    </nav>
+
+    <div class="wood-header-shadow"></div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+    <a href="/">ホーム</a>
+    <span>/</span>
+    <a href="/service">サービス</a>
+    <span>/</span>
+    <span class="current">予約</span>
+</div>
+
+<!-- RESERVATION -->
+<section class="reserve-section wood-bg">
+    <h2>予約</h2>
+
+    <div class="reserve-wrap">
+        <div class="sign reserve-card">
+            <div class="board">
+                <div class="board-inner">
+
+                    <form th:action="@{/reserve}" method="post" class="reserve-form">
+
+                        <label>店舗</label>
+                        <select name="storeId" required>
+                            <option value="">選択してください</option>
+                            <option th:each="s : ${stores}"
+                                    th:value="${s.id}"
+                                    th:text="${s.city + ' ' + s.name}">
+                            </option>
+                        </select>
+
+                        <label>人数</label>
+                        <input type="number" name="partyCnt" min="1" max="20" required>
+
+                        <label>予約日</label>
+                        <input type="date" name="resvDate" required>
+
+                        <label>予約時間</label>
+                        <select name="resvTime" required>
+                            <option value="">選択してください</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="21:00">21:00</option>
+                            <option value="21:30">21:30</option>
+                            <option value="22:00">22:00</option>
+                            <option value="22:30">22:30</option>
+                            <option value="23:00">23:00</option>
+                            <option value="23:30">23:30</option>
+                            <option value="00:00">00:00</option>
+                            <option value="00:30">00:30</option>
+                            <option value="01:00">01:00</option>
+                            <option value="01:30">01:30</option>
+                            <option value="02:00">02:00</option>
+                            <option value="02:30">02:30</option>
+                            <option value="03:00">03:00</option>
+                        </select>
+
+                        <label>要望（任意）</label>
+                        <input type="text" name="reqNote" maxlength="500" placeholder="席の希望など">
+
+                        <button type="submit">予約する</button>
+                    </form>
+
+                </div>
+                <span class="light"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MESSAGE MODAL -->
+<div class="modal-bg" id="msgModal" th:if="${msg != null}">
+    <div class="modal">
+        <div class="modal-close" onclick="closeMsg()">✕</div>
+        <p th:utext="${msg}"
+           th:classappend="${msgType} == 'error' ? 'msg-error' : 'msg-success'">
+        </p>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>© 酒屋 シオン</footer>
+
+<script>
+(function () {
+    const h = new Date().getHours();
+    if (h >= 18 && h < 21) document.body.classList.add("evening");
+    else if (h >= 21 || h < 5) document.body.classList.add("night");
+})();
+
+function closeMsg() {
+    document.getElementById("msgModal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

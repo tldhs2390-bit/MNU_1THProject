@@ -1,0 +1,282 @@
+@charset "UTF-8";
+
+/* ===============================
+   POSTER FRAME VIEW (MODAL)
+================================ */
+
+.poster-view {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+/* 🔑 활성화 */
+.poster-view.active {
+    display: flex;
+}
+
+/* ===============================
+   배경 어둠
+================================ */
+
+.poster-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0; /* 액자보다 뒤 */
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0.45),
+            rgba(0,0,0,0.9)
+        );
+    backdrop-filter: blur(2px);
+
+    /* 🔑 페이드 */
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+/* 🔑 활성화 시 backdrop 보이기 */
+.poster-view.active .poster-backdrop {
+    opacity: 1;
+}
+
+/* ===============================
+   나무 액자
+================================ */
+
+.poster-frame {
+    position: relative;
+    z-index: 2; /* backdrop 위 */
+    padding: 22px;
+
+    background:
+        linear-gradient(135deg, #5a3a22, #3b2415);
+
+    box-shadow:
+        0 40px 80px rgba(0,0,0,.85),
+        inset 0 0 0 2px rgba(0,0,0,.45),
+        inset 0 0 0 6px rgba(255,215,160,.15);
+
+    border-radius: 2px;
+
+    transform: rotate(-2.5deg) scale(0.88);
+    opacity: 0;
+
+    transition:
+        transform .45s cubic-bezier(.22,.61,.36,1),
+        opacity .3s ease;
+
+    pointer-events: auto;
+}
+
+/* ✅ 활성화되면 액자 등장 */
+.poster-view.active .poster-frame {
+    opacity: 1;
+    transform: rotate(-2.5deg) scale(1);
+}
+
+/* 점선 테두리 (빈티지 일본 포스터) */
+.poster-frame::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed rgba(255,230,190,0.28);
+    pointer-events: none;
+}
+
+/* ===============================
+   📌 종이 테이프 고정 (와시 테이프)
+================================ */
+
+.poster-frame .tape {
+    position: absolute;
+    width: 64px;
+    height: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(245,235,210,0.9),
+            rgba(225,205,170,0.85)
+        );
+    opacity: 0.85;
+    box-shadow:
+        inset 0 0 0 1px rgba(120,90,60,0.25),
+        0 2px 6px rgba(0,0,0,0.35);
+    transform: rotate(var(--tape-rotate, -6deg));
+    pointer-events: none;
+    z-index: 3;
+}
+
+.poster-frame .tape.top-left {
+    top: -8px;
+    left: 28px;
+}
+
+.poster-frame .tape.top-right {
+    top: -10px;
+    right: 36px;
+}
+
+.poster-frame .tape.bottom-left {
+    bottom: -10px;
+    left: 42px;
+    transform: rotate(4deg);
+}
+
+.poster-frame .tape.bottom-right {
+    bottom: -8px;
+    right: 30px;
+    transform: rotate(-3deg);
+}
+
+/* ===============================
+   🔩 못 / 핀 고정 디테일
+================================ */
+
+.poster-frame .pin {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            #ddd,
+            #666
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,0.4),
+        0 2px 4px rgba(0,0,0,0.6);
+
+    pointer-events: none;
+    z-index: 3;
+}
+
+.poster-frame .pin.top {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.poster-frame .pin.left {
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.poster-frame .pin.right {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ===============================
+   🔴 일본 인장 (붓글씨 + 세로)
+================================ */
+
+.poster-frame::before {
+    content: attr(data-seal-text);
+
+    position: absolute;
+    top: var(--seal-top, 18px);
+    right: var(--seal-right, 18px);
+
+    width: 66px;
+    height: 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    font-family: "Yuji Syuku", "Shippori Mincho", serif;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+
+    color: #3a0000;
+
+    border: 4px solid #7a0000;
+    border-radius: 3px;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(230,80,80,0.75),
+            rgba(140,20,20,0.35)
+        );
+
+    box-shadow:
+        inset 0 0 0 2px rgba(90,0,0,0.6),
+        inset 0 0 14px rgba(0,0,0,0.35),
+        0 6px 14px rgba(0,0,0,0.6);
+
+    text-shadow:
+        1px 0 rgba(255,220,220,0.35),
+        -1px 0 rgba(60,0,0,0.45);
+
+    transform: rotate(var(--seal-rotate, -14deg));
+    opacity: 0.96;
+
+    filter: blur(0.25px);
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* ===============================
+   액자 안 포스터
+================================ */
+
+.poster-frame img {
+    display: block;
+
+    max-width: min(68vw, 700px);
+    max-height: min(78vh, 880px);
+
+    background:
+        #f6f1e6
+        url("/images/washi_texture.png") repeat;
+
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse at center,
+            #000 60%,
+            rgba(0,0,0,0.7) 72%,
+            rgba(0,0,0,0) 100%
+        );
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            #000 60%,
+            rgba(0,0,0,0.7) 72%,
+            rgba(0,0,0,0) 100%
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.28);
+}
+
+/* ===============================
+   📱 MOBILE / TABLET FIX
+   (감상용: 회전 제거)
+================================ */
+
+@media (max-width: 768px) {
+
+    .poster-frame {
+        transform: scale(0.92);
+    }
+
+    .poster-view.active .poster-frame {
+        transform: scale(1);
+    }
+}

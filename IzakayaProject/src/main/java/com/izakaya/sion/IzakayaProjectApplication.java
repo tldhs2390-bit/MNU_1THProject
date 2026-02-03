@@ -1,0 +1,13 @@
+package com.izakaya.sion;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class IzakayaProjectApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(IzakayaProjectApplication.class, args);
+	}
+
+}

@@ -1,0 +1,255 @@
+@charset "UTF-8";
+
+/* ===============================
+   POSTER WALL
+================================ */
+
+.poster-wall {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 720px;
+    margin: 40px auto 0;
+    overflow: hidden;
+}
+
+/* ===============================
+   POSTER BASE
+================================ */
+
+.poster {
+    position: absolute;
+    background: #f6f1e6;
+    padding: 5px;
+
+    box-shadow:
+        0 4px 8px rgba(0,0,0,.45),
+        inset 0 0 0 1px rgba(0,0,0,0.22);
+
+    cursor: pointer;
+
+    filter:
+        saturate(0.9)
+        contrast(0.96)
+        brightness(0.97);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        filter .3s ease;
+}
+
+/* 종이 질감 */
+.poster::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: url("/images/washi_texture.png") repeat;
+    opacity: 0.2;
+    mix-blend-mode: multiply;
+}
+
+/* 가장자리 마모 */
+.poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse at center,
+            #000 75%,
+            rgba(0,0,0,0.9) 88%,
+            rgba(0,0,0,0) 100%
+        );
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            #000 75%,
+            rgba(0,0,0,0.9) 88%,
+            rgba(0,0,0,0) 100%
+        );
+}
+
+/* ===============================
+   SIZE VARIATION
+================================ */
+
+.poster-1  { width: 185px; }
+.poster-2  { width: 170px; }
+.poster-3  { width: 195px; }
+.poster-4  { width: 180px; }
+.poster-5  { width: 170px; }
+.poster-6  { width: 190px; }
+.poster-7  { width: 175px; }
+.poster-8  { width: 165px; }
+.poster-9  { width: 185px; }
+.poster-10 { width: 175px; }
+.poster-11 { width: 180px; }
+.poster-12 { width: 170px; }
+.poster-13 { width: 165px; }
+.poster-14 { width: 195px; }
+.poster-15 { width: 170px; }
+
+/* ===============================
+   VINTAGE (90년대 누런 느낌)
+================================ */
+
+.poster-7,
+.poster-9,
+.poster-10,
+.poster-14 {
+    filter:
+        sepia(0.35)
+        saturate(0.7)
+        contrast(0.88)
+        brightness(0.88);
+}
+
+/* ===============================
+   POSITION : IZAKAYA WALL (CENTER-FOCUSED)
+================================ */
+
+/* ===== CENTER MAIN (주인공 고정) ===== */
+.poster-9 {
+    top: 160px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    z-index: 6;
+}
+
+/* ===== LEFT CLUSTER (겹침 최소화) ===== */
+.poster-4 {
+    top: 130px;
+    left: calc(50% - 300px);
+    transform: rotate(-4deg);
+    z-index: 4;
+}
+
+.poster-5 {
+    top: 310px;
+    left: calc(50% - 260px);
+    transform: rotate(2deg);
+    z-index: 3;
+}
+
+.poster-1 {
+    top: 500px;
+    left: calc(50% - 230px);
+    transform: rotate(-1.8deg);
+    z-index: 2;
+}
+
+/* ===== RIGHT CLUSTER (지그재그 분산 핵심) ===== */
+.poster-11 {
+    top: 130px;
+    left: calc(50% + 170px);   /* 왼쪽으로 이동 */
+    transform: rotate(3deg);
+    z-index: 4;
+}
+
+.poster-12 {
+    top: 310px;
+    left: calc(50% + 110px);   /* 중앙 브릿지 역할 */
+    transform: rotate(-1.2deg);
+    z-index: 3;
+}
+
+.poster-10 {
+    top: 480px;
+    left: calc(50% + 260px);   /* 오른쪽으로 분리 */
+    transform: rotate(2.5deg);
+    z-index: 2;
+}
+
+/* ===== MID BRIDGE (중앙 연결, 밀도 보강) ===== */
+.poster-6 {
+    top: 360px;
+    left: calc(50% - 110px);
+    transform: rotate(1.2deg);
+    z-index: 5;
+}
+
+.poster-14 {
+    top: 540px;
+    left: calc(50% + 70px);
+    transform: rotate(-2.4deg);
+    z-index: 4;
+}
+
+/* ===== FAR EDGE (끝까지 채우되 화면 안) ===== */
+.poster-7 {
+    top: 110px;
+    left: 40px;
+    transform: rotate(4deg);
+    z-index: 1;
+}
+
+.poster-8 {
+    top: 360px;
+    left: 70px;
+    transform: rotate(-2.8deg);
+    z-index: 1;
+}
+
+.poster-2 {
+    top: 560px;
+    left: 110px;
+    transform: rotate(-1.5deg);
+    z-index: 1;
+}
+
+.poster-3 {
+    top: 130px;
+    left: calc(100% - 290px);
+    transform: rotate(1.5deg);
+    z-index: 1;
+}
+
+.poster-13 {
+    top: 430px;
+    left: calc(100% - 300px);
+    transform: rotate(0.8deg);
+    z-index: 1;
+}
+
+.poster-15 {
+    top: 610px;
+    left: calc(100% - 240px);
+    transform: rotate(-3.2deg);
+    z-index: 1;
+}
+
+/* ===============================
+   TAPE (딱 3곳)
+================================ */
+
+.poster-1::before,
+.poster-5::before,
+.poster-11::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 40%;
+    width: 42px;
+    height: 16px;
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(0,0,0,.18);
+    transform: rotate(-6deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,.35);
+}
+
+/* ===============================
+   HOVER
+================================ */
+
+.poster:hover {
+    transform: translateY(-3px) rotate(0deg) scale(1.02);
+    box-shadow: 0 14px 28px rgba(0,0,0,.6);
+    filter:
+        saturate(1)
+        contrast(1.02)
+        brightness(1.02);
+    z-index: 20;
+}

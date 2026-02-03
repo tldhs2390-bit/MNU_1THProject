@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>メニュー修正 | Admin</title>
+
+  <link rel="stylesheet" href="/css/index.css" />
+  <link rel="stylesheet" href="/css/admin/admin.css" />
+  <link rel="stylesheet" href="/css/admin/menu.css" />
+  <link rel="stylesheet" href="/css/admin/menu_insert.css" />
+
+  <style>
+    /* =========================
+       ✅ 액자 느낌 + 사이드바 직각 + 버튼(관리자메인 동일)
+       - 기능/JS/구조 변경 없음
+    ========================= */
+    :root{
+      --frame:#5a3f2b; /* 액자 톤 */
+    }
+
+    /* ✅ 사이드바 전체 가운데 */
+    body.admin.admin-menu-insert .admin-sidebar{
+      text-align:center;
+    }
+
+    /* ✅ 타이틀 직각 + 가운데 */
+    body.admin.admin-menu-insert .admin-login-title{
+      border-radius:0 !important;
+      text-align:center !important;
+    }
+
+    /* ✅ 사이드바 링크 직각 + 가운데 */
+    body.admin.admin-menu-insert .admin-side-links{ text-align:center; }
+    body.admin.admin-menu-insert .admin-side-link{
+      border-radius:0 !important;
+      text-align:center !important;
+      justify-content:center;
+    }
+
+    /* ✅ 로그인 폼 input 직각 */
+    body.admin.admin-menu-insert .admin-login input{
+      border-radius:0 !important;
+      text-align:center;
+    }
+
+    /* ✅ 투명/합성 문제 차단 */
+    body.admin.admin-menu-insert .admin-login,
+    body.admin.admin-menu-insert .admin-session-box{
+      opacity:1 !important;
+      filter:none !important;
+      mix-blend-mode:normal !important;
+      isolation:isolate;
+    }
+
+    /* ✅ 로그인 버튼(로그인 전) = 관리자 메인과 동일 */
+    body.admin.admin-menu-insert .admin-login button{
+      width:100%;
+      padding:10px;
+
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+
+      background:#111 !important;
+      background-image:none !important;
+      color:#fff !important;
+
+      opacity:1 !important;
+      filter:none !important;
+      mix-blend-mode:normal !important;
+
+      cursor:pointer;
+      transform:none !important;
+      text-align:center !important;
+    }
+    body.admin.admin-menu-insert .admin-login button:hover{
+      opacity:.92 !important;
+      transform:none !important;
+      box-shadow:none !important;
+    }
+
+    /* ✅ 로그아웃 버튼(접속중) = 관리자 메인과 동일 */
+    body.admin.admin-menu-insert .admin-session-box form button{
+      width:100%;
+      padding:10px;
+
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+
+      background:#111 !important;
+      background-image:none !important;
+      color:#fff !important;
+
+      opacity:1 !important;
+      filter:none !important;
+      mix-blend-mode:normal !important;
+
+      cursor:pointer;
+      transform:none !important;
+      text-align:center !important;
+    }
+    body.admin.admin-menu-insert .admin-session-box form button:hover{
+      opacity:.92 !important;
+      transform:none !important;
+      box-shadow:none !important;
+    }
+
+    /* ✅ 타이머 박스는 "직각"만 (기존 디자인 유지) */
+    .admin-session-timer{
+      margin: 14px 0;
+      padding: 14px 0;
+      text-align: center;
+      background: rgba(0,0,0,0.08);
+      border-radius: 0 !important; /* 직각 */
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .admin-session-timer strong{
+      display: block;
+      margin-top: 6px;
+      font-size: 28px;
+      color: #8b2c1f;
+      letter-spacing: 1px;
+    }
+
+    /* ✅ 페이지 전체 액자 테두리 */
+    body.admin.admin-menu-insert .admin-page.admin-insert-page{
+      border-radius:0 !important;
+      border:6px solid var(--frame) !important;
+      box-shadow: 0 14px 18px rgba(0,0,0,.18) !important;
+    }
+
+    /* ✅ 폼 카드 액자(안쪽 프레임) */
+    body.admin.admin-menu-insert .admin-form-card{
+      border-radius:0 !important;
+      border:4px solid var(--frame) !important;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 12px 18px rgba(0,0,0,.12) !important;
+    }
+
+    /* ✅ 상단 헤드 직각 */
+    body.admin.admin-menu-insert .admin-page-head{
+      border-radius:0 !important;
+    }
+
+    /* ✅ 페이지 버튼 직각(기능 영향 없음) */
+    body.admin.admin-menu-insert .admin-secondary-btn,
+    body.admin.admin-menu-insert .admin-primary-btn{
+      border-radius:0 !important;
+    }
+
+    /* ✅ 기존 textarea 가독성 유지 */
+    body.admin.admin-menu-insert textarea.form-control{
+      font-size: 15.5px;
+      line-height: 1.8;
+    }
+    body.admin.admin-menu-insert .form-grid-2 textarea.form-control{
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .menu-image-preview{
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .menu-image-preview img{
+      max-width: 220px;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.75);
+    }
+    .menu-image-preview .menu-image-url{
+      font-size: 12.5px;
+      color: rgba(0,0,0,.65);
+      word-break: break-all;
+    }
+
+    .menu-image-actions{
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  </style>
+
+  <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}"/>
+  <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}"/>
+</head>
+
+<body class="admin admin-menu-insert">
+
+<header class="admin-topbar">
+  <div class="admin-topbar__inner admin-topbar__inner--center">
+    <a href="/admin/main" class="admin-topbar__brand">
+      居酒屋シオン(管理者)
+    </a>
+  </div>
+</header>
+
+<main class="admin-dashboard">
+
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__logo">
+      <a href="/" aria-label="トップページへ">
+        <img src="/images/logo-brand.png" alt="SION" class="admin-logo">
+      </a>
+    </div>
+
+    <div class="admin-login-title">管理メニュー</div>
+
+    <div class="admin-side-links">
+      <a href="/admin/main" class="admin-side-link">ダッシュボード</a>
+      <a href="/admin/menu/list" class="admin-side-link active">メニュー管理</a>
+      <a href="/admin/store/list" class="admin-side-link">店舗管理</a>
+    </div>
+
+    <form class="admin-login"
+          sec:authorize="!isAuthenticated()"
+          method="post"
+          action="/admin/login">
+      <div class="admin-login-title">管理者ログイン</div>
+      <input type="text" name="username" placeholder="管理者ID" required />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <button type="submit">ログイン</button>
+    </form>
+
+    <div class="admin-login admin-session-box"
+         sec:authorize="isAuthenticated()">
+      <div class="admin-login-title">管理者ログインで接続中</div>
+
+      
+
+      <form method="post" action="/admin/logout">
+        <button type="submit">ログアウト</button>
+      </form>
+    </div>
+  </aside>
+
+  <section class="admin-main">
+    <div class="admin-page admin-insert-page">
+
+      <div class="admin-page-head">
+        <h2 class="admin-page-title">メニュー修正</h2>
+        <a href="/admin/menu/list" class="admin-secondary-btn">戻る</a>
+      </div>
+
+      <form class="admin-form-card"
+            th:action="@{/admin/menu/edit}"
+            th:object="${menu}"
+            method="post"
+            enctype="multipart/form-data">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- ✅ メニュー名 -->
+        <div class="form-field">
+          <label class="form-label">メニュー名</label>
+          <input class="form-control"
+                 type="text"
+                 th:field="*{name}"
+                 id="name"
+                 required
+                 maxlength="120"
+                 placeholder="例) 海鮮チヂミ">
+        </div>
+
+        <!-- ✅ 価格 -->
+        <div class="form-field">
+          <label class="form-label">価格テキスト(数字のみ)</label>
+          <input class="form-control"
+                 type="text"
+                 id="priceInput"
+                 th:field="*{priceText}"
+                 required
+                 maxlength="80"
+                 placeholder="例) 980">
+        </div>
+
+        <!-- ✅ 表示順 -->
+        <div class="form-field">
+          <label class="form-label">表示順（小さいほど上）</label>
+          <input class="form-control"
+                 type="number"
+                 th:field="*{sortOrder}"
+                 placeholder="例) 1">
+          <div class="form-help">※ 未入力の場合は 9999 で登録されます</div>
+        </div>
+
+        <!-- ✅ 画像 -->
+        <div class="form-field">
+          <label class="form-label">メニュー画像（任意）</label>
+
+          <input class="form-control"
+                 type="file"
+                 id="imageFile"
+                 name="imageFile"
+                 accept="image/*">
+
+          <div class="form-help">
+            ※ 1枚のみアップロードできます。未選択の場合は既存画像を維持します。
+          </div>
+
+          <!-- ✅ 기존 이미지 미리보기 -->
+          <div class="menu-image-preview" th:if="*{imageUrl != null && imageUrl != ''}">
+            <img th:src="*{imageUrl}" alt="menu image">
+            <div class="menu-image-url" th:text="*{imageUrl}">/uploads/menu/sample.jpg</div>
+          </div>
+
+          <!-- ✅ 기존 이미지 삭제 -->
+          <div class="menu-image-actions" th:if="*{imageUrl != null && imageUrl != ''}">
+            <label class="form-check" style="display:inline-flex; gap:8px; align-items:center;">
+              <input type="checkbox" name="removeImage" value="true">
+              <span>現在の画像を削除</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ✅ 原産地 / アレルギー -->
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label class="form-label">原産地（任意）</label>
+            <textarea class="form-control"
+                      th:field="*{originText}"
+                      id="originText"
+                      rows="2"
+                      placeholder="例) 牛肉(アメリカ)・白菜(日本)"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">アレルギー（任意）</label>
+            <textarea class="form-control"
+                      th:field="*{allergyText}"
+                      id="allergyText"
+                      rows="2"
+                      placeholder="例) 小麦・卵・乳成分"></textarea>
+          </div>
+        </div>
+
+        <!-- ✅ 카테고리 -->
+        <div class="form-field">
+          <label class="form-label">カテゴリ</label>
+          <div class="form-help">※ カテゴリー選択をしなくてもaiがカテゴリーを選択してくれます</div>
+          <br>
+          <select class="form-control" th:field="*{category}" id="category" required>
+            <option value="" disabled>選択してください</option>
+            <option value="SINGLE">単品メニュー</option>
+            <option value="MAIN">麺・ご飯類</option>
+            <option value="FRIED_PAN">揚げ物・チヂミ</option>
+            <option value="SNACK">簡単おつまみ</option>
+          </select>
+        </div>
+
+        <!-- ✅ AI 참고용 특징 -->
+        <div class="form-field">
+          <label class="form-label">メニュー特徴（AI参考）</label>
+          <textarea class="form-control"
+                    name="highlightText"
+                    id="aiFeatures"
+                    rows="2"
+                    maxlength="120"
+                    placeholder="例) 鉄板で提供 / にんにく強め / ピリ辛 / 炙り香 / サクサク食感 / タルタル多め など"
+                    th:text="*{highlightText}"></textarea>
+          <div class="form-help">※ AIが説明文を作る時に必ず参考にします（最大120文字）</div>
+        </div>
+
+        <!-- ✅ 설명 + AI 버튼 -->
+        <div class="form-field">
+          <label class="form-label">説明</label>
+          <textarea class="form-control"
+                    th:field="*{description}"
+                    id="description"
+                    rows="6"
+                    placeholder="メニュー説明"></textarea>
+
+          <div style="margin-top:10px;">
+            <button type="button" id="aiGenerateBtn" class="admin-secondary-btn">
+              AIで自動生成
+            </button>
+            <span style="margin-left:8px; font-size:13px; color:#666;">
+              ※ カテゴリ・説明を自動生成します（画像があれば画像も参照）
+            </span>
+          </div>
+        </div>
+
+        <!-- ✅ 공개 -->
+        <div class="form-row">
+          <label class="form-check">
+            <input type="checkbox" th:field="*{visible}">
+            <span>公開（visible）</span>
+          </label>
+        </div>
+
+        <!-- ✅ 버튼 -->
+        <div class="form-actions">
+          <button type="submit" class="admin-primary-btn">修正</button>
+          <a href="/admin/menu/list" class="admin-secondary-btn">キャンセル</a>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="admin-footer">
+  <small>© 居酒屋シオン Admin</small>
+</footer>
+
+<script th:inline="javascript">
+  const IS_AUTHENTICATED = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+</script>
+
+<!-- ✅✅✅ 기존 타이머/세션체크 그대로 -->
+<script sec:authorize="isAuthenticated()">
+document.addEventListener('DOMContentLoaded', () => {
+  let remaining = 600;
+  const minEl = document.getElementById('timerMin');
+  const secEl = document.getElementById('timerSec');
+  if (!minEl || !secEl) return;
+
+  const render = () => {
+    minEl.textContent = Math.floor(remaining / 60);
+    secEl.textContent = String(remaining % 60).padStart(2, '0');
+  };
+
+  render();
+
+  const doLogout = async () => {
+    try {
+      await fetch('/admin/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+    } catch (e) {
+    } finally {
+      location.href = '/admin/main?logout';
+    }
+  };
+
+  setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      remaining = 0;
+      render();
+      doLogout();
+      return;
+    }
+    render();
+  }, 1000);
+
+  setInterval(async () => {
+    try {
+      const res = await fetch('/admin/session-check', { cache: 'no-store' });
+      const alive = await res.json();
+      if (!alive) location.reload();
+    } catch (e) {
+      location.reload();
+    }
+  }, 5000);
+});
+</script>
+
+<!-- ✅✅✅ AI 생성: "셀렉트 옵션 안에서만" 카테고리 적용 + 기존 기능 유지 -->
+<script>
+(() => {
+  const btn = document.getElementById('aiGenerateBtn');
+  if (!btn) return;
+
+  const getCsrf = () => {
+    const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '';
+    const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') || '';
+    return { token, header };
+  };
+
+  const setBtnLoading = (loading) => {
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.75' : '1';
+    btn.textContent = loading ? '生成中...' : 'AIで自動生成';
+  };
+
+  const fileToDataUrl = (file) => new Promise((resolve) => {
+    if (!file) return resolve('');
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => resolve('');
+    reader.readAsDataURL(file);
+  });
+
+  btn.addEventListener('click', async () => {
+    const nameEl = document.getElementById('name');
+    const priceEl = document.getElementById('priceInput');
+    const allergyEl = document.getElementById('allergyText');
+    const originEl = document.getElementById('originText');
+    const featuresEl = document.getElementById('aiFeatures');
+
+    const categoryEl = document.getElementById('category');
+    const descEl = document.getElementById('description');
+    const fileEl = document.getElementById('imageFile');
+
+    const name = (nameEl?.value || '').trim();
+    if (!name) {
+      alert('メニュー名を入力してください');
+      nameEl?.focus();
+      return;
+    }
+
+    const allowedCategories = Array.from(categoryEl?.options || [])
+      .map(o => (o.value || '').trim())
+      .filter(v => v && v !== '');
+
+    const imageFile = fileEl?.files?.[0];
+    if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+      alert('画像が大きすぎます（5MB以上）。AI生成は画像なしで続行します。');
+    }
+
+    const imageBase64 =
+      (imageFile && imageFile.size <= 5 * 1024 * 1024)
+        ? await fileToDataUrl(imageFile)
+        : '';
+
+    const payload = {
+      name,
+      price: (priceEl?.value || '').trim(),
+      allergy: (allergyEl?.value || '').trim(),
+      origin: (originEl?.value || '').trim(),
+      features: (featuresEl?.value || '').trim(),
+      allowedCategories,
+      imageBase64
+    };
+
+    const { token, header } = getCsrf();
+    const headers = { 'Content-Type': 'application/json' };
+    if (token && header) headers[header] = token;
+
+    setBtnLoading(true);
+
+    try {
+      const res = await fetch('/admin/menu/ai-generate', {
+        method: 'POST',
+        headers,
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        console.error('AI generate failed:', res.status, text);
+        alert('AI生成に失敗しました（サーバーエラー）');
+        return;
+      }
+
+      const result = await res.json();
+
+      if (result.category && categoryEl) {
+        const c = String(result.category).trim();
+        if (allowedCategories.includes(c)) {
+          categoryEl.value = c;
+          categoryEl.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+          console.warn('AI category not allowed:', c, allowedCategories);
+        }
+      }
+
+      if (result.description && descEl) {
+        descEl.value = result.description;
+        descEl.focus();
+      }
+
+    } catch (e) {
+      console.error(e);
+      alert('AI生成に失敗しました（通信エラー）');
+    } finally {
+      setBtnLoading(false);
+    }
+  });
+})();
+</script>
+
+<!-- ✅✅✅ 기존 keepalive 그대로 -->
+<script>
+(() => {
+  let lastPing = 0;
+  const INTERVAL = 60 * 1000;
+
+  const pingServer = () => {
+    const now = Date.now();
+    if (now - lastPing < INTERVAL) return;
+    lastPing = now;
+
+    fetch('/admin/session-keepalive', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).catch(() => {});
+  };
+
+  ['mousemove', 'click', 'keydown', 'scroll'].forEach(event => {
+    document.addEventListener(event, pingServer, { passive: true });
+  });
+})();
+</script>
+
+<!-- ✅✅✅ 기존 가격 포맷 그대로 -->
+<script>
+(function(){
+  const input = document.getElementById('priceInput');
+  if(!input) return;
+
+  const formatPrice = () => {
+    const raw = (input.value || '').trim();
+    if(!raw) return;
+
+    const match = raw.match(/^(.*?)(\d[\d,]*)$/);
+    if(!match) return;
+
+    const prefix = match[1] || '';
+    const priceNum = match[2].replace(/[^\d]/g, '');
+    if(!priceNum) return;
+
+    const formatted =
+      prefix +
+      '¥' +
+      Number(priceNum).toLocaleString('ja-JP') +
+      '（税込）';
+
+    input.value = formatted;
+  };
+
+  input.addEventListener('blur', formatPrice);
+  input.form?.addEventListener('submit', formatPrice);
+})();
+</script>
+
+</body>
+</html>
