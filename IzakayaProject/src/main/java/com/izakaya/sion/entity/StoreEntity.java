@@ -10,6 +10,13 @@ import lombok.Setter;
 @Table(name = "store", schema = "izakaya")
 public class StoreEntity {
 
+	// StoreEntity.java 내부에 추가
+	@Transient
+	private Long todaySales = 0L;
+
+	@Transient
+	private Long reservationCount = 0L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

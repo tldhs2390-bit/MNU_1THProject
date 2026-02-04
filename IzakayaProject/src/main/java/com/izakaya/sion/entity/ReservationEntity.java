@@ -6,64 +6,64 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "resv")
+@Table(name = "reservation", schema = "izakaya",
+       indexes = {
+           @Index(name="idx_resv_store_status", columnList="store_id, status"),
+           @Index(name="idx_resv_store_visit", columnList="store_id, visit_at")
+       })
+@Getter @Setter
 public class ReservationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "resv_id")
-    private Long resvId;
+    private Long id;
 
-    @Column(name = "store_id", nullable = false)
-    private Long storeId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="store_id", nullable = false)
+    private StoreEntity store;
 
-    @Column(name = "cust_id", nullable = false)
-    private Long custId;
+    @Column(name="customer_id", nullable = false)
+    private Long customerId;
 
-    @Column(name = "resv_at", nullable = false)
-    private LocalDateTime resvAt;
+    @Column(name="customer_name", nullable = false, length = 60)
+    private String customerName;
 
-    @Column(name = "party_cnt", nullable = false)
-    private int partyCnt;
+    // ✅✅✅ [추가] DB NOT NULL 컬럼 대응
+    @Column(name="phone", nullable = false, length = 30)
+    private String phone;
 
-    @Column(name = "req_note", length = 500)
+    @Column(name="visit_at", nullable = false)
+    private LocalDateTime visitAt;
+
+    @Column(nullable = false)
+    private Integer headcount;
+
+    @Column(name="req_note", length = 500)
     private String reqNote;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ReservationStatus status;
+    @Column(name="line_user_id", length = 80)
+    private String lineUserId;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private ReservationStatus status = ReservationStatus.PENDING;
+
+    @Column(name="created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    /* ====== 예약 생성 (PENDING) ====== */
-    public static ReservationEntity createPending(
-            Long storeId,
-            Long custId,
-            LocalDateTime resvAt,
-            int partyCnt,
-            String reqNote
-    ) {
-        ReservationEntity e = new ReservationEntity();
-        e.storeId = storeId;
-        e.custId = custId;
-        e.resvAt = resvAt;
-        e.partyCnt = partyCnt;
-        e.reqNote = reqNote;
-        e.status = ReservationStatus.PENDING;
-        return e;
+    @Column(name="updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
     }
 
-    /* ====== 예약 확정 ====== */
-    public void confirm() {
-        this.status = ReservationStatus.CONFIRMED;
-    }
-
-    /* ====== 예약 거절 ====== */
-    public void reject() {
-        this.status = ReservationStatus.REJECTED;
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

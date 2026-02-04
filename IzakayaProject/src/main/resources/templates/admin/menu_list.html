@@ -250,8 +250,8 @@
             <table class="admin-table">
               <thead>
               <tr>
-                <th>ID</th>
-                <th style="width:200px;" class="admin-td-center">カテゴリ</th>
+				<th>No</th>                
+				<th style="width:200px;" class="admin-td-center">カテゴリ</th>
                 <th style="width:180px;" class="admin-td-center">表示順</th>
                 <th style="width:160px;" class="admin-td-center">名前</th>
                 <th style="width:160px;" class="admin-td-center">価格</th>
@@ -261,9 +261,8 @@
               </thead>
 
               <tbody>
-              <tr th:each="m : ${entry.value}">
-                <td th:text="${m.id}">1</td>
-
+				<tr th:each="m, st : ${entry.value}">
+				<td th:text="${st.count}">1</td>
                 <td>
                   <span class="admin-badge"
                         th:text="${

@@ -1,90 +1,636 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>管理者ページ | Izakaya SION</title>
+  <title>店舗一覧 | Admin</title>
 
-  <!-- 브랜드 기본 톤 (선택) -->
   <link rel="stylesheet" href="/css/index.css" />
-
-  <!-- 관리자 전용 -->
   <link rel="stylesheet" href="/css/admin/admin.css" />
+  <link rel="stylesheet" href="/css/admin/menu.css" />
+  <link rel="stylesheet" href="/css/admin/menu_insert.css" />
+
+  <!-- ✅ CSRF -->
+  <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}"/>
+  <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}"/>
+
+  <style>
+    :root{
+      --frame:#5a3f2b;
+      --btn-dark-top: rgba(30,24,18,.98);
+      --btn-dark-bot: rgba(10,10,10,.98);
+      --btn-dark-border: rgba(255,255,255,.14);
+      --btn-line: rgba(0,0,0,.12);
+      --btn-white: rgba(255,255,255,.92);
+    }
+
+    html, body{ height:100%; }
+    body.admin.admin-store-list{
+      overflow-y:auto;
+      overflow-x:hidden;
+    }
+
+    /* ✅ 사이드바 */
+    body.admin.admin-store-list .admin-sidebar{ text-align:center; }
+    body.admin.admin-store-list .admin-login-title{
+      border-radius:0 !important;
+      text-align:center !important;
+    }
+    body.admin.admin-store-list .admin-side-links{ text-align:center; }
+    body.admin.admin-store-list .admin-side-link{
+      border-radius:0 !important;
+      text-align:center !important;
+      justify-content:center;
+    }
+    body.admin.admin-store-list .admin-login input{
+      border-radius:0 !important;
+      text-align:center;
+    }
+    body.admin.admin-store-list .admin-login,
+    body.admin.admin-store-list .admin-session-box{
+      opacity:1 !important;
+      filter:none !important;
+      mix-blend-mode:normal !important;
+      isolation:isolate;
+    }
+    body.admin.admin-store-list .admin-login button,
+    body.admin.admin-store-list .admin-session-box form button{
+      width:100%;
+      padding:10px;
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+      background:#111 !important;
+      background-image:none !important;
+      color:#fff !important;
+      cursor:pointer;
+      transform:none !important;
+      text-align:center !important;
+    }
+    body.admin.admin-store-list .admin-login button:hover,
+    body.admin.admin-store-list .admin-session-box form button:hover{
+      opacity:.92 !important;
+    }
+
+    /* ✅ 타이머는 페이지에서는 숨김(기능은 JS 유지 가능) */
+    body.admin.admin-store-list .admin-session-timer{ display:none !important; }
+
+    /* ✅ 메인 컨텐츠 위로 */
+    body.admin.admin-store-list .admin-main{
+      align-items:flex-start;
+      padding: 46px 40px;
+    }
+
+    /* ✅ 페이지 액자 */
+    body.admin.admin-store-list .admin-page.admin-store-list-page{
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 18px;
+
+      border-radius:0 !important;
+      border:6px solid var(--frame) !important;
+      box-shadow: 0 14px 18px rgba(0,0,0,.18) !important;
+
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    /* ✅ 상단 헤더 */
+    body.admin.admin-store-list .admin-page-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+
+      border-radius:0 !important;
+    }
+    body.admin.admin-store-list .admin-page-title{
+      margin:0;
+      font-size: 22px;
+      color:#2b1f14;
+      letter-spacing: .02em;
+    }
+
+    /* ✅ 상단 버튼 영역(요청: 버튼 2개만) */
+    .store-top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    /* ✅ 버튼(기존 톤 유지, 직각) */
+    .admin-primary-btn,
+    .admin-secondary-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:0 !important;
+      text-decoration:none;
+      font-weight:900;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+
+    .admin-primary-btn{
+      background: linear-gradient(180deg, var(--btn-dark-top), var(--btn-dark-bot));
+      border: 1px solid var(--btn-dark-border);
+      color:#fff;
+      box-shadow:
+        0 10px 18px rgba(0,0,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.12);
+      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+    }
+    .admin-primary-btn:hover{
+      opacity:.94;
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 24px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    .admin-secondary-btn{
+      background: var(--btn-white);
+      border:1px solid var(--btn-line);
+      color:#111;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+      transition: transform .12s ease, background .12s ease, opacity .12s ease;
+    }
+    .admin-secondary-btn:hover{
+      background: rgba(255,255,255,1);
+      transform: translateY(-1px);
+    }
+
+    /* ✅ 테이블 액자 */
+    .admin-table-wrap{
+      overflow:auto;
+      background: rgba(255,255,255,.90);
+      border-radius:0 !important;
+      border:4px solid var(--frame) !important;
+      box-shadow: 0 12px 18px rgba(0,0,0,.12) !important;
+    }
+
+    .admin-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      min-width: 980px;
+      table-layout: fixed;
+    }
+
+    .admin-table th,
+    .admin-table td{
+      padding: 13px 12px;
+      text-align:left;
+      vertical-align:middle;
+      border-bottom:1px solid rgba(0,0,0,.06);
+      color:#222;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .admin-table thead tr{
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,248,248,.88));
+    }
+    .admin-table th{
+      font-size:13px;
+      font-weight:900;
+      color: rgba(43,31,20,.88);
+    }
+
+    /* ✅ 숫자 컬럼 */
+    .td-num{ text-align:center !important; }
+    .td-actions{ text-align:center !important; }
+
+    /* ✅ OPEN 링크 */
+    .store-open-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:0;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.92);
+      text-decoration:none;
+      font-weight:900;
+      color:#111;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+      transition: transform .12s ease, background .12s ease;
+    }
+    .store-open-link:hover{
+      background: rgba(255,255,255,1);
+      transform: translateY(-1px);
+    }
+
+    .admin-empty{
+      padding: 18px 14px;
+      color:#666;
+      font-weight:700;
+    }
+
+    @media (max-width: 860px){
+      body.admin.admin-store-list .admin-main{ padding: 26px 16px; }
+      body.admin.admin-store-list .admin-page.admin-store-list-page{ width: 100%; }
+      .admin-table{ min-width: 860px; }
+    }
+    /* =========================
+   ✅ 사이드바 로고 디자인 통일 (store-list 기준)
+   ========================= */
+
+/* 로고 감싸는 영역 */
+body.admin.admin-menu-insert .admin-sidebar__logo{
+  padding: 24px 0 18px;
+}
+
+/* 로고 링크 */
+body.admin.admin-menu-insert .admin-sidebar__logo a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 로고 이미지 크기/비율 통일 */
+body.admin.admin-menu-insert .admin-logo{
+  width: 120px;        /* ← store-list와 동일 */
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 사이드바 전체 레이아웃 정렬 보정 */
+body.admin.admin-menu-insert .admin-sidebar{
+  padding-top: 0;
+}
+/* =========================
+   ✅ 테이블 영역 높이 고정 + 내부 스크롤
+   - 점포가 10개 넘어도 페이지(폼) 높이 증가 X
+   - 11개 이상이면 테이블 영역 안에서 스크롤
+========================= */
+body.admin.admin-store-list .admin-table-wrap{
+  /* "10개 정도"가 보이도록 적당히 고정 높이 */
+  max-height: 640px;      /* 640으로 설정이 매장 9개 기준 그 이후로는 스크
+  overflow-y: auto;       /* 세로 스크롤 */
+  overflow-x: auto;       /* 가로는 기존처럼 */
+}
+
+/* ✅ 스크롤 시 헤더 겹침(비침) 방지: sticky th에 배경/레이어 확실히 */
+body.admin.admin-store-list .admin-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 5; /* tbody 위로 */
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,248,248,.88)); /* ✅ th 자체 배경 */
+}
+
+/* ✅ 헤더와 본문 구분선(겹쳐보임 방지 체감 큼) */
+body.admin.admin-store-list .admin-table thead th{
+  border-bottom: 1px solid rgba(0,0,0,.10);
+  box-shadow: 0 2px 0 rgba(0,0,0,.04);
+}
+
+/* (선택) tbody가 헤더 뒤로 비치지 않게 행 배경 고정 */
+body.admin.admin-store-list .admin-table tbody td{
+  background: rgba(255,255,255,1);
+}
+
+/* ✅ 겹침/비침 완전 차단 (store-list) */
+body.admin.admin-store-list .admin-table-wrap{
+  isolation: isolate; /* 레이어 분리(겹침 현상 줄임) */
+}
+
+/* ✅ sticky 헤더: 완전 불투명 + 레이어 최상단 */
+body.admin.admin-store-list .admin-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff !important;        /* ✅ rgba/그라데이션 말고 완전 불투명 */
+  background-clip: padding-box;
+}
+
+/* ✅ 헤더 줄(트)에도 배경 확실히 */
+body.admin.admin-store-list .admin-table thead tr{
+  background: #fff !important;
+}
+
+/* ✅ 헤더 아래쪽 “비쳐 보이는 1~2px” 커버 */
+body.admin.admin-store-list .admin-table thead th::after{
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: #fff;                  /* ✅ 아래 행이 비치지 않게 덮음 */
+  pointer-events: none;
+}
+
+/* ✅ 본문도 투명 방지(행/셀 배경 고정) */
+body.admin.admin-store-list .admin-table tbody tr,
+body.admin.admin-store-list .admin-table tbody td{
+  background: #fff;
+}
+  </style>
 </head>
 
-<body class="admin">
+<body class="admin admin-store-list">
 
 <header class="admin-topbar">
-  <div class="admin-topbar__inner">
-
-    <!-- 왼쪽 -->
-    <nav class="admin-topbar__left">
-      <a href="/admin/menu/new" class="admin-link">メニュー登録</a>
-      <a href="/admin/franchise/new" class="admin-link">フランチャイズ登録</a>
-    </nav>
-
-    <!-- 가운데 -->
-    <h1 class="admin-topbar__title">居酒屋シオン</h1>
-
-    <!-- 오른쪽 -->
-    <nav class="admin-topbar__right">
-      <a href="/admin/main" class="admin-link">管理HOME</a>
-      <a href="/admin/menu" class="admin-link">メニュー</a>
-      <a href="/admin/franchise" class="admin-link">フランチャイズ</a>
-      <a href="/" class="admin-link">サイトへ戻る</a>
-    </nav>
-
+  <div class="admin-topbar__inner admin-topbar__inner--center">
+    <a href="/admin/main" class="admin-topbar__brand">
+      居酒屋シオン(管理者)
+    </a>
   </div>
 </header>
 
-<main class="admin-container">
+<main class="admin-dashboard">
 
-  <section class="admin-card">
-    <div class="admin-card__head">
-      <h2 class="admin-card__title">店舗一覧（8店舗）</h2>
-      <p class="admin-card__desc">
-        予約・テイクアウト状況と売上を確認できます。
-      </p>
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__logo">
+      <a href="/" aria-label="トップページへ">
+        <img src="/images/logo-brand.png" alt="SION" class="admin-logo">
+      </a>
     </div>
 
-    <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead>
-        <tr>
-          <th>店舗名</th>
-          <th class="num">予約件数</th>
-          <th class="num">テイクアウト件数</th>
-          <th class="num">テイクアウト売上</th>
-          <th>サイト</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>サンプル店舗</td>
-          <td class="num">0</td>
-          <td class="num">0</td>
-          <td class="num">¥0</td>
-          <td><a href="#" class="admin-link">OPEN</a></td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="admin-login-title">管理メニュー</div>
+
+    <div class="admin-side-links">
+      <a href="/admin/main" class="admin-side-link">ダッシュボード</a>
+      <a href="/admin/menu/list" class="admin-side-link active">メニュー管理</a>
+      <a href="/#" class="admin-side-link">キャンペーン登録</a>
+    </div>
+
+    <form class="admin-login"
+          sec:authorize="!isAuthenticated()"
+          method="post"
+          action="/admin/login">
+      <div class="admin-login-title">管理者ログイン</div>
+      <input type="text" name="username" placeholder="管理者ID" required />
+      <input type="password" name="password" placeholder="パスワード" required />
+      <button type="submit">ログイン</button>
+    </form>
+
+    <div class="admin-login admin-session-box"
+         sec:authorize="isAuthenticated()">
+      <div class="admin-login-title">管理者ログインで接続中</div>
+
+      <form method="post" action="/admin/logout">
+        <button type="submit">ログアウト</button>
+      </form>
+    </div>
+  </aside>
+
+  <section class="admin-main">
+    <div class="admin-page admin-store-list-page">
+
+      <div class="admin-page-head">
+        <h2 class="admin-page-title">店舗一覧</h2>
+
+        <!-- ✅ 공지사항 등록/목록 버튼 제거 -->
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th class="td-num" style="width:72px;">No</th>
+            <th style="width:180px;">店舗地域</th>
+            <th>店舗名</th>
+            <th class="td-num" style="width:160px;">本日売上</th>
+            <th class="td-num" style="width:140px;">予約件数</th>
+            <th class="td-actions" style="width:120px;">サイト</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr th:if="${stores == null or #lists.isEmpty(stores)}">
+            <td colspan="6" class="admin-empty">登録された店舗がありません。</td>
+          </tr>
+
+          <tr th:each="s, st : ${stores}">
+            <td class="td-num" th:text="${st.count}">1</td>
+            <td th:text="${s.city}">新宿</td>
+            <td th:text="${s.name}">サンプル店舗</td>
+
+            <!-- ✅ 실시간 갱신 대상: data-store-id -->
+            <td class="td-num"
+                th:attr="data-store-id=${s.id}"
+                data-role="todaySales">
+              <span>0</span>
+            </td>
+
+            <td class="td-num"
+                th:attr="data-store-id=${s.id}"
+                data-role="reservationCount">
+              <span>0</span>
+            </td>
+
+            <td class="td-actions">
+              <a href="#"
+                 class="store-open-link"
+                 th:attr="data-url=@{/admin/store/{storeId}/table-pos(storeId=${s.id})}"
+                 data-role="openPosPopup">開く</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </section>
 
 </main>
 
 <footer class="admin-footer">
-  <small>© 酒屋 シオン Admin</small>
+  <small>© 居酒屋シオン Admin</small>
 </footer>
+
+<script th:inline="javascript">
+  const IS_AUTHENTICATED = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+</script>
+
+<!-- ✅ (선택) 기존 세션 체크/자동 로그아웃: 요소 없으면 그냥 종료 -->
+<script sec:authorize="isAuthenticated()">
+document.addEventListener('DOMContentLoaded', () => {
+  let remaining = 600;
+  const minEl = document.getElementById('timerMin');
+  const secEl = document.getElementById('timerSec');
+
+  const render = () => {
+    if (!minEl || !secEl) return;
+    minEl.textContent = Math.floor(remaining / 60);
+    secEl.textContent = String(remaining % 60).padStart(2, '0');
+  };
+
+  const doLogout = async () => {
+    try {
+      await fetch('/admin/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+    } catch (e) {
+    } finally {
+      location.href = '/admin/main?logout';
+    }
+  };
+
+  render();
+
+  setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      remaining = 0;
+      render();
+      doLogout();
+      return;
+    }
+    render();
+  }, 1000);
+
+  setInterval(async () => {
+    try {
+      const res = await fetch('/admin/session-check', { cache: 'no-store' });
+      const alive = await res.json();
+      if (!alive) location.reload();
+    } catch (e) {
+      location.reload();
+    }
+  }, 5000);
+});
+</script>
+
+<!-- ✅ 기존 keepalive 그대로 -->
+<script>
+(() => {
+  let lastPing = 0;
+  const INTERVAL = 60 * 1000;
+
+  const pingServer = () => {
+    const now = Date.now();
+    if (now - lastPing < INTERVAL) return;
+    lastPing = now;
+
+    fetch('/admin/session-keepalive', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).catch(() => {});
+  };
+
+  ['mousemove', 'click', 'keydown', 'scroll'].forEach(event => {
+    document.addEventListener(event, pingServer, { passive: true });
+  });
+})();
+</script>
+
+<!-- ✅✅✅ 본일매출(실시간) 갱신 -->
+<script>
+(() => {
+  const getCsrf = () => {
+    const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content') || '';
+    const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content') || '';
+    return { token, header };
+  };
+
+  const formatYen = (v) => {
+    const n = Number(v);
+    if (!Number.isFinite(n)) return '¥0';
+    return '¥' + n.toLocaleString('ja-JP');
+  };
+
+  const salesCells = Array.from(document.querySelectorAll('[data-role="todaySales"][data-store-id]'));
+  if (salesCells.length === 0) return;
+
+  const updateOne = async (storeId) => {
+    const url = `/admin/store/today-sales?storeId=${encodeURIComponent(storeId)}`;
+
+    const { token, header } = getCsrf();
+    const headers = {};
+    if (token && header) headers[header] = token;
+
+    const res = await fetch(url, {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers
+    });
+
+    if (!res.ok) throw new Error('today-sales api failed: ' + res.status);
+
+    const data = await res.json();
+
+    const salesTd = document.querySelector(`[data-role="todaySales"][data-store-id="${storeId}"]`);
+    if (salesTd) {
+      const span = salesTd.querySelector('span') || salesTd;
+      span.textContent = formatYen(data.todaySales ?? 0);
+    }
+
+    const rTd = document.querySelector(`[data-role="reservationCount"][data-store-id="${storeId}"]`);
+    if (rTd && data.reservationCount !== undefined && data.reservationCount !== null) {
+      const span = rTd.querySelector('span') || rTd;
+      span.textContent = String(data.reservationCount);
+    }
+  };
+
+  const tick = async () => {
+    const ids = Array.from(new Set(
+      salesCells.map(td => td.getAttribute('data-store-id')).filter(Boolean)
+    ));
+
+    for (const id of ids) {
+      try {
+        await updateOne(id);
+      } catch (e) {
+        // ignore
+      }
+    }
+  };
+
+  tick();
+  setInterval(tick, 10000);
+})();
+</script>
+
+<script>
+(() => {
+  const openPopup = (url) => {
+    const w = 1380;
+    const h = 860;
+
+    const left = Math.max(0, Math.floor((screen.width - w) / 2));
+    const top  = Math.max(0, Math.floor((screen.height - h) / 2));
+
+    const features =
+      `width=${w},height=${h},left=${left},top=${top},` +
+      `resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=no`;
+
+    const win = window.open(url, 'POS_POPUP', features);
+    if (!win) {
+      alert('ポップアップがブロックされました。ブラウザの設定で許可してください。');
+      return;
+    }
+    win.focus();
+  };
+
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-role="openPosPopup"][data-url]');
+    if (!a) return;
+
+    e.preventDefault();
+    const url = a.getAttribute('data-url');
+    if (!url) return;
+
+    openPopup(url);
+  });
+})();
+</script>
 
 </body>
 </html>

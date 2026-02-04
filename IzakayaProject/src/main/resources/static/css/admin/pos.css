@@ -1,0 +1,1122 @@
+/* /css/admin/pos.css */
+:root{
+  --bg:#ffffff;
+  --panel:#ffffff;
+  --line:#e6e6e6;
+  --text:#111;
+  --muted:#666;
+
+  --soft:#f7f7f7;
+  --soft2:#fafafa;
+
+  --ok:#0a7a2a;
+  --card:#1a4fa3;
+  --danger:#b2002a;
+
+  /* ✅ 다홍빛(합계용) */
+  --sum:#ff5a4f;
+
+  --shadow: 0 10px 20px rgba(0,0,0,.08);
+}
+
+html, body{ height:100%; }
+body{
+  margin:0;
+  background: var(--bg);
+  color:var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+  overflow:hidden;
+
+  /* ✅ 전체 글씨 조금 키움 */
+  font-size:16px;
+}
+
+/* TOP BAR */
+.topbar{
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background: var(--panel);
+  border-bottom:2px solid var(--line);
+  box-sizing:border-box;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width: 260px;
+}
+.brand{ font-weight:1000; font-size:18px; letter-spacing:.02em; }
+.storeid{
+  font-weight:900;
+  font-size:13px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  background: var(--soft2);
+  border-radius:0;
+}
+
+.top-center{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  justify-content:center;
+  flex:1;
+}
+.clock{
+  font-weight:1000;
+  font-size:15px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  background: var(--soft2);
+  border-radius:0;
+}
+
+.top-right{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:flex-end;
+  min-width: 560px;
+  flex-wrap:wrap;
+}
+.stat{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  background: var(--soft2);
+  border-radius:0;
+  min-width: 160px;
+  box-sizing:border-box;
+}
+.stat .label{ color:var(--muted); font-size:12px; font-weight:900; }
+.stat .value{ font-size:15px; font-weight:1000; }
+
+.btn{
+  border:1px solid var(--line);
+  background: var(--soft2);
+  color: var(--text);
+  font-weight:1000;
+  padding:10px 12px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:0;
+}
+.btn:hover{ background: var(--soft); }
+
+/* MAIN */
+.wrap{
+  height: calc(100% - 64px);
+  display:grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap:12px;
+  padding:12px;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+
+.panel{
+  background: var(--panel);
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius:0;
+  min-width:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.panel-head{
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background: var(--soft2);
+}
+.panel-title{ margin:0; font-size:15px; font-weight:1000; }
+
+.panel-body{
+  padding:12px;
+  min-height:0;
+  overflow:hidden;
+}
+
+.resv-body{ overflow:auto; }
+
+/* RESERVATIONS */
+.resv-item{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:0;
+}
+.resv-meta{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:13px;
+  color: var(--muted);
+  font-weight:800;
+}
+.resv-meta b{ color:var(--text); }
+.resv-id{ opacity:.85; }
+
+.resv-actions{ display:flex; gap:8px; margin-top:10px; }
+.btn-ok{
+  border:1px solid rgba(10,122,42,.25);
+  background: rgba(10,122,42,.08);
+  color:#0a7a2a;
+  border-radius:0;
+  font-weight:1000;
+  padding:10px 12px;
+  cursor:pointer;
+}
+.btn-no{
+  border:1px solid rgba(178,0,42,.25);
+  background: rgba(178,0,42,.08);
+  color:#b2002a;
+  border-radius:0;
+  font-weight:1000;
+  padding:10px 12px;
+  cursor:pointer;
+}
+.btn-ok:hover, .btn-no:hover{ opacity:.9; }
+
+/* TABLE AREA */
+.tables-wrap{ min-height:0; }
+.tables-body{
+  flex:1;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.table-grid{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap:10px;
+  overflow:hidden;
+}
+
+.table-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:0;
+  padding:16px 14px;
+  cursor:pointer;
+  min-height:0;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  box-sizing:border-box;
+  transition: transform .08s ease, box-shadow .08s ease, border-color .08s ease;
+}
+.table-btn:hover{
+  background: var(--soft2);
+  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+  transform: translateY(-1px);
+}
+
+.t-no{
+  font-weight:1000;
+  font-size:17px;
+  padding-bottom:10px;
+  margin-bottom:10px;
+  border-bottom:1px solid var(--line);
+}
+
+.t-items{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+}
+
+.t-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-height:0;
+}
+.t-row .name{
+  font-weight:900;
+  font-size:14px;
+  color: var(--text);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.t-row .qty{
+  font-weight:1000;
+  font-size:14px;
+  color: var(--text);
+  white-space:nowrap;
+}
+
+.t-total{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex:0 0 auto;
+}
+.t-total .label{ font-weight:900; font-size:13px; color: var(--text); }
+.t-total .amt{
+  font-weight:1000;
+  font-size:16px;
+  color: var(--text);
+  white-space:nowrap;
+}
+
+/* bottom pay */
+.bottom-pay{
+  border-top:1px solid var(--line);
+  background: var(--soft2);
+  padding:12px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.bottom-pay button{
+  border-radius:0;
+  border:1px solid var(--line);
+  padding:14px 12px;
+  font-weight:1000;
+  cursor:pointer;
+  background:#fff;
+  color:var(--text);
+  font-size:16px;
+}
+.bottom-pay .cash{ background: var(--ok); color:#fff; border-color: rgba(0,0,0,.10); }
+.bottom-pay .card{ background: var(--card); color:#fff; border-color: rgba(0,0,0,.10); }
+.bottom-pay button:hover{ opacity:.92; }
+
+/* FLASH */
+@keyframes paidFlash {
+  0%   { box-shadow: 0 0 0 rgba(0,0,0,0); border-color: var(--line); }
+  25%  { box-shadow: 0 0 0 6px rgba(10,122,42,.18); border-color: rgba(10,122,42,.55); }
+  50%  { box-shadow: 0 0 0 0 rgba(0,0,0,0); border-color: var(--line); }
+  75%  { box-shadow: 0 0 0 6px rgba(26,79,163,.16); border-color: rgba(26,79,163,.50); }
+  100% { box-shadow: 0 0 0 rgba(0,0,0,0); border-color: var(--line); }
+}
+.flash-paid{ animation: paidFlash 650ms ease-in-out 1; }
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  box-sizing:border-box;
+  z-index:999;
+}
+.modal.show{ display:flex; }
+
+.modal-card{
+  width:min(1100px, 100%);
+  height:min(680px, 100%);
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-top{
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background: var(--soft2);
+}
+.modal-title{
+  margin:0;
+  font-size:15px;
+  font-weight:1000;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.modal-top-actions{ display:flex; gap:10px; align-items:center; }
+
+.table-badge{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:6px 10px;
+  border-radius:0;
+  font-size:13px;
+  font-weight:1000;
+}
+
+.modal-body{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+}
+
+.modal-left{
+  border-right:1px solid var(--line);
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+.modal-right{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-section-head{
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  background: var(--soft2);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.modal-section-title{ font-weight:1000; font-size:15px; }
+
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+.tab{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  font-weight:1000;
+  padding:8px 10px;
+  border-radius:0;
+  cursor:pointer;
+  font-size:13px;
+  user-select:none;
+}
+.tab.active{
+  background:#111;
+  border-color:#111;
+  color:#fff;
+}
+
+.modal-scroll{
+  padding:12px;
+  overflow:auto;
+  min-height:0;
+}
+
+/* menu */
+.menu-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap:10px;
+}
+.menu-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:0;
+  padding:10px;
+  cursor:pointer;
+  min-height:82px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:6px;
+  text-align:left;
+
+  /* ✅ 가격 오른쪽 하단 고정용 */
+  position:relative;
+}
+.menu-btn:hover{ background: var(--soft2); }
+
+.m-name{
+  font-weight:1000;
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  padding-right:10px;
+}
+
+/* ✅ 가격: 오른쪽 하단 */
+.m-price{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  font-weight:1000;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* cart */
+.cart-pane{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+
+#cartList{
+  min-height:0;
+  overflow:hidden;
+}
+
+#cartList.cart-scroll-on{
+  overflow:auto;
+  max-height: 420px;
+  padding-right:4px;
+}
+
+.cart-item{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:0;
+}
+
+.cart-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.cart-row2{ margin-top:8px; }
+
+.cart-title{
+  font-weight:1000;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width: 260px;
+  font-size:14px;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.qty-btn{
+  width:36px;
+  height:36px;
+  border-radius:0;
+  border:1px solid var(--line);
+  background: var(--soft2);
+  color:var(--text);
+  font-weight:1000;
+  cursor:pointer;
+  font-size:16px;
+}
+.qty-btn:hover{ background: var(--soft); }
+.qty-val{ min-width:24px; text-align:center; font-weight:1000; font-size:15px; }
+
+/* ✅ 합계는 항상 아래 */
+.sum{
+  margin-top:auto;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-weight:1000;
+  background:#fff;
+  font-size:15px;
+}
+
+/* ✅ 합계 금액만 다홍빛 */
+#cartTotal{
+  color: var(--sum);
+}
+
+/* modal foot */
+.modal-foot{
+  border-top:1px solid var(--line);
+  background: var(--soft2);
+  padding:12px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.paybox{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:10px;
+  min-width: 680px;
+}
+.paybox button{
+  border-radius:0;
+  border:1px solid var(--line);
+  padding:14px 12px;
+  font-weight:1000;
+  cursor:pointer;
+  background:#fff;
+  color:var(--text);
+  font-size:16px;
+}
+.paybox .cash{ background: var(--ok); color:#fff; border-color: rgba(0,0,0,.10); }
+.paybox .card{ background: var(--card); color:#fff; border-color: rgba(0,0,0,.10); }
+.paybox button:hover{ opacity:.92; }
+
+/* ✅ 모달 상단 취소 버튼(빨간 느낌) */
+.btn.btn-cancel{
+  border:1px solid rgba(178,0,42,.25);
+  background: rgba(178,0,42,.08);
+  color:#b2002a;
+}
+.btn.btn-cancel:hover{ opacity:.9; }
+
+/* ✅ 주문완료 버튼 검정 */
+.btn.btn-commit{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+.btn.btn-commit:hover{ opacity:.92; }
+
+/* RESPONSIVE */
+@media (max-width: 1080px){
+  body{ overflow:auto; }
+  .wrap{ height:auto; grid-template-columns: 1fr; }
+  .panel-body{ overflow:auto; }
+
+  .table-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+
+  .modal-body{ grid-template-columns: 1fr; }
+  .modal-left{ border-right:0; border-bottom:1px solid var(--line); }
+
+  .paybox{
+    min-width: 0;
+    width:100%;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #cartList.cart-scroll-on{ max-height: 360px; }
+}
+
+ /* ✅ 예약 영역을 정확히 위/아래 50% 분리 */
+    .resv-body{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      height: calc(100vh - 170px); /* topbar + panel padding 고려(필요시 숫자만 조절) */
+      min-height: 520px;           /* 화면 작아도 반반 유지 */
+    }
+
+    .resv-split-section{
+      flex: 1 1 0;
+      min-height: 0;     /* ✅ overflow 스크롤을 위해 필수 */
+      display:flex;
+      flex-direction:column;
+      border-top:1px solid rgba(0,0,0,0.08);
+      padding-top:10px;
+    }
+
+    .resv-split-section:first-child{
+      border-top:none;
+      padding-top:0;
+    }
+
+    .resv-split-title{
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+      opacity:.9;
+      flex: 0 0 auto;
+    }
+
+    .resv-list-area{
+      flex: 1 1 auto;
+      min-height:0;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .resv-accepted-wrap{
+      background: rgba(0,0,0,0.03);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    /* ✅ accepted 쪽은 내부 패딩 때문에 타이틀/리스트를 안쪽에 */
+    .resv-accepted-wrap .resv-split-title{ margin-left:2px; }
+
+    /* ==========================
+       ✅ 예약 전체목록 모달(추가)
+       ========================== */
+    .resv-history-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+    }
+    .resv-history-card{
+      width:min(980px, 96vw);
+      height:min(620px, 92vh);
+      background:#fff;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,.25);
+      display:flex;
+      flex-direction:column;
+    }
+    .resv-history-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid #eee;
+      background:#fafafa;
+    }
+    .resv-history-head-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .resv-history-title{
+      font-weight:800;
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .resv-history-date{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .resv-history-date input[type="date"]{
+      padding:6px 8px;
+      border:1px solid #ddd;
+      border-radius:8px;
+      font-size:13px;
+    }
+    .resv-history-close{
+      border:none;
+      background:transparent;
+      font-size:20px;
+      cursor:pointer;
+      line-height:1;
+      padding:4px 8px;
+      border-radius:8px;
+    }
+    .resv-history-close:hover{ background:rgba(0,0,0,.06); }
+
+    .resv-history-body{
+      flex:1 1 auto;
+      min-height:0;
+      display:flex;
+    }
+    .resv-history-left{
+      width:44%;
+      min-width:320px;
+      border-right:1px solid #eee;
+      overflow:auto;
+      padding:10px;
+    }
+    .resv-history-right{
+      flex:1 1 auto;
+      min-width:0;
+      overflow:auto;
+      padding:14px;
+    }
+
+    .resv-h-item{
+      padding:10px 10px;
+      border:1px solid #eee;
+      border-radius:10px;
+      margin-bottom:10px;
+      cursor:pointer;
+      background:#fff;
+      transition: background .12s ease, border-color .12s ease;
+    }
+    .resv-h-item:hover{
+      background:#fafafa;
+      border-color:#e5e5e5;
+    }
+    .resv-h-item.active{
+      background:rgba(0,0,0,.03);
+      border-color:rgba(0,0,0,.12);
+    }
+
+    .resv-h-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+    }
+    .resv-h-time{
+      font-weight:800;
+      font-size:13px;
+    }
+    .resv-h-status{
+      font-weight:800;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .st-accepted{
+      color:#1b7f4a;
+      background:rgba(27,127,74,.12);
+    }
+    .st-rejected{
+      color:#b00020;
+      background:rgba(176,0,32,.10);
+    }
+    .st-pending{
+      color:#845400;
+      background:rgba(132,84,0,.12);
+    }
+    .st-other{
+      color:#444;
+      background:rgba(0,0,0,.08);
+    }
+    .resv-h-name{
+      font-size:13px;
+      opacity:.92;
+      margin-bottom:4px;
+      font-weight:700;
+    }
+    .resv-h-mini{
+      font-size:12px;
+      opacity:.78;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .resv-detail-box{
+      border:1px solid #eee;
+      border-radius:12px;
+      padding:12px 12px;
+      background:#fff;
+    }
+    .resv-detail-title{
+      font-weight:900;
+      margin-bottom:10px;
+      font-size:14px;
+    }
+    .resv-d-row{
+      display:flex;
+      gap:10px;
+      padding:8px 0;
+      border-bottom:1px dashed rgba(0,0,0,.10);
+      font-size:13px;
+    }
+    .resv-d-row:last-child{ border-bottom:none; }
+    .resv-d-k{
+      width:110px;
+      opacity:.75;
+      flex:0 0 auto;
+    }
+    .resv-d-v{
+      flex:1 1 auto;
+      min-width:0;
+      word-break:break-word;
+      font-weight:700;
+      opacity:.95;
+    }
+/* ✅ TOPBAR 안의 매출/예약 버튼은 그냥 기본 버튼(.btn) 그대로 */
+.top-right .stat .btn{
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+}
+    
+    .top-right .stat .btn-resv-history:hover{
+      background:rgba(255,255,255,.18);
+    }
+    /* ✅ 상단 오른쪽 영역에서 버튼/통계가 밀려서 숨는 문제 방지 */
+.topbar{
+  overflow: visible !important;
+}
+
+.top-right{
+  overflow: visible !important;
+  flex-wrap: wrap;              /* 공간 부족하면 줄바꿈 허용 */
+  gap: 10px;
+  align-items: center;
+}
+
+/* 버튼이 stat 박스 안에서 눌리고 보이게 */
+.btn-sales-history,
+.btn-resv-history{
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* ✅ 모달이 화면 뒤로 가는 문제 방지 */
+.resv-history-modal,
+.sales-history-modal{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;                /* 가장 위로 */
+  display: none;                /* 기본은 숨김 */
+}
+
+/* 모달 열릴 때 JS가 display:flex로 바꿉니다 */
+
+/* =========================================================
+   ✅ TOPBAR 레이아웃 안정화 (버튼이 사라지거나 밀리는 문제 방지)
+   ========================================================= */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  overflow: visible !important;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex: 0 0 auto;
+}
+
+.top-center{
+  flex: 1 1 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width: 260px;
+}
+
+.top-right{
+  flex: 0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  /* ✅ 줄바꿈 대신 오른쪽에서 스크롤로 처리 (버튼이 안 보이는 문제 방지) */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 52vw;
+  padding-bottom: 2px;
+}
+
+/* 스크롤바 너무 거슬리면 얇게 */
+.top-right::-webkit-scrollbar { height: 6px; }
+.top-right::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 10px; }
+
+/* 버튼이 확실히 보이도록 */
+.btn-sales-history,
+.btn-resv-history{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  min-height: 34px;
+  padding: 0 14px;
+}
+
+/* =========================================================
+   ✅ 예약/매출 모달을 "진짜 모달처럼" (중앙정렬 + 배경 + z-index)
+   - 지금처럼 좌상단에 박히는 문제 해결
+   ========================================================= */
+
+/* 공통 오버레이 */
+.resv-history-modal,
+.sales-history-modal{
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+
+  /* ✅ 배경(반투명) */
+  background: rgba(0,0,0,.35);
+
+  /* ✅ 중앙정렬 */
+  display: none;                 /* JS가 열 때 flex로 바꿈 */
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+}
+
+/* 예약 카드(기존 스타일이 있어도 이걸로 정리됨) */
+.resv-history-card{
+  width: min(1080px, 96vw);
+  height: min(720px, 92vh);
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+  display:flex;
+  flex-direction: column;
+}
+
+/* 매출 카드 */
+.sales-history-card{
+  width: min(1180px, 96vw);
+  height: min(720px, 92vh);
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+  display:flex;
+  flex-direction: column;
+}
+
+/* 헤더 고정 느낌 */
+.resv-history-head,
+.sales-history-head{
+  flex: 0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  background: #fff;
+}
+
+.resv-history-head-left,
+.sales-history-head-left{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.resv-history-title,
+.sales-history-title{
+  font-weight: 900;
+}
+
+/* 바디(좌/우) */
+.resv-history-body,
+.sales-history-body{
+  flex: 1 1 auto;
+  display:flex;
+  min-height: 0; /* ✅ 내부 스크롤 필수 */
+}
+
+.resv-history-left,
+.sales-history-left{
+  flex: 0 0 44%;
+  border-right: 1px solid rgba(0,0,0,.08);
+  overflow:auto;
+  padding: 10px;
+}
+
+.resv-history-right,
+.sales-history-right{
+  flex: 1 1 auto;
+  overflow:auto;
+  padding: 10px;
+}
+
+/* 리스트 아이템이 너무 붙어 보이면 */
+.resv-h-item,
+.sales-h-item{
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.resv-h-item.active,
+.sales-h-item.active{
+  outline: 2px solid rgba(0,0,0,.25);
+}
+
+/* 닫기 버튼 */
+.resv-history-close,
+.sales-history-close{
+  border: 0;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.resv-history-close:hover,
+.sales-history-close:hover{
+  background: rgba(0,0,0,.06);
+}
+
+/* 상태 뱃지(이미 쓰고 계신 cls 유지) */
+.st-accepted{ background: rgba(0,180,0,.10); color: #137a13; font-weight: 800; }
+.st-rejected{ background: rgba(220,0,0,.10); color: #a70f0f; font-weight: 800; }
+.st-pending { background: rgba(255,170,0,.14); color: #8a5b00; font-weight: 800; }
+.st-other   { background: rgba(0,0,0,.08); color: #333; font-weight: 800; }
+
+/* ===============================
+   ✅ TOPBAR 버튼: 검정 배경 + 흰 글씨 (clock과 동일한 높이)
+   =============================== */
+.top-right .stat.stat-btn{
+  background: transparent;
+  border: 0;
+  padding: 0;
+  min-width: auto;
+}
+
+/* 버튼 자체 */
+.top-right .stat.stat-btn .btn{
+  padding: 10px 12px;          /* clock과 동일 */
+  border: 1px solid #111;
+  background: #111;            /* ✅ 검정 */
+  color: #fff;                 /* ✅ 흰 글씨 */
+  border-radius: 0;
+
+  font-weight: 1000;
+  font-size: 15px;
+  line-height: 1;
+
+  height: auto;
+  min-height: 0;
+  width: auto;
+
+  cursor: pointer;
+}
+
+/* hover / active */
+.top-right .stat.stat-btn .btn:hover{
+  background: #222;
+}
+.top-right .stat.stat-btn .btn:active{
+  background: #000;
+}
+.top-right .stat.stat-btn .btn:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.25);
+}
+

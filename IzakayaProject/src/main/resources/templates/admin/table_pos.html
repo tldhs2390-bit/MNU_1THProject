@@ -1,0 +1,257 @@
+<!-- table_pos.html -->
+<!DOCTYPE html>
+<html lang="ja"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>テーブルPOS</title>
+
+  <link rel="stylesheet" href="/css/admin/pos.css" />
+
+  <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}"/>
+  <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}"/>
+</head>
+
+<body>
+
+<div class="topbar">
+  <!-- LEFT -->
+  <div class="top-left">
+    <div class="brand">Sion POS</div>
+    <div class="storeid"><span th:text="${storeName}">SION</span></div>
+    <div class="clock" id="clock">--</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="top-right">
+    <!-- ✅ 매출 목록 -->
+    <div class="stat stat-btn">
+      <button type="button" class="btn" id="btnSalesHistory">売上一覧</button>
+    </div>
+
+    <!-- ✅ 예약 목록 -->
+    <div class="stat stat-btn">
+      <button type="button" class="btn" id="btnResvHistory">予約一覧</button>
+    </div>
+
+    <div class="stat">
+      <div class="label">現金(今日)</div>
+      <div class="value" id="cashSales">¥0</div>
+    </div>
+    <div class="stat">
+      <div class="label">カード(今日)</div>
+      <div class="value" id="cardSales">¥0</div>
+    </div>
+    <div class="stat">
+      <div class="label">総売上(今日)</div>
+      <div class="value" id="totalSales">¥0</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- LEFT: RESERVATIONS -->
+  <section class="panel">
+    <div class="panel-head">
+      <h3 class="panel-title">予約管理</h3>
+    </div>
+
+    <div class="panel-body resv-body">
+
+      <!-- ✅ 위: 승인대기 -->
+      <div class="resv-split-section">
+        <div class="resv-split-title">承認待ち</div>
+        <div class="resv-list-area" id="resvPendingList"></div>
+      </div>
+
+      <!-- ✅ 아래: 승인완료 -->
+      <div class="resv-split-section resv-accepted-wrap">
+        <div class="resv-split-title">受付済み予約</div>
+        <div class="resv-list-area" id="resvAcceptedList"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RIGHT: TABLES + PAY -->
+  <section class="panel tables-wrap">
+    <div class="panel-head">
+      <h3 class="panel-title">テーブル</h3>
+    </div>
+
+    <div class="panel-body tables-body">
+      <div id="tableGrid" class="table-grid"></div>
+    </div>
+
+    <div class="bottom-pay">
+      <button class="cash" type="button" id="btnCash">現金</button>
+      <button class="card" type="button" id="btnCard">カード</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ✅✅ [추가] 예약 전체목록 모달 -->
+<div class="resv-history-modal" id="resvHistoryModal" aria-hidden="true">
+  <div class="resv-history-card" role="dialog" aria-modal="true">
+    <div class="resv-history-head">
+      <div class="resv-history-head-left">
+        <div class="resv-history-title">予約一覧</div>
+        <div class="resv-history-date">
+          <span style="font-size:12px;opacity:.75;font-weight:700;">日付</span>
+          <input type="date" id="resvHistoryDate">
+          <!-- ✅✅ [추가] 예약 상태 필터 + 요약 -->
+		<!-- ✅✅ 예약 상태 필터 + 요약(전체/수락/거절만) -->
+		<div class="resv-history-filter" style="display:flex;align-items:center;gap:8px;margin-left:10px;">
+		  <span style="font-size:12px;opacity:.75;font-weight:700;">状態</span>
+		  <select id="resvStatusFilter"
+		          style="padding:6px 8px;border:1px solid #ddd;border-radius:8px;font-size:13px;">
+		    <option value="ALL">全て</option>
+		    <option value="ACCEPTED">受付</option>
+		    <option value="REJECTED">拒否</option>
+		  </select>
+		</div>
+
+<div class="resv-history-summary" style="display:flex;gap:10px;align-items:center;margin-left:10px;">
+  <span style="font-size:12px;opacity:.75;font-weight:700;">受付</span><b id="resvSumAccepted">0</b>
+  <span style="font-size:12px;opacity:.75;font-weight:700;">拒否</span><b id="resvSumRejected">0</b>
+  <span style="font-size:12px;opacity:.75;font-weight:700;">合計</span><b id="resvSumTotal">0</b>
+</div>
+
+        </div>
+      </div>
+      <button type="button" class="resv-history-close" id="resvHistoryClose" aria-label="close">✕</button>
+    </div>
+
+    <div class="resv-history-body">
+      <div class="resv-history-left">
+        <div id="resvHistoryList"></div>
+      </div>
+      <div class="resv-history-right">
+        <div class="resv-detail-box">
+          <div class="resv-detail-title">予約詳細</div>
+          <div id="resvHistoryDetail" style="opacity:.75;font-size:13px;">
+            予約を選択してください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅✅ [추가] 매출 전체목록 모달 -->
+<div class="sales-history-modal" id="salesHistoryModal" aria-hidden="true">
+  <div class="sales-history-card" role="dialog" aria-modal="true">
+    <div class="sales-history-head">
+      <div class="sales-history-head-left">
+        <div class="sales-history-title">売上一覧</div>
+
+        <div class="sales-history-date">
+          <span style="font-size:12px;opacity:.75;font-weight:700;">日付</span>
+          <input type="date" id="salesHistoryDate">
+        </div>
+
+        <!-- ✅✅ [추가] 결제 방식 필터 -->
+        <div class="sales-history-filter" style="display:flex;align-items:center;gap:8px;margin-left:10px;">
+          <span style="font-size:12px;opacity:.75;font-weight:700;">決済</span>
+          <select id="salesMethodFilter"
+                  style="padding:6px 8px;border:1px solid #ddd;border-radius:8px;font-size:13px;">
+            <option value="ALL">全て</option>
+            <option value="CASH">現金</option>
+            <option value="CARD">カード</option>
+         
+          </select>
+        </div>
+
+        <div class="sales-history-summary" style="display:flex;gap:10px;align-items:center;margin-left:10px;">
+          <span style="font-size:12px;opacity:.75;font-weight:700;">現金</span><b id="salesSumCash">¥0</b>
+          <span style="font-size:12px;opacity:.75;font-weight:700;">カード</span><b id="salesSumCard">¥0</b>
+          <span style="font-size:12px;opacity:.75;font-weight:700;">合計</span><b id="salesSumTotal">¥0</b>
+        </div>
+      </div>
+
+      <button type="button" class="sales-history-close" id="salesHistoryClose" aria-label="close">✕</button>
+    </div>
+
+    <div class="sales-history-body">
+      <div class="sales-history-left">
+        <div id="salesHistoryList"></div>
+      </div>
+      <div class="sales-history-right">
+        <div class="sales-detail-box">
+          <div class="sales-detail-title">メニュー / 決済詳細</div>
+          <div id="salesHistoryDetail" style="opacity:.75;font-size:13px;">
+            売上を選択してください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ORDER SCREEN -->
+<div class="modal" id="orderModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h3 class="modal-title">
+        注文画面
+        <span class="table-badge" id="activeTableBadge">TABLE --</span>
+      </h3>
+      <div class="modal-top-actions">
+        <button class="btn btn-cancel" type="button" id="payCancel">注文取消</button>
+        <button class="btn" type="button" id="modalClose">閉じる</button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <!-- left: menus -->
+      <div class="modal-left">
+        <div class="modal-section-head">
+          <div class="modal-section-title">メニュー</div>
+          <div class="tabs" id="catTabs"></div>
+        </div>
+
+        <div class="modal-scroll">
+          <div id="menuGrid" class="menu-grid"></div>
+        </div>
+      </div>
+
+      <!-- right: cart -->
+      <div class="modal-right">
+        <div class="modal-section-head">
+          <div class="modal-section-title">カート</div>
+          <div class="table-badge">TABLE <span id="activeTableSmall">--</span></div>
+        </div>
+
+        <div class="modal-scroll cart-pane">
+          <div id="cartList"></div>
+
+          <div class="sum">
+            <div>合計</div>
+            <div id="cartTotal">¥0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <div class="paybox">
+        <button class="cash" type="button" id="payCash">現金で決済</button>
+        <button class="card" type="button" id="payCard">カードで決済</button>
+        <button class="btn btn-commit" type="button" id="orderCommit">注文完了</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  window.STORE_ID = /*[[${storeId}]]*/ 0;
+</script>
+
+<script src="/js/admin/table_pos.js"></script>
+
+</body>
+</html>

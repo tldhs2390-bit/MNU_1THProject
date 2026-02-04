@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,33 +27,42 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final StoreRepository storeRepository;
 
-    /* =========================
-       예약 폼 화면 (GET)
-    ========================= */
     @GetMapping
-    public String form(Model model) {
+    public String form(Model model, HttpSession session) {
         model.addAttribute("stores", storeRepository.findAll());
+        model.addAttribute("lineLinked", session.getAttribute("LINE_USER_ID") != null);
         return "service/reservation";
     }
 
-    /* =========================
-       예약 요청 처리 (POST)
-    ========================= */
     @PostMapping
     public String reserve(
             @RequestParam("storeId") Long storeId,
+            @RequestParam("customerName") String customerName,
+            @RequestParam("phone") String phone, // ✅✅✅ 추가
             @RequestParam("partyCnt") int partyCnt,
             @RequestParam("resvDate") String resvDate,
             @RequestParam("resvTime") String resvTime,
             @RequestParam(value = "reqNote", required = false) String reqNote,
-            RedirectAttributes ra
+            RedirectAttributes ra,
+            HttpSession session
     ) {
         Long custId = 1L; // TODO 로그인 연동 시 세션에서 가져오기
 
-        /* ===== 30분 단위 체크 ===== */
+        if (customerName == null || customerName.trim().isEmpty()) {
+            ra.addFlashAttribute("msg", "お名前を入力してください。");
+            ra.addFlashAttribute("msgType", "error");
+            return "redirect:/reserve";
+        }
+
+        // ✅ phone not null 대응 (형식은 빡세게 안 잡고, 최소만)
+        if (phone == null || phone.trim().isEmpty()) {
+            ra.addFlashAttribute("msg", "電話番号を入力してください。");
+            ra.addFlashAttribute("msgType", "error");
+            return "redirect:/reserve";
+        }
+
         if (!(resvTime.endsWith(":00") || resvTime.endsWith(":30"))) {
-            ra.addFlashAttribute("msg",
-                    "時間は30分単位（00 または 30）で選択してください。");
+            ra.addFlashAttribute("msg", "時間は30分単位（00 または 30）で選択してください。");
             ra.addFlashAttribute("msgType", "error");
             return "redirect:/reserve";
         }
@@ -64,45 +74,47 @@ public class ReservationController {
             date = LocalDate.parse(resvDate);
             time = LocalTime.parse(resvTime);
         } catch (DateTimeParseException e) {
-            ra.addFlashAttribute("msg",
-                    "日付または時間の形式が正しくありません。");
+            ra.addFlashAttribute("msg", "日付または時間の形式が正しくありません。");
             ra.addFlashAttribute("msgType", "error");
             return "redirect:/reserve";
         }
 
-        /* ===== 영업시간 체크 (17:00 ~ 03:00) ===== */
-        boolean valid =
-                !time.isBefore(LocalTime.of(17, 0)) ||
-                !time.isAfter(LocalTime.of(3, 0));
+        boolean inBusinessHours =
+                (!time.isBefore(LocalTime.of(17, 0))) || (!time.isAfter(LocalTime.of(3, 0)));
 
-        if (!valid) {
-            ra.addFlashAttribute("msg",
-                    "予約時間は17:00〜翌03:00の間で選択してください。");
+        if (!inBusinessHours) {
+            ra.addFlashAttribute("msg", "予約時間は17:00〜翌03:00の間で選択してください。");
             ra.addFlashAttribute("msgType", "error");
             return "redirect:/reserve";
         }
 
-        /* ===== 자정 이후 예약은 다음날 처리 ===== */
         if (time.isBefore(LocalTime.of(5, 0))) {
             date = date.plusDays(1);
         }
 
         LocalDateTime resvAt = LocalDateTime.of(date, time);
 
+        String lineUserId = (String) session.getAttribute("LINE_USER_ID");
+
         reservationService.createPendingReservation(
                 storeId,
                 custId,
+                customerName.trim(),
+                phone.trim(),         // ✅✅✅ 추가
                 resvAt,
                 partyCnt,
-                reqNote
+                reqNote,
+                lineUserId
         );
 
-        /* ===== 성공 메시지 ===== */
+        boolean linked = (lineUserId != null && !lineUserId.isBlank());
         ra.addFlashAttribute(
-        	    "msg",
-        	    "予約リクエストを受け付けました。<br>管理者確認後、LINEで通知されます。"
-        	);
-        	ra.addFlashAttribute("msgType", "success");
+                "msg",
+                linked
+                    ? "予約リクエストを受け付けました。<br>管理者確認後、LINEで通知されます。"
+                    : "予約リクエストを受け付けました。<br>※LINE連携すると結果をLINEで通知できます。"
+        );
+        ra.addFlashAttribute("msgType", "success");
 
         return "redirect:/reserve";
     }

@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/css/index.css">
 
     <style>
-        /* ===== BREADCRUMB (DELIVERY / MAP / SERVICE 통일) ===== */
         .breadcrumb {
             position: absolute;
             top: 96px;
@@ -17,56 +16,46 @@
             padding: 12px 60px;
             background: transparent;
             z-index: 60;
-
             font-size: 17px;
             color: #111;
             text-align: left;
         }
-
         .breadcrumb a {
             color: #111;
             text-decoration: none;
             opacity: 0.6;
         }
-
         .breadcrumb a:hover {
             opacity: 1;
             text-decoration: underline;
         }
-
         .breadcrumb .current {
             color: #111;
             font-weight: 600;
         }
 
-        /* ===== PAGE LAYOUT ===== */
         .reserve-section {
             min-height: calc(100vh - 72px - 40px);
-            padding: 120px 60px 40px; /* breadcrumb 공간 확보 */
+            padding: 120px 60px 40px;
             text-align: center;
         }
-
         .reserve-section h2 {
             margin-bottom: 60px;
             letter-spacing: 0.15em;
         }
 
-        /* ===== BOARD ===== */
         .reserve-wrap {
             display: flex;
             justify-content: center;
         }
 
-        .reserve-card {
-            width: 420px;
-        }
+        .reserve-card { width: 420px; }
 
         .reserve-card .board-inner {
             padding: 42px 36px 56px;
             writing-mode: horizontal-tb;
         }
 
-        /* ===== FORM ===== */
         .reserve-form {
             text-align: left;
             font-size: 15px;
@@ -96,7 +85,6 @@
             cursor: pointer;
         }
 
-        /* ===== MESSAGE MODAL ===== */
         .modal-bg {
             position: fixed;
             inset: 0;
@@ -136,7 +124,6 @@
 
 <body id="time-theme">
 
-<!-- HEADER -->
 <header class="top-bar wood-header">
     <div class="logo brand-area">
         <img src="/images/logo-brand.png" class="brand-logo neon-logo" alt="">
@@ -152,7 +139,6 @@
     <div class="wood-header-shadow"></div>
 </header>
 
-<!-- BREADCRUMB -->
 <div class="breadcrumb">
     <a href="/">ホーム</a>
     <span>/</span>
@@ -161,7 +147,6 @@
     <span class="current">予約</span>
 </div>
 
-<!-- RESERVATION -->
 <section class="reserve-section wood-bg">
     <h2>予約</h2>
 
@@ -169,6 +154,20 @@
         <div class="sign reserve-card">
             <div class="board">
                 <div class="board-inner">
+
+                    <div style="margin-bottom:14px;">
+                        <div th:if="${lineLinked}">
+                            <span style="color:#1b7f4a;font-weight:700;">
+                              LINE連携済み：結果をLINEで通知します。
+                            </span>
+                        </div>
+
+                        <div th:if="${!lineLinked}">
+                            <span style="color:#111;opacity:.7;font-weight:700;">
+                              LINE連携（任意）：連携すると結果をLINEで通知します。
+                            </span>
+                        </div>
+                    </div>
 
                     <form th:action="@{/reserve}" method="post" class="reserve-form">
 
@@ -180,6 +179,13 @@
                                     th:text="${s.city + ' ' + s.name}">
                             </option>
                         </select>
+
+                        <label>お名前</label>
+                        <input type="text" name="customerName" maxlength="60" required placeholder="例）山田 太郎">
+
+                        <!-- ✅✅✅ [추가] 전화번호 -->
+                        <label>電話番号</label>
+                        <input type="text" name="phone" maxlength="30" required placeholder="例）090-1234-5678">
 
                         <label>人数</label>
                         <input type="number" name="partyCnt" min="1" max="20" required>
@@ -226,7 +232,6 @@
     </div>
 </section>
 
-<!-- MESSAGE MODAL -->
 <div class="modal-bg" id="msgModal" th:if="${msg != null}">
     <div class="modal">
         <div class="modal-close" onclick="closeMsg()">✕</div>
@@ -236,7 +241,6 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer>© 酒屋 シオン</footer>
 
 <script>

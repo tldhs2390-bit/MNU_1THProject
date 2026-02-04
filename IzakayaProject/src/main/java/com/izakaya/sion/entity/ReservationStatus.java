@@ -1,7 +1,8 @@
 package com.izakaya.sion.entity;
 
 public enum ReservationStatus {
-    PENDING,     // 관리자 확인 대기
-    CONFIRMED,   // 예약 확정
-    REJECTED     // 예약 거절 (확장용)
+    PENDING,    // 승인 대기
+    ACCEPTED,   // 수락
+    REJECTED,   // 거절
+    CANCELED    // 취소 (선택)
 }
